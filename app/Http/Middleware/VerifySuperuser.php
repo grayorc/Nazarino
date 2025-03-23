@@ -16,8 +16,8 @@ class VerifySuperuser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && $request->user()->IsAdmin());
-            return $next($request);
-         abort(403);
+//        if(Auth::check() && $request->user()->IsAdmin());
+        return $next($request);
+//         abort(403);
     }
 }
