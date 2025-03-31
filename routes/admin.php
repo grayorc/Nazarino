@@ -9,3 +9,5 @@ Route::get('/', function () {
 });
 
 Route::Resource('users', UserController::class);
+
+Route::post('/password-reset', [UserController::class, 'sendResetLink'])->name('password.email');

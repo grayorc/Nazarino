@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -73,19 +75,32 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request)
+    public function edit(User $user)
     {
-        //
-        $user = $request->user();
-        return view('admin.users.edit');
+        return view('admin.users.edit',compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): \Illuminate\Http\RedirectResponse
     {
-        //
+        $data = $request->validate([
+            'name' => ['string', 'max:255',Rule::unique('users')->ignore($id)],
+            'email' => ['email','max:255', Rule::unique('users')->ignore($id)],
+            'password' => ['max:255','confirmed'],
+        ]);
+
+        if($request->input('password') == null) {
+            $data = Arr::except($data,['password']);
+        }
+        $user = User::find($id);
+        $user->update($data);
+        if($request->has('activateEmail')){
+            $user->markEmailAsVerified();
+        }
+
+        return redirect(route('users.index'));
     }
 
     /**

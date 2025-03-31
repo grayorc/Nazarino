@@ -79,9 +79,11 @@
                                                 hx-confirm="آیا مطمئن هستید که می‌خواهید این کاربر را حذف کنید؟"
                                                 hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'
                                         ><i class="ri-delete-bin-2-line ri-fw"></i></button>
-                                        <button class="btn btn-light btn-sm text-primary">
-                                            <i class="ri-edit-2-line ri-1x"></i>
-                                        </button>
+                                        <a href="{{ route('users.edit',$user->id) }}">
+                                            <button class="btn btn-light btn-sm text-primary">
+                                                <i class="ri-edit-2-line ri-1x"></i>
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
