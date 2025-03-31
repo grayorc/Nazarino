@@ -1,5 +1,5 @@
 <!doctype html>
-<html dir="rtl">
+<html dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,7 +36,7 @@
     </header>
 
     <main class="flex">
-        <div class="text-center px-6 py-8 bg-primaryBlack max-w-lvh min-h-lvh mx-auto mt-20">
+        <div id="landing" class="text-center px-6 py-8 bg-primaryBlack max-w-lvh min-h-lvh mx-auto mt-20">
             <div class="mb-6">
                 <div class="mx-auto flex items-center justify-center animate-float">
                     <img src="dist/img/main-logo.png" class="w-96">
