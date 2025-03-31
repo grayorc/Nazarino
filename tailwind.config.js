@@ -12,10 +12,20 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Vazirmatn','Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                primaryColor : "#EB5E28",
+                primaryWhite : "#FFFCF2",
+                SecondaryWhite : "#CCC5B9",
+                PrimaryBlack : "#252422",
+                SecondaryBlack : "#403D39",
             },
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('tailwindcss-rtl'),
+    ],
 };
