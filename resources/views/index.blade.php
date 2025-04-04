@@ -15,7 +15,7 @@
                     <a
                     role="button"
                     class="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
-                    href="#"
+                    href="{{ route('register') }}"
                     >
                     شروع کنید!
                 </a>
@@ -80,41 +80,71 @@
             <div class="rounded-3xl rounded-t-3xl bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:rounded-b-none sm:p-10 lg:mx-0 lg:rounded-tl-none lg:rounded-br-3xl">
                 <h3 id="tier-hobby" class="text-base/7 font-semibold text-primaryColor">عادی</h3>
                 <p class="mt-4 flex items-baseline gap-x-2">
-                <span class="text-5xl font-semibold tracking-tight text-gray-900">۴۰٬۰۰۰ت</span>
-                <span class="text-base text-gray-500">/ماهیانه</span>
+                <span class="text-5xl font-semibold tracking-tight text-gray-900">رایگان</span>
+                <span class="text-base text-gray-500"></span>
                 </p>
-                <p class="mt-6 text-base/7 text-gray-600">پلن ماهیانه با قیمت مناسب</p>
+                <p class="mt-6 text-base/7 text-gray-600">پلن رایگان با محدودیت</p>
                 <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-600 sm:mt-10">
-                <li class="flex gap-x-3">
-                    <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
-                    </svg>
-                    ساخت بینهایت نظرسنجی
-                </li>
-                <li class="flex gap-x-3">
-                    <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                    <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
-                    </svg>
-                    پشتیبانی 24 ساعته
-                </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        ساخت 5 نظرسنجی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        ساخت نظرسنجی عمومی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        پشتیبانی 24 ساعته
+                    </li>
                 </ul>
                 <a href="#" aria-describedby="tier-hobby" class="mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-primaryColor ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primaryColor sm:mt-10">همین الان شروع کن!</a>
             </div>
             <div class="relative rounded-3xl bg-PrimaryBlack p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
                 <h3 id="tier-enterprise" class="text-base/7 font-semibold text-primaryColor">حرفه ای</h3>
                 <p class="mt-4 flex items-baseline gap-x-2">
-                <span class="text-5xl font-semibold tracking-tight text-white">۳۰۰٬۰۰۰ت</span>
-                <span class="text-base text-gray-400">/سالیانه</span>
+                <span class="text-5xl font-semibold tracking-tight text-white">۴۰٬۰۰۰ت</span>
+                <span class="text-base text-gray-400">/ماهیانه</span>
                 </p>
-                <p class="mt-6 text-base/7 text-gray-300">پلن سالیانه همراه با تخفیف</p>
+                <p class="mt-6 text-base/7 text-gray-300">پلن ماهیانه بدون محدودیت</p>
                 <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-300 sm:mt-10">
                     <li class="flex gap-x-3">
                         <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                             <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                         </svg>
-                        ساخت بینهایت نظرسنجی
-                        </li>
-                        <li class="flex gap-x-3">
+                        ساخت 5 نظرسنجی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        ساخت نظرسنجی عمومی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        ساخت نظرسنجی خصوصی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        دعوت کاربران به نظرسنجی
+                    </li>
+                    <li class="flex gap-x-3">
+                        <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                        خروجی اکسل
+                    </li>
+                    <li class="flex gap-x-3">
                         <svg class="h-6 w-5 flex-none text-primaryColor" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                             <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                         </svg>

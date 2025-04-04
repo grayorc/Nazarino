@@ -19,10 +19,11 @@
         <header class="flex justify-between items-center py-4 px-5 sm:px-20 bg-PrimaryBlack sticky top-0 z-10">
             <div class="flex justify-between items-center w-full">
             <!-- Logo -->
-            <div class="text-primaryColor text-xl">
-                <img src="dist/img/logo.png" class="w-10" alt="Logo">
-            </div>
-
+            <a href="{{ route('index') }}">
+                <div class="text-primaryColor text-xl">
+                    <img src="dist/img/logo.png" class="w-10" alt="Logo">
+                </div>
+            </a>
             <!-- Hamburger Menu -->
             <div class="sm:hidden">
                 <button id="menu-toggle" class="text-primaryWhite focus:outline-none">
@@ -40,7 +41,7 @@
                 <!-- Authentication Buttons -->
                 @auth
                 <li class="lg:hidden">
-                <a href="/dashboard">
+                <a href="{{ route('dashboard') }}">
                     <button class="bg-primaryColor rounded-md px-8 py-0.5 border-primaryColor border-2
                     hover:bg-PrimaryBlack hover:border-primaryColor hover:text-primaryColor
                     transition delay-100 duration-200 w-full">داشبورد</button>
@@ -48,7 +49,7 @@
                 </li>
                 @else
                 <li class="lg:hidden">
-                <a href="/login">
+                <a href="{{ route('login') }}">
                     <button class="bg-primaryColor rounded-md px-8 py-0.5 border-primaryColor border-2
                     hover:bg-PrimaryBlack hover:border-primaryColor hover:text-primaryColor
                     transition delay-100 duration-200 w-full">ورود</button>
@@ -60,13 +61,13 @@
             <!-- Authentication Buttons for Desktop -->
             <div class="hidden sm:block text-primaryWhite text-l">
                 @auth
-                <a href="/dashboard">
+                <a href="{{ route('dashboard') }}">
                 <button class="bg-primaryColor rounded-md px-8 py-0.5 border-primaryColor border-2
                 hover:bg-PrimaryBlack hover:border-primaryColor hover:text-primaryColor
                 transition delay-100 duration-200">داشبورد</button>
                 </a>
                 @else
-                <a href="/login">
+                <a href="{{ route('login') }}">
                 <button class="bg-primaryColor rounded-md px-8 py-0.5 border-primaryColor border-2
                 hover:bg-PrimaryBlack hover:border-primaryColor hover:text-primaryColor
                 transition delay-100 duration-200">ورود</button>
