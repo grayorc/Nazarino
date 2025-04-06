@@ -7,9 +7,13 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/dashboard', function () {
-    return view('dash.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dash.index');
+//})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::prefix('dashboard')->middleware(['auth'])->group( function () {
+    require __DIR__.'/dash.php';
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

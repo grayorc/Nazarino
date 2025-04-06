@@ -5,9 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -57,6 +58,21 @@ class User extends Authenticatable
     public function Image():MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function comments():MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function votes():HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function elections():HasMany
+    {
+        return $this->hasMany(Election::class);
     }
 
 }

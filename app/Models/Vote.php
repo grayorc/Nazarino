@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-class Comment extends Model
+class Vote extends Model
 {
-    public $fillable = ['body'];
+    protected $fillable = ['user_id', 'option_id'];
 
-    public function commentable(): MorphTo
+    public function option():BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(Option::class);
     }
 
     public function user():BelongsTo
