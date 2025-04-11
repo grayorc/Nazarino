@@ -18,6 +18,7 @@ export default {
                 primaryColor : "#EB5E28",
                 fadedPrimaryColor : "rgba(235,94,40,0.15)",
                 primaryWhite : "#FFFCF2",
+                postBg : "#cfccc8",
                 SecondaryWhite : "#CCC5B9",
                 PrimaryBlack : "#252422",
                 SecondaryBlack : "#403D39",

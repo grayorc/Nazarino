@@ -10,6 +10,7 @@ Route::get('/', function () {
 })->name('dashboard');
 
 Route::Resource('elections', \App\Http\Controllers\ElectionController::class);
+
 Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');
 Route::post('elections/{id}/options', [OptionController::class, 'store'])->name('options.store');
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Election extends Model
 {
-    protected $fillable = ['title', 'description', 'end_date', 'has_comment', 'is_revocable', 'is_open', 'is_public', 'is_multivote', 'user_id'];
+    protected $fillable = ['title', 'description', 'end_date', 'has_comment', 'is_revocable', 'is_open', 'is_public', 'user_id'];
 
     public function comments():MorphMany
     {
@@ -24,5 +24,10 @@ class Election extends Model
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function votes():HasMany
+    {
+        return $this->hasMany(Vote::class);
     }
 }

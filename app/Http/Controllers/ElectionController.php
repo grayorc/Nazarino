@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Election;
+use App\Models\Image;
 use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
+use App\Models\Vote;
+use App\Models\Option;
 
 class ElectionController extends Controller
 {
@@ -52,10 +55,21 @@ class ElectionController extends Controller
             $data['is_multivote'] = false;
         }
 
-
-        Election::create($data);
-
-
+        $election = Election::create($data);
+        if($request->hasFile('image')){
+            //verify if it is image
+            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
+                $image = $request->file('image')->store('elections', 'public');
+                $image = Image::create([
+                    'path' => $image,
+                    'imageable_id' => $election->id,
+                    'imageable_type' => 'App\Models\Election',
+                ]);
+            }else{
+                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
+            }
+        }
+        return redirect()->route('options.create', $election->id);
 //        $user->notify(new InviteNotification()([
 //            'title' => 'به نظرسنجی جدید دعوت شدید!',
 //            'message' => 'شما به یک نظرسنجی جدید دعوت شدید. بررسی کنید.',
@@ -63,9 +77,36 @@ class ElectionController extends Controller
 //        ]));
     }
 
-    public function show(Election $election)
+    public function show(int $election)
     {
+        $election = Election::find($election);
 
+        if($election == null){
+            abort(404);
+        }
+
+        $options = $election->options;
+        return view('elections.single',compact('election','options'));
     }
 
+    public function vote(Request $request)
+    {
+        $data = $request->validate([
+            'option_id' => 'required',
+            'vote_type' => ['required','in:-1,1']
+        ]);
+
+        $option = Option::find($data['option_id']);
+        if(Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()){
+            $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
+            $vote->delete();
+        }else{
+        $vote = Vote::create([
+
+        ])
+        return response()->json([
+            'message' => 'Vote received',
+            'vote_count' => $vote->option->votes,
+        ]);
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Option;
 use Illuminate\Http\Request;
+
 
 class OptionController extends Controller
 {
@@ -35,8 +37,20 @@ class OptionController extends Controller
         ]);
         $data['election_id'] = $request->id;
         // dd($data);
-        Option::Create($data);
-        return redirect()->route('options.create', $request->id);
+        $option = Option::Create($data);
+        if($request->hasFile('image')){
+            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
+                $image = $request->file('image')->store('options', 'public');
+                $image = Image::create([
+                    'path' => $image,
+                    'imageable_id' => $option->id,
+                    'imageable_type' => 'App\Models\Option',
+                ]);
+            }else{
+                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
+            }
+        }
+        return redirect()->route('options.create', $request->id)->with('success', 'گزینه با موفقیت ایجاد شد');
     }
 
     /**

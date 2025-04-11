@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('election/{id}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
+
+Route::post('vote', [\App\Http\Controllers\ElectionController::class, 'vote'])->name('vote');
 require __DIR__.'/auth.php';
 
 Route::prefix('admin')->middleware(['VerifySuperuser','auth'])->group( function () {
