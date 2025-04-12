@@ -91,22 +91,40 @@ class ElectionController extends Controller
 
     public function vote(Request $request)
     {
+        if(!auth()->check()){
+            return response()->json([
+                'message' => 'User not logged in',
+            ]);
+        }
         $data = $request->validate([
             'option_id' => 'required',
-            'vote_type' => ['required','in:-1,1']
+            'vote_type' => ['required','in:UP,DOWN,NONE']
         ]);
 
         $option = Option::find($data['option_id']);
         if(Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()){
+            if($data['vote_type'] == 'NONE'){
             $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
             $vote->delete();
-        }else{
-        $vote = Vote::create([
+            }
+            if($data['vote_type'] == 'UP'){
+                $vote->update([
+                    'vote_type' => 1
+                ]);
+            }else{
+                $vote->update([
+                    'vote_type' => -1
+                ]);
+            }
+        }else {
+            $vote = Vote::create([
 
-        ])
-        return response()->json([
-            'message' => 'Vote received',
-            'vote_count' => $vote->option->votes,
-        ]);
+            ]);
+            return response()->json([
+                'message' => 'Vote received',
+                'vote_count' => $vote->option->votes,
+            ]);
+        }
     }
+
 }

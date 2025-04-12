@@ -41,7 +41,6 @@
                     </div>
                     <div class="flex gap-6">
                         <div class="flex flex-row gap-1">
-                            <!-- up vote with htmx to /vote (post) and change line to fill when got success response-->
                             <button hx-post="/vote" hx-target="#vote-count" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}' hx-swap="innerHTML" hx-trigger="click" hx-vals='{"option_id": {{ $option->id }}, "vote_type": "UP"}'>
                                 <i class="ri-arrow-up-circle-line ri-xl"></i>
                             </button>
