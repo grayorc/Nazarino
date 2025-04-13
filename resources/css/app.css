@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@notifyCss;
+@notifyJs;
+
+
 
 @layer utilities {
     .animate-float {

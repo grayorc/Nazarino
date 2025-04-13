@@ -80,7 +80,6 @@ class ElectionController extends Controller
     public function show(int $election)
     {
         $election = Election::find($election);
-
         if($election == null){
             abort(404);
         }
@@ -100,31 +99,31 @@ class ElectionController extends Controller
             'option_id' => 'required',
             'vote_type' => ['required','in:UP,DOWN,NONE']
         ]);
-
+        // return $data;
         $option = Option::find($data['option_id']);
         if(Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()){
-            if($data['vote_type'] == 'NONE'){
             $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
-            $vote->delete();
+            if($data['vote_type'] == 'NONE'){
+                $vote->delete();
             }
             if($data['vote_type'] == 'UP'){
                 $vote->update([
-                    'vote_type' => 1
+                    'vote' => 1
                 ]);
             }else{
                 $vote->update([
-                    'vote_type' => -1
+                    'vote' => -1
                 ]);
             }
         }else {
             $vote = Vote::create([
-
-            ]);
-            return response()->json([
-                'message' => 'Vote received',
-                'vote_count' => $vote->option->votes,
+                'user_id' => auth()->user()->id,
+                'option_id' => $data['option_id'],
+                'vote' => $data['vote_type'] == 'UP' ? 1 : -1,
+                'election_id' => $option->election_id
             ]);
         }
+        return $vote->option->votes->sum('vote');
     }
 
 }

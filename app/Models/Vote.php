@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Vote extends Model
 {
-    protected $fillable = ['user_id', 'option_id', 'vote'];
+    protected $fillable = ['user_id', 'option_id', 'vote', 'election_id'];
 
     public function option():BelongsTo
     {
@@ -22,4 +22,6 @@ class Vote extends Model
     {
         return $this->belongsTo(Election::class);
     }
+
+    
 }

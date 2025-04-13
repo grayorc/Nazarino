@@ -17,10 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->date('end_date')->nullable();
             $table->boolean('has_comment')->default(false);
-            $table->boolean('is_revocable')->default(false);
             $table->boolean('is_open')->default(true);
             $table->boolean('is_public')->default(true);
-            $table->boolean('is_multivote')->default(false);
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

@@ -41,19 +41,26 @@
                     </div>
                     <div class="flex gap-6">
                         <div class="flex flex-row gap-1">
-                            <button hx-post="/vote" hx-target="#vote-count" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}' hx-swap="innerHTML" hx-trigger="click" hx-vals='{"option_id": {{ $option->id }}, "vote_type": "UP"}'>
+                            <!-- show notify err when click on button if user is not logged in -->
+                            @if(!auth()->check())
+                            <button onclick="notify('You must be logged in to vote', 'error')">
                                 <i class="ri-arrow-up-circle-line ri-xl"></i>
                             </button>
-                            <div class="my-auto" id="vote-count">
-                                15
+                            @else
+                            <button hx-post="/vote" hx-target="#vote-count-{{ $option->id }}" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}' hx-swap="innerHTML" hx-trigger="click" hx-vals='{"option_id": {{ $option->id }}, "vote_type": "UP"}'>
+                                <i class="ri-arrow-up-circle-line ri-xl"></i>
+                            </button>
+                            @endif
+                            <div class="my-auto" id="vote-count-{{ $option->id }}">
+                                {{ $option->votes->sum('vote') }}
                             </div>
-                            <button hx-post="/vote" hx-target="#vote-count" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}' hx-swap="innerHTML" hx-trigger="click" hx-vals='{"option_id": {{ $option->id }}, "vote_type": "DOWN"}'>
+                            <button hx-post="/vote" hx-target="#vote-count-{{ $option->id }}" hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}' hx-swap="innerHTML" hx-trigger="click" hx-vals='{"option_id": {{ $option->id }}, "vote_type": "DOWN"}'>
                                 <i class="ri-arrow-down-circle-line ri-xl"></i>
                             </button>
                         </div>
                         <div class="flex flex-row gap-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6" viewBox="0 0 24 24" fill="rgba(0,0,0,1)"><path fill="none" d="M0 0h24v24H0z"></path><path d="M10 3H14C18.4183 3 22 6.58172 22 11C22 15.4183 18.4183 19 14 19V22.5C9 20.5 2 17.5 2 11C2 6.58172 5.58172 3 10 3Z"></path></svg>                        <div class="my-auto">
-                                15
+                                {{ $option->votes->sum('vote') }}
                             </div>
                         </div>
                     </div>
