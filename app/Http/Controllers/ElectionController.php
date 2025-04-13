@@ -85,7 +85,13 @@ class ElectionController extends Controller
         }
 
         $options = $election->options;
-        return view('elections.single',compact('election','options'));
+        $votes = Vote::where('election_id', $election->id)->get();
+        //send optins with user vote
+        $options = $options->map(function($option) use ($votes){
+            $option->user_vote = $votes->where('option_id', $option->id)->first();
+            return $option;
+        });
+        return view('elections.single',compact('election','options','votes'));
     }
 
     public function vote(Request $request)
