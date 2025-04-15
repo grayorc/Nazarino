@@ -86,7 +86,6 @@ class ElectionController extends Controller
 
         $options = $election->options;
         $votes = Vote::where('election_id', $election->id)->get();
-        //send optins with user vote
         $options = $options->map(function($option) use ($votes){
             $option->user_vote = $votes->where('option_id', $option->id)->first();
             return $option;
@@ -96,40 +95,45 @@ class ElectionController extends Controller
 
     public function vote(Request $request)
     {
-        if(!auth()->check()){
+        if (!auth()->check()) {
             return response()->json([
                 'message' => 'User not logged in',
             ]);
         }
         $data = $request->validate([
             'option_id' => 'required',
-            'vote_type' => ['required','in:UP,DOWN,NONE']
+            'vote_type' => ['required', 'in:UP,DOWN']
         ]);
         // return $data;
         $option = Option::find($data['option_id']);
-        if(Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()){
+        if (Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()) {
             $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
-            if($data['vote_type'] == 'NONE'){
-                $vote->delete();
+            if ($data['vote_type'] == 'UP') {
+                if ($vote->vote == 1) {
+                    $vote->delete();
+                } else {
+                    $vote->update([
+                        'vote' => 1
+                    ]);
+                }
             }
-            if($data['vote_type'] == 'UP'){
-                $vote->update([
-                    'vote' => 1
-                ]);
-            }else{
-                $vote->update([
-                    'vote' => -1
+            if ($data['vote_type'] == 'DOWN') {
+                if ($vote->vote == -1) {
+                    $vote->delete();
+                } else {
+                    $vote->update([
+                        'vote' => -1
+                    ]);
+                }
+            }
+            } else {
+                $vote = Vote::create([
+                    'user_id' => auth()->user()->id,
+                    'option_id' => $data['option_id'],
+                    'vote' => $data['vote_type'] == 'UP' ? 1 : -1,
+                    'election_id' => $option->election_id
                 ]);
             }
-        }else {
-            $vote = Vote::create([
-                'user_id' => auth()->user()->id,
-                'option_id' => $data['option_id'],
-                'vote' => $data['vote_type'] == 'UP' ? 1 : -1,
-                'election_id' => $option->election_id
-            ]);
-        }
-        return $vote->option->votes->sum('vote');
+            return $vote->option->votes->sum('vote');
     }
-
 }
