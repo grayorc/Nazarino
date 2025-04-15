@@ -100,40 +100,57 @@ class ElectionController extends Controller
                 'message' => 'User not logged in',
             ]);
         }
+
         $data = $request->validate([
             'option_id' => 'required',
             'vote_type' => ['required', 'in:UP,DOWN']
         ]);
         // return $data;
+        $vote_type = "";
         $option = Option::find($data['option_id']);
         if (Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()) {
             $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
             if ($data['vote_type'] == 'UP') {
                 if ($vote->vote == 1) {
                     $vote->delete();
+                    $vote_type = "NONE";
                 } else {
                     $vote->update([
                         'vote' => 1
                     ]);
+                    $vote_type = "UP";
                 }
             }
             if ($data['vote_type'] == 'DOWN') {
                 if ($vote->vote == -1) {
                     $vote->delete();
+                    $vote_type = "NONE";
                 } else {
                     $vote->update([
                         'vote' => -1
                     ]);
+                    $vote_type = "DOWN";
                 }
             }
             } else {
+                if ($data['vote_type'] == 'UP') {
+                    $q_vote_type = 1;
+                    $vote_type = "UP";
+                } else {
+                    $q_vote_type = -1;
+                    $vote_type = "DOWN";
+                }
                 $vote = Vote::create([
                     'user_id' => auth()->user()->id,
                     'option_id' => $data['option_id'],
-                    'vote' => $data['vote_type'] == 'UP' ? 1 : -1,
+                    'vote' => $q_vote_type,
                     'election_id' => $option->election_id
                 ]);
             }
-            return $vote->option->votes->sum('vote');
+            return response()->json([
+                'vote' => $vote->option->votes->sum('vote'),
+                'vote_type' => $vote_type,
+                'option_id' => $data['option_id'],
+            ]);
     }
 }

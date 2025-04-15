@@ -42,7 +42,19 @@
 
                     <div class="flex gap-6">
                         <div class="flex flex-col items-center gap-4">
-                            <div class="flex w-fit flex-row items-center gap-0 rounded-full border-black bg-zinc-800/30">
+                            <div class="flex w-fit flex-row items-center gap-0 rounded-full border-black
+                            bg-zinc-800/30
+                            "
+
+                            @if(optional($option->user_vote)->vote != null)
+                                style="
+                                background-color:@if(optional($option->user_vote)->vote === 1)
+                                #009e42
+                                @elseif(optional($option->user_vote)->vote === -1)
+                                #ea002a
+                                @endif "
+                            @endif
+                            >
                                 <button class="rounded-full p-1 hover:bg-zinc-800/30"
                                 hx-post="/vote"
                                 hx-target="#vote-count-{{ $option->id }}"
@@ -90,7 +102,6 @@
 {{--                        </div>--}}
                         <div class="flex flex-row gap-1">
                             <i class="ri-chat-1-fill"></i>
-{{--                            {{ $option->comments->count() }}--}}
                         </div>
                     </div>
                 </div>
@@ -99,6 +110,39 @@
         </div>
     </div>
     <script>
+        document.body.addEventListener("htmx:afterRequest", function (event) {
+            const response = JSON.parse(event.detail.xhr.responseText);
 
+            const voteCountElement = document.querySelector(`#vote-count-${response.option_id}`);
+            const parentContainer = voteCountElement.closest('.flex.w-fit.flex-row.items-center');
+
+            voteCountElement.textContent = response.vote;
+            const upvoteButton = voteCountElement.closest('.flex').querySelector('button:nth-child(1) svg');
+            const downvoteButton = voteCountElement.closest('.flex').querySelector('button:nth-child(3) svg');
+
+            if (response.vote_type === "UP") {
+                parentContainer.style.backgroundColor = "#009e42";
+
+                upvoteButton.classList.replace("text-black", "text-white");
+                upvoteButton.classList.add("fill-white");
+                downvoteButton.classList.replace("text-white", "text-black");
+                downvoteButton.classList.remove("fill-white");
+              } else if (response.vote_type === "DOWN") {
+                parentContainer.style.backgroundColor = "#ea002a";
+
+                downvoteButton.classList.replace("text-black", "text-white");
+                downvoteButton.classList.add("fill-white");
+                upvoteButton.classList.replace("text-white", "text-black");
+                upvoteButton.classList.remove("fill-white");
+              } else if (response.vote_type === "NONE") {
+                parentContainer.style.backgroundColor = "";
+
+                upvoteButton.classList.replace("text-white", "text-black");
+                upvoteButton.classList.remove("fill-white");
+                downvoteButton.classList.replace("text-white", "text-black");
+                downvoteButton.classList.remove("fill-white");
+              }
+        });
     </script>
+
 </x-inc-layout>
