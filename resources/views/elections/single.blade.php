@@ -1,33 +1,9 @@
 <x-inc-layout>
     <div class="flex w-10/12 mx-auto min-h-lvh">
-        <div class="flex flex-col p-3 bg-postBg w-1/4 my-16 rounded-2xl mx-auto">
-            <div class="font-bold text-2xl">
-                {{ $election->title }}
-            </div>
-            <div>
-                {{ $election->description }}
-            </div>
-            <div class="flex flex-col p-3  bg-gray-500 rounded-lg">
-                <div class="mb-1 text-sm font-medium dark:text-white">گزینه 1</div>
-                <div class=" bg-gray-200 rounded-full dark:bg-gray-700 w-11/12">
-                    <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
-                </div>
-                <div class="mb-1 text-sm font-medium dark:text-white">گزینه 2</div>
-                <div class=" bg-gray-200 rounded-full dark:bg-gray-700 w-11/12 ">
-                    <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 20%"> 20%</div>
-                </div>
-                <div class="mb-1 text-sm font-medium dark:text-white">گزینه 3</div>
-                <div class=" bg-gray-200 rounded-full dark:bg-gray-700 w-11/12 ">
-                    <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 10%"> 10%</div>
-                </div>
-                <div class="mb-1 text-sm font-medium dark:text-white">گزینه 4</div>
-                <div class=" bg-gray-200 rounded-full dark:bg-gray-700 w-11/12 ">
-                    <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 15%"> 15%</div>
-                </div>
-            </div>
-        </div>
+        @include('elections.layouts.sidebar')
         <div class="flex flex-col w-4/6 mx-auto my-16">
             @foreach($options as $option)
+            <a href="{{ route('option.show', ['election_id' => $election->id, 'option_id' => $option->id]) }}" hx-boost="true">
                 <div class="flex flex-col p-3 bg-postBg  rounded-2xl
                     @if (!$loop->first)
                         mt-4
@@ -102,10 +78,12 @@
 {{--                        </div>--}}
                         <div class="flex flex-row gap-1">
                             <i class="ri-chat-1-fill"></i>
+                            <!-- count comments -->
+                            {{ $option->comment_count }}
                         </div>
                     </div>
                 </div>
-
+            </a>
             @endforeach
         </div>
     </div>

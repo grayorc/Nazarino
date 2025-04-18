@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Option;
+use App\Models\Election;
 use Illuminate\Http\Request;
-
+use App\Models\Vote;
+use App\Models\Comment;
 
 class OptionController extends Controller
 {
@@ -56,9 +58,24 @@ class OptionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $election_id, string $option_id)
     {
-        //
+        $option = Option::find($option_id);
+        $election = Election::find($election_id);
+        $election->votes_count = $election->votes->count();
+        $election->comments_count = $election->comments->count();
+        $election->users_count = $election->options->map(function($option){
+            $votes = Vote::where('option_id', $option->id)->get();
+            $users = $votes->map(function($vote){
+                return $vote->user;
+            });
+            return $users->count();
+        })->unique()->sum();
+        $votes = Vote::where('option_id', $option->id)->get();
+        $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
+        $option->user_vote = $votes->where('option_id', $option->id)->first();
+        $option->comment_count = $option->comments->count();
+        return view('elections.options.single', compact('option', 'election','comments','votes'));
     }
 
     /**

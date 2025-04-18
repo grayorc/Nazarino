@@ -80,6 +80,15 @@ class ElectionController extends Controller
     public function show(int $election)
     {
         $election = Election::find($election);
+        $election->comments_count = $election->comments->count();
+        $election->votes_count = $election->votes->count();
+        $election->users_count = $election->options->map(function($option){
+            $votes = Vote::where('option_id', $option->id)->get();
+            $users = $votes->map(function($vote){
+                return $vote->user;
+            });
+            return $users->count();
+        })->unique()->sum();
         if($election == null){
             abort(404);
         }
@@ -88,6 +97,7 @@ class ElectionController extends Controller
         $votes = Vote::where('election_id', $election->id)->get();
         $options = $options->map(function($option) use ($votes){
             $option->user_vote = $votes->where('option_id', $option->id)->first();
+            $option->comment_count = $option->comments->count();
             return $option;
         });
         return view('elections.single',compact('election','options','votes'));

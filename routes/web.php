@@ -29,3 +29,6 @@ require __DIR__.'/auth.php';
 Route::prefix('admin')->middleware(['VerifySuperuser','auth'])->group( function () {
     require __DIR__.'/admin.php';
 });
+
+Route::get('elections/{election_id}/option/{option_id}', [\App\Http\Controllers\OptionController::class, 'show'])->name('option.show');
+Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');

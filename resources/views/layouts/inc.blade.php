@@ -19,7 +19,7 @@
         <header class="flex justify-between items-center py-4 px-5 sm:px-20 bg-PrimaryBlack sticky top-0 z-10">
             <div class="flex justify-between items-center w-full">
             <!-- Logo -->
-            <a href="{{ route('index') }}">
+            <a href="{{ route('index') }}" hx-boost="true">
                 <div class="text-primaryColor text-xl">
                     <img src="dist/img/logo.png" class="w-10" alt="Logo">
                 </div>
@@ -41,7 +41,7 @@
                 <!-- Authentication Buttons -->
                 @auth
                 <li class="lg:hidden">
-                <a href="{{ route('dashboard') }}">
+                <a href="{{ route('dashboard') }}" >
                     <button class="bg-primaryColor rounded-md px-8 py-0.5 border-primaryColor border-2
                     hover:bg-PrimaryBlack hover:border-primaryColor hover:text-primaryColor
                     transition delay-100 duration-200 w-full">داشبورد</button>
@@ -115,5 +115,29 @@
         </footer>
         <x-notify::notify />
         @notifyJs
+        <script>
+            //need scritp for ajax responces if ajax responce is success then show notify
+            document.body.addEventListener('htmx:afterSwap', function(event) {
+                if (event.detail.shouldSwap) {
+                    if (event.detail.swapResponse.ok) {
+                        notify({
+                            title: event.detail.swapResponse.title,
+                            text: event.detail.swapResponse.message,
+                            type: event.detail.swapResponse.type
+                        });
+                    }
+                }
+            });
+            //error notify
+            document.body.addEventListener('htmx:beforeSwap', function(event) {
+                if (event.detail.shouldSwap) {
+                    notify({
+                        title: event.detail.swapResponse.title,
+                        text: event.detail.swapResponse.message,
+                        type: event.detail.swapResponse.type
+                    });
+                }
+            });
+        </script>
     </body>
 </html>
