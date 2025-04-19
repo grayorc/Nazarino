@@ -22,11 +22,11 @@
                             bg-zinc-800/30
                             "
 
-                            @if(optional($option->user_vote)->vote != null)
+                            @if(optional($option->votes->where('option_id', $option->id)->first())->vote != null)
                                 style="
-                                background-color:@if(optional($option->user_vote)->vote === 1)
+                                background-color:@if(optional($option->votes->where('option_id', $option->id)->first())->vote === 1)
                                 #009e42
-                                @elseif(optional($option->user_vote)->vote === -1)
+                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === -1)
                                 #ea002a
                                 @endif "
                             @endif
@@ -38,9 +38,9 @@
                                 hx-swap="innerHTML"
                                 hx-trigger="click"
                                 hx-vals='{"option_id": {{ $option->id }}, "vote_type": "UP"}'>
-                                @if(optional($option->user_vote)->vote === 1)
+                                @if(optional($option->votes->where('option_id', $option->id)->first())->vote === 1)
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-white fill-white"><path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path></svg>
-                                @elseif(optional($option->user_vote)->vote === -1 || $option->user_vote == null)
+                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === -1 || $option->votes->where('option_id', $option->id)->first() == null)
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black">
                                         <path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path>
                                     </svg>
@@ -56,9 +56,9 @@
                                 hx-swap="innerHTML"
                                 hx-trigger="click"
                                 hx-vals='{"option_id": {{ $option->id }}, "vote_type": "DOWN"}'>
-                                @if(optional($option->user_vote)->vote === -1)
+                                @if(optional($option->votes->where('option_id', $option->id)->first())->vote === -1)
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-white fill-white"><path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path></svg>
-                                @elseif(optional($option->user_vote)->vote === 1 || $option->user_vote == null)
+                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === 1 || $option->votes->where('option_id', $option->id)->first() == null)
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black">
                                     <path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path>
                                 </svg>
@@ -79,7 +79,7 @@
                         <div class="flex flex-row gap-1">
                             <i class="ri-chat-1-fill"></i>
                             <!-- count comments -->
-                            {{ $option->comment_count }}
+                            {{ $option->comments->count() }}
                         </div>
                     </div>
                 </div>

@@ -92,15 +92,9 @@ class ElectionController extends Controller
         if($election == null){
             abort(404);
         }
-
         $options = $election->options;
-        $votes = Vote::where('election_id', $election->id)->get();
-        $options = $options->map(function($option) use ($votes){
-            $option->user_vote = $votes->where('option_id', $option->id)->first();
-            $option->comment_count = $option->comments->count();
-            return $option;
-        });
-        return view('elections.single',compact('election','options','votes'));
+        $options->load('votes','comments');
+        return view('elections.single',compact('election','options'));
     }
 
     public function vote(Request $request)
