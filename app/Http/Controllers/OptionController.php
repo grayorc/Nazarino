@@ -69,7 +69,7 @@ class OptionController extends Controller
             $users = $votes->map(function($vote){
                 return $vote->user;
             });
-            return $users->count();
+            return $users;
         })->unique()->sum();
         $votes = Vote::where('option_id', $option->id)->get();
         $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
