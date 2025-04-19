@@ -23,5 +23,5 @@ class Vote extends Model
         return $this->belongsTo(Election::class);
     }
 
-    
+
 }

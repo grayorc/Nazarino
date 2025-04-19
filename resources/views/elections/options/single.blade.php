@@ -61,7 +61,7 @@
                         </div>
                         <div class="flex flex-row gap-1">
                             <i class="ri-chat-1-fill"></i>
-                            {{ $option->comment_count }}
+                            {{ $option->comments->count() }}
                         </div>
                     </div>
                 </div>

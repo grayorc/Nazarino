@@ -80,20 +80,14 @@ class ElectionController extends Controller
     public function show(int $election)
     {
         $election = Election::find($election);
-        $election->comments_count = $election->comments->count();
-        $election->votes_count = $election->votes->count();
-        $election->users_count = $election->options->map(function($option){
-            $votes = Vote::where('option_id', $option->id)->get();
-            $users = $votes->map(function($vote){
-                return $vote->user;
-            });
-            return $users->count();
-        })->unique()->sum();
+        $election->withRelationshipAutoloading();
+        $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
+            ->distinct('user_id')
+            ->count();
         if($election == null){
             abort(404);
         }
         $options = $election->options;
-        $options->load('votes','comments');
         return view('elections.single',compact('election','options'));
     }
 

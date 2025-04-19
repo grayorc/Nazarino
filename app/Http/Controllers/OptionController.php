@@ -61,21 +61,20 @@ class OptionController extends Controller
     public function show(string $election_id, string $option_id)
     {
         $option = Option::find($option_id);
+        $option->withRelationshipAutoloading();
         $election = Election::find($election_id);
-        $election->votes_count = $election->votes->count();
-        $election->comments_count = $election->comments->count();
-        $election->users_count = $election->options->map(function($option){
-            $votes = Vote::where('option_id', $option->id)->get();
-            $users = $votes->map(function($vote){
-                return $vote->user;
-            });
-            return $users;
-        })->unique()->sum();
-        $votes = Vote::where('option_id', $option->id)->get();
+        $election->withRelationshipAutoloading();
+        $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
+            ->distinct('user_id')
+            ->count();
         $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
+        $comments->withRelationshipAutoloading();
+        //wrong
+        $votes = Vote::where('option_id', $option->id)->get();
         $option->user_vote = $votes->where('option_id', $option->id)->first();
+
         $option->comment_count = $option->comments->count();
-        return view('elections.options.single', compact('option', 'election','comments','votes'));
+        return view('elections.options.single', compact('option', 'election','comments'));
     }
 
     /**

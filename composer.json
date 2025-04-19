@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.2",
         "hekmatinasser/verta": "^8.5",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^12.8",
         "laravel/tinker": "^2.10.1",
         "mckenziearts/laravel-notify": "^2.7"
     },
