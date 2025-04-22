@@ -63,7 +63,7 @@ class OptionController extends Controller
         $option = Option::find($option_id);
         $option->withRelationshipAutoloading();
         $election = Election::find($election_id);
-        $election->withRelationshipAutoloading();
+//        $election->withRelationshipAutoloading();
         $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
             ->distinct('user_id')
             ->count();

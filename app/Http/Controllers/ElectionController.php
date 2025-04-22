@@ -80,7 +80,7 @@ class ElectionController extends Controller
     public function show(int $election)
     {
         $election = Election::find($election);
-        $election->withRelationshipAutoloading();
+//        $election->withRelationshipAutoloading();
         $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
             ->distinct('user_id')
             ->count();
