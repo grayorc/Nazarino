@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,7 +27,7 @@ Route::get('election/{id}', [\App\Http\Controllers\ElectionController::class, 's
 Route::post('vote', [\App\Http\Controllers\ElectionController::class, 'vote'])->name('vote');
 require __DIR__.'/auth.php';
 
-Route::prefix('admin')->middleware(['VerifySuperuser','auth'])->group( function () {
+Route::prefix('admin')->middleware(['AdminMiddleware','auth'])->group( function () {
     require __DIR__.'/admin.php';
 });
 

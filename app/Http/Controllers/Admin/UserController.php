@@ -17,6 +17,8 @@ class UserController extends Controller
     {
         $query = User::query();
 
+
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {

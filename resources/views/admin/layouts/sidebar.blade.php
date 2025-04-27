@@ -24,6 +24,8 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
+
+            @can('view-user')
             <!-- کاربران -->
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
@@ -43,16 +45,19 @@
                     <p>لیست کاربران</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="
-                  {{ route('users.create') }}
-                   " class="nav-link">
-                    <i class="ri-circle-line nav-icon"></i>
-                    <p>ساخت کاربر جدید</p>
-                  </a>
-                </li>
+                @can('create-user')
+                    <li class="nav-item">
+                      <a href="
+                      {{ route('users.create') }}
+                       " class="nav-link">
+                        <i class="ri-circle-line nav-icon"></i>
+                        <p>ساخت کاربر جدید</p>
+                      </a>
+                    </li>
+                @endcan
               </ul>
             </li>
+            @endcan
             <!-- محصولات -->
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">

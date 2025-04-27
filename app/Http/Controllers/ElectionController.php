@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Election;
 use App\Models\Image;
+use App\Models\Role;
 use App\Notifications\InviteNotification;
 use Illuminate\Http\Request;
 use App\Models\Vote;
