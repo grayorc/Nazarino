@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\Option;

@@ -3,7 +3,7 @@
 return [
     'options' => [
         "closeButton" => true,
-        "positionClass" => "toast-top-end",
+        "positionClass" => "toast-bottom-start",
         "preventDuplicates" => false,
         "showDuration" => "300",
         "timeOut" => "5000",

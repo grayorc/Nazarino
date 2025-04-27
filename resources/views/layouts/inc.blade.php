@@ -113,7 +113,6 @@
                 </div>
             </div>
         </footer>
-        <x-notify::notify />
         <script>
             //need scritp for ajax responces if ajax responce is success then show notify
             document.body.addEventListener('htmx:afterSwap', function(event) {
