@@ -113,30 +113,6 @@
                 </div>
             </div>
         </footer>
-        <script>
-            //need scritp for ajax responces if ajax responce is success then show notify
-            document.body.addEventListener('htmx:afterSwap', function(event) {
-                if (event.detail.shouldSwap) {
-                    if (event.detail.swapResponse.ok) {
-                        notify({
-                            title: event.detail.swapResponse.title,
-                            text: event.detail.swapResponse.message,
-                            type: event.detail.swapResponse.type
-                        });
-                    }
-                }
-            });
-            //error notify
-            document.body.addEventListener('htmx:beforeSwap', function(event) {
-                if (event.detail.shouldSwap) {
-                    notify({
-                        title: event.detail.swapResponse.title,
-                        text: event.detail.swapResponse.message,
-                        type: event.detail.swapResponse.type
-                    });
-                }
-            });
-        </script>
         {!! ToastMagic::scripts() !!}
     </body>
 </html>

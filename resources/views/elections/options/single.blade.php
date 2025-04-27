@@ -96,44 +96,6 @@
             <div class="font-bold text-2xl mb-4">نظرات</div>
 
             @if($election->has_comment)
-<script>
-    document.body.addEventListener('htmx:afterRequest', function(event) {
-        ToastMagic = new ToastMagic();
-        ToastMagic.success("نظر شما ثبت گردید!");
-        if (event.detail.target && event.detail.target.id === 'comments-list' && event.detail.xhr.status === 200) {
-            const commentBody = event.detail.xhr.responseText;
-            const commentId = new Date().getTime(); // Generate a temporary ID for the new comment
-            const commentTemplate = `
-                <article class="p-6 mb-6 text-base bg-white rounded-lg" id="comment-${commentId}">
-                    <footer class="flex justify-between items-center mb-2">
-                        <div class="flex items-center">
-                            <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                <time>همین الان</time>
-                            </p>
-                        </div>
-                        <button class="text-gray-400 hover:text-gray-600"
-                            hx-delete="/comments/${commentId}"
-                            hx-target="#comment-${commentId}"
-                            hx-swap="outerHTML"
-                            hx-confirm="آیا از حذف این نظر مطمئن هستید؟"
-                            hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'>
-                            <i class="ri-delete-bin-line"></i>
-                        </button>
-                    </footer>
-                    <p class="text-gray-500">${commentBody}</p>
-                </article>
-            `;
-            const commentsList = document.getElementById('comments-list');
-            commentsList.insertAdjacentHTML('afterbegin', commentTemplate);
-        }
-    });
-</script>
-
-
-
-
                 <form class="mb-6"
                     hx-post="/comments"
                     hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'
@@ -172,6 +134,73 @@
                        </div>
                    </div>
                 </form>
+                <script>
+                    document.body.addEventListener('htmx:afterRequest', function(event) {
+                        console.log('htmx:afterRequest fired', event.detail);
+
+                        const xhr = event.detail.xhr;
+                        if (!xhr) {
+                            console.warn('No xhr object in event.detail');
+                            return;
+                        }
+
+                        if (
+                            xhr.status === 200
+                        ) {
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log('Parsed response:', response);
+
+                                if (response.status === 'success' && response.comment) {
+                                    if (typeof ToastMagic === 'function' || typeof ToastMagic === 'object') {
+                                        const toastInstance = new ToastMagic();
+                                        toastInstance.success("نظر شما ثبت گردید!");
+                                    } else {
+                                        console.warn('ToastMagic is not defined');
+                                    }
+
+                                    const comment = response.comment;
+
+                                    const commentTemplate = `
+          <article class="p-6 mb-6 text-base bg-white rounded-lg" id="comment-${comment.id}">
+            <footer class="flex justify-between items-center mb-2">
+              <div class="flex items-center">
+                <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                  ${comment.user_name}
+                </p>
+                <p class="text-sm text-gray-600">
+                  <time>${comment.created_at}</time>
+                </p>
+              </div>
+              <button class="text-gray-400 hover:text-gray-600"
+                      hx-delete="/comments/${comment.id}"
+                      hx-target="#comment-${comment.id}"
+                      hx-swap="outerHTML"
+                      hx-confirm="آیا از حذف این نظر مطمئن هستید؟"
+                      hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'>
+                <i class="ri-delete-bin-line"></i>
+              </button>
+            </footer>
+            <p class="text-gray-500">${comment.body}</p>
+          </article>
+        `;
+
+                                    const commentsList = document.getElementById('comments-list');
+                                    if (commentsList) {
+                                        commentsList.insertAdjacentHTML('afterbegin', commentTemplate);
+                                        console.log('Comment added to #comments-list');
+                                    } else {
+                                        console.warn('#comments-list element not found in DOM');
+                                    }
+                                } else {
+                                    console.warn('Response status not success or comment missing');
+                                }
+                            } catch (error) {
+                                console.error('Error parsing JSON or inserting comment:', error);
+                            }
+                        }
+                    });
+                </script>
             @endif
 
             <div id="comments-list">
