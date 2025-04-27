@@ -89,6 +89,11 @@ class ElectionController extends Controller
             abort(404);
         }
         $options = $election->options;
+        if(auth()->check()){
+            foreach ($options as $option) {
+                $option->user_vote = auth()->user()->userVote($option->id);
+            }
+        }
         return view('elections.single',compact('election','options'));
     }
 

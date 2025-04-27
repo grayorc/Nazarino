@@ -21,15 +21,16 @@
                             <div class="flex w-fit flex-row items-center gap-0 rounded-full border-black
                             bg-zinc-800/30
                             "
-
-                            @if(optional($option->votes->where('option_id', $option->id)->first())->vote != null)
-                                style="
-                                background-color:@if(optional($option->votes->where('option_id', $option->id)->first())->vote === 1)
-                                #009e42
-                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === -1)
-                                #ea002a
-                                @endif "
-                            @endif
+                            @auth()
+                                @if($option->user_vote != null)
+                                    style="
+                                    background-color:@if($option->user_vote === 1)
+                                    #009e42
+                                    @elseif($option->user_vote === -1)
+                                    #ea002a
+                                    @endif "
+                                @endif
+                            @endauth
                             >
                                 <button class="rounded-full p-1 hover:bg-zinc-800/30"
                                 hx-post="/vote"
@@ -38,13 +39,20 @@
                                 hx-swap="innerHTML"
                                 hx-trigger="click"
                                 hx-vals='{"option_id": {{ $option->id }}, "vote_type": "UP"}'>
-                                @if(optional($option->votes->where('option_id', $option->id)->first())->vote === 1)
+                                @auth()
+                                @if($option->user_vote === 1)
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-white fill-white"><path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path></svg>
-                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === -1 || $option->votes->where('option_id', $option->id)->first() == null)
+                                @elseif($option->user_vote === -1 || $option->user_vote == null)
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black">
                                         <path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path>
                                     </svg>
                                 @endif
+                                @endauth
+                                @guest()
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black">
+                                            <path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path>
+                                        </svg>
+                                @endguest
                                 </button>
                                 <span class="min-w-8 p-1 text-center text-black">
                                     <number-flow class="font-mono" id="vote-count-{{ $option->id }}">{{ $option->votes->sum('vote') }}</number-flow>
@@ -56,13 +64,20 @@
                                 hx-swap="innerHTML"
                                 hx-trigger="click"
                                 hx-vals='{"option_id": {{ $option->id }}, "vote_type": "DOWN"}'>
-                                @if(optional($option->votes->where('option_id', $option->id)->first())->vote === -1)
+                                @auth()
+                                @if($option->user_vote === -1)
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-white fill-white"><path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path></svg>
-                                @elseif(optional($option->votes->where('option_id', $option->id)->first())->vote === 1 || $option->votes->where('option_id', $option->id)->first() == null)
+                                @elseif($option->user_vote === 1 || $option->user_vote == null)
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black">
                                     <path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path>
                                 </svg>
                                 @endif
+                                @endauth
+                                @guest()
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black">
+                                        <path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path>
+                                    </svg>
+                                @endguest
                             </div>
                         </div>
 {{--                        <div class="flex flex-row gap-1">--}}

@@ -13,6 +13,7 @@ Route::get('/', function () {
 //    ->middleware('can:view,User')
 ;
 
+//users
 Route::get('/users', [UserController::class, 'index'])
     ->can('view-user')
     ->name('users.index');
@@ -35,4 +36,7 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])
     ->can('remove-user')
     ->name('users.destroy');
 
-//Route::post('/password-reset', [UserController::class, 'sendResetLink'])->name('password.email');
+//elections
+
+
+//permissions

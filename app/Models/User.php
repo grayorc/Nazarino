@@ -111,4 +111,9 @@ class User extends Authenticatable
         return $this->userHasPermission($permission) || $this->roleHasPermission($permission);
     }
 
+    public function userVote($option_id)
+    {
+        return $this->votes()->where('option_id', $option_id)->value('vote');
+    }
+
 }
