@@ -10,9 +10,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        @notifyCss
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {!! ToastMagic::styles() !!}
     </head>
     <body class="min-h-screen bg-primaryWhite">
 
@@ -114,7 +114,6 @@
             </div>
         </footer>
         <x-notify::notify />
-        @notifyJs
         <script>
             //need scritp for ajax responces if ajax responce is success then show notify
             document.body.addEventListener('htmx:afterSwap', function(event) {
@@ -139,5 +138,6 @@
                 }
             });
         </script>
+        {!! ToastMagic::scripts() !!}
     </body>
 </html>
