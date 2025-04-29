@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use phpDocumentor\Reflection\PseudoTypes\Numeric_;
 
 class Election extends Model
 {
@@ -29,5 +31,12 @@ class Election extends Model
     public function votes():HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    public function userCount():null|int
+    {
+        return $this->votes()->whereIn('option_id', $this->options->pluck('id'))
+            ->distinct('user_id')
+            ->count();
     }
 }

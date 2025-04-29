@@ -15,6 +15,7 @@ class ElectionController extends Controller
     public function index()
     {
         $elections = Election::all();
+
         return view('dash.elections.all', compact('elections'));
     }
 

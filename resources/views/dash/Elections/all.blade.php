@@ -5,12 +5,12 @@
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div>
                     <div class="flex items-center gap-x-3">
-                        <h2 class="text-lg font-medium text-gray-800 dark:text-white">Customers</h2>
+{{--                        <h2 class="text-lg font-medium text-gray-800 dark:text-white">Customers</h2>--}}
 
-                        <span class="px-3 py-1 text-xs text-primaryColor bg-blue-100 rounded-full dark:bg-SecondaryBlack dark:text-blue-400">240 vendors</span>
+                        <span class="px-3 py-1 text-xs text-primaryColor bg-blue-100 rounded-full dark:bg-SecondaryBlack dark:text-blue-400">{{ auth()->user()->elections()->count() }} نظرسنجی ساخته شده</span>
                     </div>
 
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">این نظرسنجی ها از قبل ایجاد شده اند</p>
+{{--                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">این نظرسنجی ها از قبل ایجاد شده اند</p>--}}
                 </div>
 
                 <div class="flex items-center mt-4 gap-x-3">
@@ -43,15 +43,15 @@
             <div class="mt-6 md:flex md:items-center md:justify-between">
                 <div class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-PrimaryBlack rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
                     <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 bg-gray-100 sm:text-sm dark:bg-SecondaryBlack dark:text-gray-300">
-                        View all
+                        همه
                     </button>
 
                     <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-SecondaryBlack dark:text-gray-300 hover:bg-gray-100">
-                        Monitored
+                        بسته شده
                     </button>
 
                     <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 sm:text-sm dark:hover:bg-SecondaryBlack dark:text-gray-300 hover:bg-gray-100">
-                        Unmonitored
+                        در جریان
                     </button>
                 </div>
 
@@ -62,7 +62,7 @@
                     </svg>
                 </span>
 
-                    <input type="text" placeholder="Search" class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+                    <input type="text" placeholder="جست و جو" class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
                 </div>
             </div>
 
@@ -115,9 +115,11 @@
                                         <span>وضعیت</span>
                                     </th>
 
-                                    <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">کاربران</th>
+                                    <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">کاربران شرکت کرده</th>
 
                                     <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">تا پایان نظرسنجی</th>
+
+                                    <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">تاریح ایجاد</th>
 
                                     <th scope="col" class="relative py-3.5 px-4">
                                         <span class="sr-only">Edit</span>
@@ -145,13 +147,26 @@
                                             <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
                                             <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1256&q=80" alt="">
                                             <img class="object-cover w-6 h-6 -mx-1 border-2 border-white rounded-full dark:border-gray-700 shrink-0" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=256&q=80" alt="">
-                                            <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-primaryColor bg-blue-100 border-2 border-white rounded-full">+4</p>
+                                            <p class="flex items-center justify-center w-6 h-6 -mx-1 text-xs text-primaryColor bg-blue-100 border-2 border-white rounded-full">{{ $election->userCount() }}+</p>
                                         </div>
                                     </td>
 
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
-                                        <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">
-                                            <div class="bg-primaryColor w-1/6 h-1.5"></div>
+                                    <td class="px-4 py-4 text-sm whitespace-nowrap text-white">
+{{--                                        <div class="w-48 h-1.5 bg-blue-200 overflow-hidden rounded-full">--}}
+{{--                                            <div class="bg-primaryColor w-1/6 h-1.5"></div>--}}
+{{--                                        </div>--}}
+                                        @if($election->end_date == null)
+                                            تاریخ پایان مشخص نشده
+                                        @elseif($election->end_date != null && $election->end_date > now())
+                                            {{ verta($election->end_date)->formatDifference() }}
+                                        @elseif($election->end_date < now())
+                                            پایان یافته
+                                        @endif
+                                    </td>
+
+                                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                                        <div>
+                                            <h2 class="font-medium text-gray-800 dark:text-white ">{{ verta($election->created_at)->format("Y.m.d") }}</h2>
                                         </div>
                                     </td>
 
