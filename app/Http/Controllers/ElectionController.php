@@ -26,29 +26,27 @@ class ElectionController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+//         dd($request);
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'end_date' => ['sometimes','date','after:today','nullable'],
         ]);
+
         $data['user_id'] = auth()->user()->id;
-        if($request->has('date-check') && $request->has('end_date')){
-            if($request->end_date > now()){
-                $data['end_date'] = $request->end_date;
-            }else{
-                return redirect()->back()->with('error', 'تاریخ انتخابی باید بیشتر از تاریخ حال باشد');
-            }
-        }
+        //change it with 'sometimes' validation
+//        if($request->has('date-check') && $request->has('end_date')){
+//            if($request->end_date > now()){
+//                $data['end_date'] = $request->end_date;
+//            }else{
+//                return redirect()->back()->with('error', 'تاریخ انتخابی باید بیشتر از تاریخ حال باشد');
+//            }
+//        }
         $data['is_public'] = true;
         if($request->has('comment')){
             $data['has_comment'] = true;
         }else{
             $data['has_comment'] = false;
-        }
-        if($request->has('revote')){
-            $data['is_revocable'] = true;
-        }else{
-            $data['is_revocable'] = false;
         }
 
         if($request->has('multivote')){
@@ -83,9 +81,6 @@ class ElectionController extends Controller
     {
         $election = Election::find($election);
 //        $election->withRelationshipAutoloading();
-        $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
-            ->distinct('user_id')
-            ->count();
         if($election == null){
             abort(404);
         }

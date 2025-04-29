@@ -3,18 +3,19 @@
         @include('elections.layouts.sidebar')
         <div class="flex flex-col w-4/6 mx-auto my-16">
             @foreach($options as $option)
-            <a href="{{ route('option.show', ['election_id' => $election->id, 'option_id' => $option->id]) }}">
                 <div class="flex flex-col p-3 bg-postBg  rounded-2xl
                     @if (!$loop->first)
                         mt-4
                     @endif
                 ">
-                    <div class="font-bold text-2xl">
-                        {{ $option->title }}
-                    </div>
-                    <div>
-                        {{ $option->description }}
-                    </div>
+                    <a href="{{ route('option.show', ['election_id' => $election->id, 'option_id' => $option->id]) }}">
+                        <div class="font-bold text-2xl">
+                            {{ $option->title }}
+                        </div>
+                        <div>
+                            {{ $option->description }}
+                        </div>
+                    </a>
 
                     <div class="flex gap-6">
                         <div class="flex flex-col items-center gap-4">
@@ -98,7 +99,6 @@
                         </div>
                     </div>
                 </div>
-            </a>
             @endforeach
         </div>
     </div>

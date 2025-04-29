@@ -18,7 +18,7 @@
             <div class="flex flex-col items-center m-auto">
                 <i class="ri-user-3-fill"></i>
                 <div class="text-sm font-medium">
-                    {{ $election->users_count }}
+                    {{ $election->userCount() }}
                 </div>
             </div>
             <div class="flex flex-col items-center m-auto">

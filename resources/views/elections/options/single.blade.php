@@ -106,6 +106,7 @@
                            <label for="comment" class="sr-only">نظر شما</label>
                            <textarea id="comment" name="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="نظر خود را بنویسید..." required ></textarea>
                            <input type="hidden" name="option_id" value="{{ $option->id }}">
+                           <input type="hidden" name="election_id" value="{{ $election->id }}">
                        </div>
                        <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600 border-gray-200">
                            <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
@@ -150,8 +151,13 @@
                             try {
                                 const response = JSON.parse(xhr.responseText);
                                 console.log('Parsed response:', response);
-
-                                if (response.status === 'success' && response.comment) {
+                                if (response.status === 'failed') {
+                                    if (typeof ToastMagic === 'function' || typeof ToastMagic === 'object') {
+                                        const toastInstance = new ToastMagic();
+                                        toastInstance.error("خطا!","نمیتوانید در این نظرسنجی، دیدگاه ثبت کنید");
+                                    }
+                                }
+                                if(response.status === 'success' && response.comment) {
                                     if (typeof ToastMagic === 'function' || typeof ToastMagic === 'object') {
                                         const toastInstance = new ToastMagic();
                                         toastInstance.success("نظر شما ثبت گردید!");
@@ -201,6 +207,8 @@
                         }
                     });
                 </script>
+            @else
+                <span class="text-gray-600"> امکان ثبت دیدگاه وجود ندارد</span>
             @endif
 
             <div id="comments-list">

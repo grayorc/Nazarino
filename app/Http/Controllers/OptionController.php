@@ -64,9 +64,6 @@ class OptionController extends Controller
         $option->withRelationshipAutoloading();
         $election = Election::find($election_id);
 //        $election->withRelationshipAutoloading();
-        $election->users_count = Vote::whereIn('option_id', $election->options->pluck('id'))
-            ->distinct('user_id')
-            ->count();
         $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
         $comments->withRelationshipAutoloading();
         $option->user_vote = auth()->user()->userVote($option->id);

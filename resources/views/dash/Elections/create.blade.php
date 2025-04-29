@@ -39,12 +39,9 @@
                 </div>
                 <div class="mt-5">
                     <div class="flex flex-row items-center space-x-4">
-                        <div class="flex">
-                            <label for="date-check" class="text-sm text-gray-500 dark:text-gray-300">پایان در تاریخ مشخص</label>
-                            <input type="checkbox" name="date-check" id="date-check" class="ml-2 rounded-md" value="">
-                        </div>
                         <div>
-                            <input type="date" placeholder="John Doe" name="end_date"
+                            <label for="end_date" class="text-sm text-gray-500 dark:text-gray-300">تاریخ پایان</label>
+                            <input type="date" placeholder="John Doe" name="end_date" id="end_date"
                                    class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
                         </div>
 

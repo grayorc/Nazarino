@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Election;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\Request;
 use App\Models\Comment;
@@ -12,9 +13,20 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'comment' => 'required|string|max:255',
-            'option_id' => 'required|exists:options,id',
+            'election_id' => ['required'],
+            'comment' => ['required','string','max:255'],
+            'option_id' => ['required','exists:options,id'],
         ]);
+
+        $election = Election::find($request->input('election_id'));
+
+        if(!$election->has_comment){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'خطا!',
+                'description' => 'نمیتوانید در این نظرسنجی، نظر ثبت کنید.',
+            ]);
+        }
 
         $comment = new Comment();
         $comment->body = $request->comment;
