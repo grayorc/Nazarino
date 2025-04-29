@@ -11,8 +11,8 @@
       <div style="direction: rtl">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-          <div class="image">
-            <img src="https://www.gravatar.com/avatar/52f0fbcbedee04a121cba8dad1174462?s=200&d=mm&r=g" class="img-circle elevation-2" alt="User Image">
+          <div class="image square-wrapper">
+            <img src="/dist/img/user8-128x128.jpg" class="img-circle elevation-2 img-fluid" alt="User Image">
           </div>
           <div class="info">
             <a href="#" class="d-block"> علی</a>
