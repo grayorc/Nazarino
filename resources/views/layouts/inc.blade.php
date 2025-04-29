@@ -21,7 +21,7 @@
             <!-- Logo -->
             <a href="{{ route('index') }}" hx-boost="true">
                 <div class="text-primaryColor text-xl">
-                    <img src="dist/img/logo.png" class="w-10" alt="Logo">
+                    <img src="/dist/img/logo.png" class="w-10" alt="Logo">
                 </div>
             </a>
             <!-- Hamburger Menu -->
