@@ -32,7 +32,7 @@
   <link rel="stylesheet" href="/dist/css/bootstrap-rtl.min.css">
   <!-- template rtl version -->
   <link rel="stylesheet" href="/dist/css/custom-style.css">
-  
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -52,7 +52,6 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>CopyLeft &copy; 2018 <a href="http://github.com/hesammousavi/">حسام موسوی</a>.</strong>
   </footer>
 
 </div>

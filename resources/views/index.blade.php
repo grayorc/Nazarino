@@ -3,7 +3,7 @@
             <div id="landing" class="text-center px-6 py-8 bg-primaryBlack max-w-lvh min-h-lvh mx-auto mt-20">
                 <div class="mb-6">
                     <div class="mx-auto flex items-center justify-center animate-float">
-                        <img src="dist/img/main-logo.png" class="w-96">
+                        <img src="/dist/img/main-logo.png" class="w-96">
                     </div>
                 </div>
                 <h1 class="text-primaryBlack text-2xl font-bold mb-4">نظرسنجی آنلاین بسازید</h1>
