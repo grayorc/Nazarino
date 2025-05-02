@@ -1,14 +1,14 @@
 <x-min-layout>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
-        <section class="container px-4 mx-auto flex-grow-1">
+        <section class="container px-4 mx-auto flex-grow-1 pb-32">
             <form action="{{ route('elections.store') }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                     @csrf
                     <div class="flex flex-row">
                         <div class="">
                         <label for="username" class="block text-sm text-gray-500 dark:text-gray-300">عنوان</label>
 
-                        <input type="text" name="title" placeholder="عنوان نظرسنجی را بنویسید" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                        <input type="text" name="title" placeholder="عنوان نظرسنجی را بنویسید" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300" />
                     </div>
                 </div>
                 <div class="flex flex-row">
@@ -16,7 +16,7 @@
                 <div class="mt-5">
                     <label for="Description" class="block text-sm text-gray-500 dark:text-gray-300">توضیحات نظرسنجی</label>
 
-                    <textarea name="description" placeholder="توضیحات نظرسنجی که به شرکت کنندگان نمایش داده میشود" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"></textarea>
+                    <textarea name="description" placeholder="توضیحات نظرسنجی که به شرکت کنندگان نمایش داده میشود" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300"></textarea>
 
                     <p class="mt-3 text-xs text-gray-400 dark:text-gray-600"></p>
                 </div>
@@ -24,7 +24,7 @@
                     <div>
                         <label for="file" class="block text-sm text-gray-500 dark:text-gray-300">تصویر</label>
 
-                        <label for="dropzone-file" class="flex flex-col items-center w-full max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-900 dark:border-gray-700 rounded-xl">
+                        <label for="dropzone-file" class="flex flex-col items-center w-full max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-PrimaryBlack dark:border-gray-700 rounded-xl">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-500 dark:text-gray-400">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                             </svg>
@@ -191,7 +191,7 @@
                                  x-cloak>
                                 <div class="container px-4 py-2 mx-auto md:py-10">
                                     <div class="w-full mb-5">
-                                        <label for="datepicker" class="block mb-1 text-sm font-medium text-neutral-500">انتخاب تاریخ</label>
+                                        <label for="datepicker" class="block mb-1 text-sm font-medium light:text-neutral-500">انتخاب تاریخ پایان</label>
                                         <div class="relative w-[17rem]">
                                             <input
                                                 x-ref="datePickerInput"
@@ -200,8 +200,8 @@
                                                 @click="datePickerOpen=!datePickerOpen"
                                                 x-model="datePickerValue"
                                                 x-on:keydown.escape="datePickerOpen=false"
-                                                class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md text-neutral-600 border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
-                                                placeholder="انتخاب تاریخ"
+                                                class="flex focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 w-full h-10 px-3 py-2 text-sm bg-white rounded-md text-neutral-600 placeholder:text-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+                                                placeholder="انتخاب تاریخ پایان"
                                                 readonly
                                             />
                                             <div @click="datePickerOpen=!datePickerOpen; if(datePickerOpen){ $refs.datePickerInput.focus() }" class="absolute top-0 left-0 px-3 py-2 cursor-pointer text-neutral-400 hover:text-neutral-500">
@@ -264,22 +264,51 @@
                 </div>
                 <div class="mt-5">
                     <div class="flex ml-auto">
-                        <label for="date-check" class="text-sm text-gray-500 dark:text-gray-300">امکان درج کامنت</label>
-                        <input type="checkbox" name="comment" class="ml-2 rounded-md" value="">
+                        <div dir="ltr" x-data="{ switchOn: true }" class="flex items-center justify-center space-x-2">
+                            <input id="thisId" type="checkbox" name="comment" class="hidden" :checked="switchOn">
+
+                            <button
+                                x-ref="switchButton"
+                                type="button"
+                                @click="switchOn = ! switchOn"
+                                :class="switchOn ? 'bg-primaryColor' : 'bg-neutral-200'"
+                                class="relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"
+                                x-cloak>
+                                <span :class="switchOn ? 'translate-x-[18px]' : 'translate-x-0.5'" class="w-5 h-5 duration-200 ease-in-out bg-white rounded-full shadow-md"></span>
+                            </button>
+
+                            <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
+                                   :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
+                                   class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                   x-cloak>
+                                امکان درج کامنت
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="mt-5">
                     <div class="flex ml-auto">
-                        <label for="date-check" class="text-sm text-gray-500 dark:text-gray-300">امکان پس گرفتن رای</label>
-                        <input type="checkbox" name="revote" class="ml-2 rounded-md" value="">
-                    </div>
-                </div>
+                        <div dir="ltr" x-data="{ switchOn: false }" class="flex items-center justify-center space-x-2">
+                            <input id="thisId" type="checkbox" name="public" class="hidden" :checked="switchOn">
 
-                <div class="mt-5">
-                    <div class="flex ml-auto">
-                        <label for="date-check" class="text-sm text-gray-500 dark:text-gray-300">امکان انتخاب چندگزینه ای</label>
-                        <input type="checkbox" name="multivote" class="ml-2 rounded-md" value="">
+                            <button
+                                x-ref="switchButton"
+                                type="button"
+                                @click="switchOn = ! switchOn"
+                                :class="switchOn ? 'bg-primaryColor' : 'bg-neutral-200'"
+                                class="relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"
+                                x-cloak>
+                                <span :class="switchOn ? 'translate-x-[18px]' : 'translate-x-0.5'" class="w-5 h-5 duration-200 ease-in-out bg-white rounded-full shadow-md"></span>
+                            </button>
+
+                            <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
+                                   :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
+                                   class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                   x-cloak>
+                                عمومی
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-5">
@@ -315,7 +344,7 @@
             optionNumber.textContent = optionNumber.textContent + 1;
 
             newOption.innerHTML = `
-                <input type="text" placeholder="گزینه" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+                <input type="text" placeholder="گزینه" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300">
             `;
         });
 

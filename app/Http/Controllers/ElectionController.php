@@ -86,10 +86,10 @@ class ElectionController extends Controller
             $data['has_comment'] = false;
         }
 
-        if($request->has('multivote')){
-            $data['is_multivote'] = true;
+        if($request->has('public')){
+            $data['is_public'] = true;
         }else{
-            $data['is_multivote'] = false;
+            $data['is_public'] = false;
         }
 
         $election = Election::create($data);
