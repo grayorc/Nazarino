@@ -42,26 +42,33 @@
 
             <div class="mt-6 md:flex md:items-center md:justify-between">
                 <div class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-PrimaryBlack rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
-                    <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter', 'visible') == 'all' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100"
-                            hx-get="{{ route('elections.index', ['filter' => 'all']) }}"
-                            hx-target="#table-section"
-                            hx-swap="outerHTML">
-                        همه
-                    </button>
+                    <a hx-boost="true" href="{{ route('elections.index')}}">
+                        <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter') == 'all' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100">
+                            همه
+                        </button>
+                    </a>
 
-                    <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter') == 'visible' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100"
-                            hx-get="{{ route('elections.index', ['filter' => 'visible']) }}"
-                            hx-target="#table-section"
-                            hx-swap="outerHTML">
-                        نمایان
-                    </button>
+                    <a hx-boost="true" href="{{ route('elections.index', array_merge(request()->except(['filter']), ['filter' => 'visible'])) }}">
+                        <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter') == 'visible' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100">
+                            عمومی
+                        </button>
+                    </a>
 
-                    <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter') == 'hidden' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100"
-                            hx-get="{{ route('elections.index', ['filter' => 'hidden']) }}"
-                            hx-target="#table-section"
-                            hx-swap="outerHTML">
-                        مخفی
-                    </button>
+                    <a hx-boost="true" href="{{ route('elections.index', array_merge(request()->except('filter'), ['filter' => 'hidden'])) }}">
+                        <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('filter') == 'hidden' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100">
+                            خصوصی
+                        </button>
+                    </a>
+                    <a hx-boost="true" href="{{ route('elections.index', array_merge(request()->except('status'), ['status' => 'open'])) }}">
+                        <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('status') == 'open' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100">
+                            باز
+                        </button>
+                    </a>
+                    <a hx-boost="true" href="{{ route('elections.index', array_merge(request()->except('status'), ['status' => 'closed'])) }}">
+                        <button class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 {{ request('status') == 'closed' ? 'bg-gray-100 dark:bg-SecondaryBlack' : '' }} sm:text-sm dark:text-gray-300 hover:bg-gray-100">
+                            بسته
+                        </button>
+                    </a>
                 </div>
 
                 <div class="relative flex items-center mt-4 md:mt-0">

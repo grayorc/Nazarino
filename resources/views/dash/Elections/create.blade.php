@@ -39,13 +39,227 @@
                 </div>
                 <div class="mt-5">
                     <div class="flex flex-row items-center space-x-4">
-                        <div>
-                            <label for="end_date" class="text-sm text-gray-500 dark:text-gray-300">تاریخ پایان</label>
-                            <input type="date" placeholder="John Doe" name="end_date" id="end_date"
-                                   class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
+                        <div class="flex flex-row items-center space-x-4">
+                            <div x-data="{
+      datePickerOpen: false,
+      datePickerValue: '',
+      datePickerFormat: 'Y/M/D',
+      datePickerMonth: 0,
+      datePickerYear: 0,
+      datePickerDay: 0,
+      datePickerDaysInMonth: [],
+      datePickerBlankDaysInMonth: [],
+      datePickerMonthNames: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+      datePickerDays: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'],
+
+      // Convert Gregorian date to Jalali (Persian) date
+      gregorianToJalali(gy, gm, gd) {
+        var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        var jy = (gy <= 1600) ? 0 : 979;
+        gy -= (gy <= 1600) ? 621 : 1600;
+        var gy2 = (gm > 2) ? (gy + 1) : gy;
+        var days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100)) + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+        jy += 33 * (parseInt(days / 12053));
+        days %= 12053;
+        jy += 4 * (parseInt(days / 1461));
+        days %= 1461;
+        jy += parseInt((days - 1) / 365);
+        if (days > 365) days = (days - 1) % 365;
+        var jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+        var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+        return [jy, jm, jd];
+      },
+
+      // Convert Jalali (Persian) date to Gregorian date
+      jalaliToGregorian(jy, jm, jd) {
+        var gy = (jy <= 979) ? 621 : 1600;
+        jy -= (jy <= 979) ? 0 : 979;
+        var days = (365 * jy) + ((parseInt(jy / 33)) * 8) + (parseInt(((jy % 33) + 3) / 4)) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+        gy += 400 * (parseInt(days / 146097));
+        days %= 146097;
+        if (days > 36524) {
+          gy += 100 * (parseInt(--days / 36524));
+          days %= 36524;
+          if (days >= 365) days++;
+        }
+        gy += 4 * (parseInt(days / 1461));
+        days %= 1461;
+        gy += parseInt((days - 1) / 365);
+        if (days > 365) days = (days - 1) % 365;
+        var gm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+        var gd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+        return [gy, gm, gd];
+      },
+
+      // Get number of days in a given Jalali month
+      getDaysInJalaliMonth(year, month) {
+        if (month <= 6) return 31;
+        if (month <= 11) return 30;
+        // Check for leap year
+        if (this.isJalaliLeapYear(year)) return 30;
+        return 29;
+      },
+
+      // Check if a Jalali year is leap year
+      isJalaliLeapYear(year) {
+        return ((year % 33) % 4 === 1);
+      },
+
+      // Get day of week in Jalali calendar (0 = Saturday, 1 = Sunday, etc.)
+      getJalaliDayOfWeek(jy, jm, jd) {
+        const gregorian = this.jalaliToGregorian(jy, jm, jd);
+        const date = new Date(gregorian[0], gregorian[1] - 1, gregorian[2]);
+        // Adjust for Persian calendar (week starts on Saturday)
+        return (date.getDay() + 1) % 7;
+      },
+
+      datePickerDayClicked(day) {
+        this.datePickerDay = day;
+        this.datePickerValue = this.datePickerFormatDate(this.datePickerYear, this.datePickerMonth + 1, day);
+        this.datePickerOpen = false;
+      },
+
+      datePickerPreviousMonth() {
+        if (this.datePickerMonth === 0) {
+            this.datePickerYear--;
+            this.datePickerMonth = 11;
+        } else {
+            this.datePickerMonth--;
+        }
+        this.datePickerCalculateDays();
+      },
+
+      datePickerNextMonth() {
+        if (this.datePickerMonth === 11) {
+            this.datePickerMonth = 0;
+            this.datePickerYear++;
+        } else {
+            this.datePickerMonth++;
+        }
+        this.datePickerCalculateDays();
+      },
+
+      datePickerIsSelectedDate(day) {
+        const formattedDate = this.datePickerFormatDate(this.datePickerYear, this.datePickerMonth + 1, day);
+        return this.datePickerValue === formattedDate;
+      },
+
+      datePickerIsToday(day) {
+        // Use server-side provided values for today
+        return {{ verta()->year }} === this.datePickerYear &&
+               {{ verta()->month }} === (this.datePickerMonth + 1) &&
+               {{ verta()->day }} === day;
+      },
+
+      datePickerCalculateDays() {
+        let daysInMonth = this.getDaysInJalaliMonth(this.datePickerYear, this.datePickerMonth + 1);
+
+        // Find where to start calendar day of week (in Persian calendar week starts with Saturday)
+        let dayOfWeek = this.getJalaliDayOfWeek(this.datePickerYear, this.datePickerMonth + 1, 1);
+
+        let blankdaysArray = [];
+        for (var i = 0; i < dayOfWeek; i++) {
+            blankdaysArray.push(i);
+        }
+
+        let daysArray = [];
+        for (var i = 1; i <= daysInMonth; i++) {
+            daysArray.push(i);
+        }
+
+        this.datePickerBlankDaysInMonth = blankdaysArray;
+        this.datePickerDaysInMonth = daysArray;
+      },
+
+      datePickerFormatDate(year, month, day) {
+        let formattedMonthInNumber = ('0' + month).slice(-2);
+        let formattedDay = ('0' + day).slice(-2);
+
+        return `${year}/${formattedMonthInNumber}/${formattedDay}`;
+      },
+
+      initCalendar() {
+        // Use server-side provided values for initialization
+        this.datePickerYear = {{ verta()->year }};
+        this.datePickerMonth = {{ verta()->month - 1 }};
+        this.datePickerDay = {{ verta()->day }};
+        this.datePickerValue = this.datePickerFormatDate(this.datePickerYear, this.datePickerMonth + 1, this.datePickerDay);
+        this.datePickerCalculateDays();
+      }
+    }"
+                                 x-init="initCalendar()"
+                                 x-cloak>
+                                <div class="container px-4 py-2 mx-auto md:py-10">
+                                    <div class="w-full mb-5">
+                                        <label for="datepicker" class="block mb-1 text-sm font-medium text-neutral-500">انتخاب تاریخ</label>
+                                        <div class="relative w-[17rem]">
+                                            <input
+                                                x-ref="datePickerInput"
+                                                name="selected_date"
+                                                type="text"
+                                                @click="datePickerOpen=!datePickerOpen"
+                                                x-model="datePickerValue"
+                                                x-on:keydown.escape="datePickerOpen=false"
+                                                class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md text-neutral-600 border-neutral-300 ring-offset-background placeholder:text-neutral-400 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+                                                placeholder="انتخاب تاریخ"
+                                                readonly
+                                            />
+                                            <div @click="datePickerOpen=!datePickerOpen; if(datePickerOpen){ $refs.datePickerInput.focus() }" class="absolute top-0 left-0 px-3 py-2 cursor-pointer text-neutral-400 hover:text-neutral-500">
+                                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            </div>
+                                            <div
+                                                x-show="datePickerOpen"
+                                                x-transition
+                                                @click.away="datePickerOpen = false"
+                                                class="absolute top-0 right-0 z-50 max-w-lg p-4 mt-12 antialiased bg-white border rounded-lg shadow w-[17rem] border-neutral-200/70">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div>
+                                                        <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
+                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <span x-text="datePickerMonthNames[datePickerMonth]" class="text-lg font-bold text-gray-800"></span>
+                                                        <span x-text="datePickerYear" class="mr-1 text-lg font-normal text-gray-600"></span>
+                                                    </div>
+                                                    <div>
+                                                        <button @click="datePickerPreviousMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
+                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="grid grid-cols-7 mb-3">
+                                                    <template x-for="(day, index) in datePickerDays" :key="index">
+                                                        <div class="px-0.5">
+                                                            <div x-text="day" class="text-xs font-medium text-center text-gray-800"></div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <div class="grid grid-cols-7">
+                                                    <template x-for="blankDay in datePickerBlankDaysInMonth">
+                                                        <div class="p-1 text-sm text-center border border-transparent"></div>
+                                                    </template>
+                                                    <template x-for="(day, dayIndex) in datePickerDaysInMonth" :key="dayIndex">
+                                                        <div class="px-0.5 mb-1 aspect-square">
+                                                            <div
+                                                                x-text="day"
+                                                                @click="datePickerDayClicked(day)"
+                                                                :class="{
+                                            'bg-neutral-200': datePickerIsToday(day) == true,
+                                            'text-gray-600 hover:bg-neutral-200': datePickerIsToday(day) == false && datePickerIsSelectedDate(day) == false,
+                                            'bg-neutral-800 text-white hover:bg-opacity-75': datePickerIsSelectedDate(day) == true
+                                        }"
+                                                                class="flex items-center justify-center text-sm leading-none text-center rounded-full cursor-pointer h-7 w-7">
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="mt-5">

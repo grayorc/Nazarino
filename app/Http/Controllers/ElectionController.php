@@ -27,16 +27,14 @@ class ElectionController extends Controller
         if ($request->has('filter')) {
             switch ($request->input('filter')) {
                 case 'visible':
-                    $query->where('is_public', false);
+                    $query->where('is_public', true);
                     break;
                 case 'hidden':
-                    $query->where('is_public', true);
+                    $query->where('is_public', false);
                     break;
                 case 'all':
                     break;
             }
-        } elseif ($request->has('filter')) {
-            $query->where('is_public', false);
         }
 
         if ($request->has('status')) {
@@ -55,7 +53,7 @@ class ElectionController extends Controller
         $elections->appends($request->all());
 
         return view('dash.elections.all', compact('elections'))
-            ->fragmentIf(request()->hasHeader('HX-Request'), 'table-section');
+            ->fragmentIf(request()->hasHeader('HX-Request') && $request->has('search'), 'table-section');
     }
 
     public function create()
