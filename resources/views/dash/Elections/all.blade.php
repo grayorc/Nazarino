@@ -94,7 +94,7 @@
                     @fragment('table-container')
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8" id="table-container">
     {{--                    --}}{{--         if empty           --}}
-                        @empty($elections)
+                        @if($elections->isEmpty())
                             <div class="flex items-center mt-6 text-center border rounded-lg h-96 dark:border-gray-700">
                             <div class="flex flex-col w-full max-w-sm px-4 mx-auto">
                                 <div class="p-3 mx-auto text-primaryColor bg-fadedPrimaryColor rounded-full dark:bg-fadedPrimaryColor">
@@ -207,7 +207,7 @@
                                 @endfragment
                             </table>
                         </div>
-                        @endempty
+                        @endif
                     </div>
                     @endfragment
                 </div>

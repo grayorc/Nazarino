@@ -14,7 +14,7 @@ class ElectionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Election::query();
+        $query = auth()->user()->elections();
 
         if ($request->has('search') && !empty($request->input('search'))) {
             $search = $request->input('search');
