@@ -6,6 +6,8 @@ use App\Models\Election;
 use App\Models\Image;
 use App\Models\Role;
 use App\Notifications\InviteNotification;
+use Hekmatinasser\Verta\Verta;
+use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use App\Models\Option;
@@ -63,7 +65,8 @@ class ElectionController extends Controller
 
     public function store(Request $request)
     {
-//         dd($request);
+        $d = $this->convertDate($request->get('end_date'));
+        //end date validate
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -114,9 +117,8 @@ class ElectionController extends Controller
 //        ]));
     }
 
-    public function show(int $election)
+    public function show(Election $election)
     {
-        $election = Election::find($election);
 //        $election->withRelationshipAutoloading();
         if($election == null){
             abort(404);
@@ -189,5 +191,165 @@ class ElectionController extends Controller
                 'vote_type' => $vote_type,
                 'option_id' => $data['option_id'],
             ]);
+    }
+
+    private function convertDate($persianDateString)
+    {
+        $gregorianDate = Verta::parseFormat('Y/n/j', $persianDateString)->datetime();
+
+        return $gregorianDate->format('Y-m-d H:i:s');
+    }
+
+    public function showResult(Election $election)
+    {
+        $options = Option::where('election_id', $election->id)
+            ->withCount([
+                'votes as upvotes_count' => function ($query) {
+                    $query->where('vote', 1);
+                },
+                'votes as downvotes_count' => function ($query) {
+                    $query->where('vote', -1);
+                },
+            ])
+            ->get();
+
+        $labels = $options->pluck('title')->toArray();
+        $upvotes = $options->pluck('upvotes_count')->toArray();
+        $downvotes = $options->pluck('downvotes_count')->toArray();
+
+        $totalVotes = [];
+        foreach ($options as $option) {
+            $totalVotes[] = $option->upvotes_count + $option->downvotes_count;
+        }
+
+        // Bar Chart
+        $barChart = Chartjs::build()
+            ->name('VotingResultsBarChart')
+            ->type('bar')
+            ->size(['width' => 700, 'height' => 350])
+            ->labels($labels)
+            ->datasets([
+                [
+                    'label' => 'رای مثبت',
+                    'backgroundColor' => 'rgba(38, 185, 154, 0.7)',
+                    'data' => $upvotes,
+                ],
+                [
+                    'label' => 'رای منفی',
+                    'backgroundColor' => 'rgba(255, 99, 132, 0.7)',
+                    'data' => $downvotes,
+                ],
+            ])
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+//                        'text' => 'نتایج رای گیری',
+                    ],
+                    'legend' => [
+                        'position' => 'top',
+                    ],
+                ],
+                'scales' => [
+                    'y' => [
+                        'beginAtZero' => true,
+                    ],
+                ],
+            ]);
+
+        // Pie Chart
+        $pieChart = Chartjs::build()
+            ->name('VotingResultsPieChart')
+            ->type('pie')
+            ->size(['width' => 400, 'height' => 400])
+            ->labels($labels)
+            ->datasets([
+                [
+                    'label' => 'Total Votes',
+                    'backgroundColor' => [
+                        'rgba(38, 185, 154, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                    ],
+                    'data' => $totalVotes,
+                    'borderWidth' => 0
+                ]
+            ])
+            ->options([
+                'plugins' => [
+                    'title' => [
+                        'display' => true,
+//                        'text' => 'تعداد رای های هر گزینه',
+                    ],
+                    'legend' => [
+                        'position' => 'right',
+                    ],
+                ],
+            ]);
+
+        return view('dash.elections.results', compact('barChart', 'pieChart', 'election'));
+    }
+
+    public function edit(Election $election)
+    {
+
+        return view('dash.elections.edit', compact('election'));
+    }
+
+    public function update(Request $Request, Election $election)
+    {
+        $d = $this->convertDate($request->get('end_date'));
+        //end date validate
+        $data = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'end_date' => ['sometimes','date','after:today','nullable'],
+        ]);
+
+        $data['user_id'] = auth()->user()->id;
+        //change it with 'sometimes' validation
+//        if($request->has('date-check') && $request->has('end_date')){
+//            if($request->end_date > now()){
+//                $data['end_date'] = $request->end_date;
+//            }else{
+//                return redirect()->back()->with('error', 'تاریخ انتخابی باید بیشتر از تاریخ حال باشد');
+//            }
+//        }
+        $data['is_public'] = true;
+        if($request->has('comment')){
+            $data['has_comment'] = true;
+        }else{
+            $data['has_comment'] = false;
+        }
+
+        if($request->has('public')){
+            $data['is_public'] = true;
+        }else{
+            $data['is_public'] = false;
+        }
+
+        $election = Election::create($data);
+        if($request->hasFile('image')){
+            //verify if it is image
+            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
+                $image = $request->file('image')->store('elections', 'public');
+                $image = Image::create([
+                    'path' => $image,
+                    'imageable_id' => $election->id,
+                    'imageable_type' => 'App\Models\Election',
+                ]);
+            }else{
+                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
+            }
+        }
+        return redirect()->route('options.create', $election->id);
+//        $user->notify(new InviteNotification()([
+//            'title' => 'به نظرسنجی جدید دعوت شدید!',
+//            'message' => 'شما به یک نظرسنجی جدید دعوت شدید. بررسی کنید.',
+//            'url' => route('elections.show', $election->id),
+//        ]));
+
     }
 }

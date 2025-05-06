@@ -12,6 +12,7 @@
         "php": "^8.2",
         "devrabiul/laravel-toaster-magic": "^1.0",
         "hekmatinasser/verta": "^8.5",
+        "icehouse-ventures/laravel-chartjs": "^4.2",
         "laravel/framework": "^12.8",
         "laravel/tinker": "^2.10.1",
         "mckenziearts/laravel-notify": "^2.7"

@@ -18,6 +18,12 @@ class Election extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+
     public function options():HasMany
     {
         return $this->hasMany(Option::class);

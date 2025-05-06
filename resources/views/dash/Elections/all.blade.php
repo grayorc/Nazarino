@@ -1,4 +1,8 @@
 <x-min-layout>
+    <div x-data="{
+        dropdownOpen: false
+    }"
+         class="relative">
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
         <section class="container px-4 mx-auto flex-grow-1">
@@ -156,7 +160,9 @@
                                 <tr>
                                     <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                         <div>
+                                            <a href="{{route('elections.result', $election->id)}}">
                                             <h2 class="font-medium text-gray-800 dark:text-white ">{{ $election->title }}</h2>
+                                            </a>
                                             <p class="text-sm font-normal text-gray-600 dark:text-gray-400">{{ $election->description }}</p>
                                         </div>
                                     </td>
@@ -194,12 +200,13 @@
                                         </div>
                                     </td>
 
-                                    <td class="px-4 py-4 text-sm whitespace-nowrap">
+                                    <td class="relative px-4 py-4 text-sm whitespace-nowrap">
                                         <button class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                                             </svg>
                                         </button>
+
                                     </td>
                                 </tr>
                                 @endforeach

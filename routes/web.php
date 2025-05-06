@@ -30,6 +30,6 @@ Route::prefix('admin')->middleware(['AdminMiddleware','auth'])->group( function 
     require __DIR__.'/admin.php';
 });
 
-Route::get('election/{id}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
+Route::get('election/{election}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
 Route::get('election/{election_id}/option/{option_id}', [\App\Http\Controllers\OptionController::class, 'show'])->name('option.show');
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');

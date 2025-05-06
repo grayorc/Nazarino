@@ -22,6 +22,12 @@ export default {
                 SecondaryWhite : "#CCC5B9",
                 PrimaryBlack : "#252422",
                 SecondaryBlack : "#403D39",
+
+                Background_color: "#1E1E2E",
+                Sidebar_background: "#23232E",
+                Sidebar_background_hover: "#373749",
+                Secondary_accent_color: "#E91E63",
+                Chart_background: "#2E2E3E",
             },
         },
     },

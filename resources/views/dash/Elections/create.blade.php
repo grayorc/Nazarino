@@ -191,11 +191,11 @@
                                  x-cloak>
                                 <div class="container px-4 py-2 mx-auto md:py-10">
                                     <div class="w-full mb-5">
-                                        <label for="datepicker" class="block mb-1 text-sm font-medium light:text-neutral-500">انتخاب تاریخ پایان</label>
+                                        <label for="datepicker" class="block mb-1 text-sm font-medium light:text-neutral-500 dark:text-gray-300">انتخاب تاریخ پایان</label>
                                         <div class="relative w-[17rem]">
                                             <input
                                                 x-ref="datePickerInput"
-                                                name="selected_date"
+                                                name="end_date"
                                                 type="text"
                                                 @click="datePickerOpen=!datePickerOpen"
                                                 x-model="datePickerValue"
