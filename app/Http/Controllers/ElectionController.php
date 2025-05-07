@@ -6,6 +6,7 @@ use App\Models\Election;
 use App\Models\Image;
 use App\Models\Role;
 use App\Notifications\InviteNotification;
+use App\Rules\AfterNow;
 use Hekmatinasser\Verta\Verta;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Illuminate\Http\Request;
@@ -65,13 +66,22 @@ class ElectionController extends Controller
 
     public function store(Request $request)
     {
-        $d = $this->convertDate($request->get('end_date'));
-        //end date validate
+
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'end_date' => ['sometimes','date','after:today','nullable'],
         ]);
+
+        if ($request->has('has_end_date') && $request->input('has_end_date') == "on") {
+            $request->validate([
+                'end_date' => ['required', new AfterNow()]
+            ]);
+
+            $data['end_date'] = $this->convertDate($request->input('end_date'));
+//            dd(Verta::parse($request->input('end_date'))->lte(Verta::today()));
+        } else {
+            $data['end_date'] = 'nullable';
+        }
 
         $data['user_id'] = auth()->user()->id;
         //change it with 'sometimes' validation
@@ -300,14 +310,13 @@ class ElectionController extends Controller
 
     public function update(Request $Request, Election $election)
     {
-        $d = $this->convertDate($request->get('end_date'));
-        //end date validate
-        $data = $request->validate([
+        $data = $Request->validate([
             'title' => 'required',
             'description' => 'required',
-            'end_date' => ['sometimes','date','after:today','nullable'],
+            'end_date' => ['sometimes','jdate:Y.m.d','nullable', new AfterNow()],
         ]);
 
+        $data['end_date'] = $this->convertDate($request->get('end_date'));
         $data['user_id'] = auth()->user()->id;
         //change it with 'sometimes' validation
 //        if($request->has('date-check') && $request->has('end_date')){
@@ -344,12 +353,8 @@ class ElectionController extends Controller
                 return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
             }
         }
-        return redirect()->route('options.create', $election->id);
-//        $user->notify(new InviteNotification()([
-//            'title' => 'به نظرسنجی جدید دعوت شدید!',
-//            'message' => 'شما به یک نظرسنجی جدید دعوت شدید. بررسی کنید.',
-//            'url' => route('elections.show', $election->id),
-//        ]));
+
+//        return redirect()->route('options.create', $election->id);
 
     }
 }

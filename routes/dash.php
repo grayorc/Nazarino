@@ -10,14 +10,20 @@ Route::get('/', function () {
     return view('dash.index');
 })->name('dashboard');
 
-Route::Resource('elections', \App\Http\Controllers\ElectionController::class);
+Route::get('/elections', [ElectionController::class, 'index'])->name('elections.index');
+Route::get('/elections/create', [ElectionController::class, 'create'])->name('elections.create');
+Route::post('/elections', [ElectionController::class, 'store'])->name('elections.store');
+Route::get('/elections/{election}', [ElectionController::class, 'showResult'])->name('elections.result');
+Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])->name('elections.edit');
+Route::put('/elections/{election}', [ElectionController::class, 'update'])->name('elections.update');
+Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])->name('elections.destroy');
 
 Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');
 Route::post('elections/{id}/options', [OptionController::class, 'store'])->name('options.store');
 
-Route::get('election/{election}', [ElectionController::class, 'showResult'])->name('elections.result');
-Route::get('election/{election}/edit', [ElectionController::class, 'edit'])->name('elections.edit');
-Route::put('election/{election}/update', [ElectionController::class, 'update'])->name('elections.update');
+//Route::get('election/{election}', [ElectionController::class, 'showResult'])->name('elections.result');
+//Route::get('election/{election}/edit', [ElectionController::class, 'edit'])->name('elections.edit');
+//Route::put('election/{election}/update', [ElectionController::class, 'update'])->name('elections.update');
 
 
 //Route::get('test', function () {
