@@ -66,65 +66,60 @@ class ElectionController extends Controller
 
     public function store(Request $request)
     {
-
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+        $validatedData = $request->validate([
+            'title' => ['required','string','max:255'],
+            'description' => ['required','string'],
+            'public' => ['nullable','string'],
+            'comment' => ['nullable','string'],
+            'has_end_date' => ['nullable','string'],
+            'image' => ['nullable','file','image','mimes:jpeg,png,jpg,gif,svg','max:5120'],
         ]);
 
-        if ($request->has('has_end_date') && $request->input('has_end_date') == "on") {
+        if ($request->has('has_end_date') && $request->input('has_end_date') === "on") {
             $request->validate([
                 'end_date' => ['required', new AfterNow()]
             ]);
 
-            $data['end_date'] = $this->convertDate($request->input('end_date'));
-//            dd(Verta::parse($request->input('end_date'))->lte(Verta::today()));
+            $endDate = $this->convertDate($request->input('end_date'));
         } else {
-            $data['end_date'] = 'nullable';
+            $endDate = null;
         }
 
-        $data['user_id'] = auth()->user()->id;
-        //change it with 'sometimes' validation
-//        if($request->has('date-check') && $request->has('end_date')){
-//            if($request->end_date > now()){
-//                $data['end_date'] = $request->end_date;
-//            }else{
-//                return redirect()->back()->with('error', 'تاریخ انتخابی باید بیشتر از تاریخ حال باشد');
-//            }
-//        }
-        $data['is_public'] = true;
-        if($request->has('comment')){
-            $data['has_comment'] = true;
-        }else{
-            $data['has_comment'] = false;
-        }
-
-        if($request->has('public')){
-            $data['is_public'] = true;
-        }else{
-            $data['is_public'] = false;
-        }
-
+        $data = [
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'end_date' => $endDate,
+            'user_id' => auth()->id(),
+            'has_comment' => $request->has('comment'),
+            'is_public' => $request->has('public'),
+        ];
         $election = Election::create($data);
-        if($request->hasFile('image')){
-            //verify if it is image
-            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
-                $image = $request->file('image')->store('elections', 'public');
-                $image = Image::create([
-                    'path' => $image,
+
+        if ($request->hasFile('image')) {
+            try {
+                if (!$request->file('image')->isValid()) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(['image' => 'خطا در آپلود تصویر. لطفا دوباره تلاش کنید.']);
+                }
+
+                $imagePath = $request->file('image')->store('elections', 'public');
+
+                Image::create([
+                    'path' => $imagePath,
                     'imageable_id' => $election->id,
                     'imageable_type' => 'App\Models\Election',
                 ]);
-            }else{
-                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
+            } catch (\Exception $e) {
+                $election->delete();
+
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['image' => 'خطا در آپلود تصویر. لطفا دوباره تلاش کنید.']);
             }
         }
+
         return redirect()->route('options.create', $election->id);
-//        $user->notify(new InviteNotification()([
-//            'title' => 'به نظرسنجی جدید دعوت شدید!',
-//            'message' => 'شما به یک نظرسنجی جدید دعوت شدید. بررسی کنید.',
-//            'url' => route('elections.show', $election->id),
-//        ]));
     }
 
     public function show(Election $election)

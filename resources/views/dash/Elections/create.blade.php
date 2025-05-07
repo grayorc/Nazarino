@@ -3,29 +3,29 @@
         @include('dash.layouts.sidebar')
         <section class="container px-4 mx-auto flex-grow-1 pb-32">
             <form action="{{ route('elections.store') }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
-                    @csrf
-                    <div class="flex flex-row">
-                        <div class="">
-                        <label for="username" class="block text-sm text-gray-500 dark:text-gray-300">عنوان</label>
+                @csrf
+                <div class="flex flex-row">
+                    <div class="w-full">
+                        <label for="title" class="block text-sm text-gray-500 dark:text-gray-300">عنوان</label>
 
-                        <input type="text" name="title" placeholder="عنوان نظرسنجی را بنویسید" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300" />
-                        <x-input-error :messages="$errors->first('title') ? [$errors->first('title')] : []" class="mt-2" />
+                        <input type="text" name="title" id="title" value="{{ old('title') }}" placeholder="عنوان نظرسنجی را بنویسید" class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 {{ $errors->has('title') ? 'border-red-500 focus:border-red-500' : '' }}" />
+                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
                 </div>
                 <div class="flex flex-row">
                 </div>
                 <div class="mt-5">
-                    <label for="Description" class="block text-sm text-gray-500 dark:text-gray-300">توضیحات نظرسنجی</label>
+                    <label for="description" class="block text-sm text-gray-500 dark:text-gray-300">توضیحات نظرسنجی</label>
 
-                    <textarea name="description" placeholder="توضیحات نظرسنجی که به شرکت کنندگان نمایش داده میشود" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300"></textarea>
-
+                    <textarea name="description" id="description" placeholder="توضیحات نظرسنجی که به شرکت کنندگان نمایش داده میشود" class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-32 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 {{ $errors->has('description') ? 'border-red-500 focus:border-red-500' : '' }}">{{ old('description') }}</textarea>
+                    <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     <p class="mt-3 text-xs text-gray-400 dark:text-gray-600"></p>
                 </div>
                 <div class="mt-5">
                     <div>
-                        <label for="file" class="block text-sm text-gray-500 dark:text-gray-300">تصویر</label>
+                        <label for="dropzone-file" class="block text-sm text-gray-500 dark:text-gray-300">تصویر</label>
 
-                        <label for="dropzone-file" class="flex flex-col items-center w-full max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-PrimaryBlack dark:border-gray-700 rounded-xl">
+                        <label for="dropzone-file" class="flex flex-col items-center w-full max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-PrimaryBlack dark:border-gray-700 rounded-xl {{ $errors->has('image') ? 'border-red-500' : '' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-500 dark:text-gray-400">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                             </svg>
@@ -36,6 +36,7 @@
 
                             <input id="dropzone-file" name="image" type="file" class="hidden" />
                         </label>
+                        <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
                 </div>
                 <div class="mt-5">
@@ -43,7 +44,7 @@
                         <div class="flex flex-row items-center space-x-4">
                             <!-- The switch component -->
                             <div dir="ltr" x-data="{ switchOn: true }" class="flex items-center justify-center space-x-2">
-                                <input id="thisId" type="checkbox" name="has_end_date" class="hidden" :checked="switchOn">
+                                <input id="has_end_date" type="checkbox" name="has_end_date" class="hidden" :checked="switchOn">
 
                                 <button
                                     x-ref="switchButton"
@@ -229,12 +230,13 @@
                                             <input
                                                 x-ref="datePickerInput"
                                                 name="end_date"
+                                                id="end_date"
                                                 type="text"
                                                 @click="if (!isDisabled) { datePickerOpen = !datePickerOpen }"
                                                 x-model="datePickerValue"
                                                 x-on:keydown.escape="datePickerOpen=false"
                                                 :class="isDisabled ? 'opacity-50 cursor-not-allowed' : ''"
-                                                class="flex focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 w-full h-10 px-3 py-2 text-sm bg-white rounded-md text-neutral-600 placeholder:text-neutral-400"
+                                                class="flex focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 w-full h-10 px-3 py-2 text-sm bg-white rounded-md text-neutral-600 placeholder:text-neutral-400 {{ $errors->has('end_date') ? 'border-red-500 focus:border-red-500' : '' }}"
                                                 placeholder="انتخاب تاریخ پایان"
                                                 readonly
                                                 :disabled="isDisabled"
@@ -294,6 +296,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <x-input-error :messages="$errors->get('end_date')" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +306,7 @@
                 <div class="mt-5">
                     <div class="flex ml-auto">
                         <div dir="ltr" x-data="{ switchOn: true }" class="flex items-center justify-center space-x-2">
-                            <input id="thisId" type="checkbox" name="comment" class="hidden" :checked="switchOn">
+                            <input id="comment" type="checkbox" name="comment" class="hidden" :checked="switchOn">
 
                             <button
                                 x-ref="switchButton"
@@ -323,12 +326,13 @@
                             </label>
                         </div>
                     </div>
+                    <x-input-error :messages="$errors->get('comment')" class="mt-2" />
                 </div>
 
                 <div class="mt-5">
                     <div class="flex ml-auto">
                         <div dir="ltr" x-data="{ switchOn: false }" class="flex items-center justify-center space-x-2">
-                            <input id="thisId" type="checkbox" name="public" class="hidden" :checked="switchOn">
+                            <input id="public" type="checkbox" name="public" class="hidden" :checked="switchOn">
 
                             <button
                                 x-ref="switchButton"
@@ -348,6 +352,7 @@
                             </label>
                         </div>
                     </div>
+                    <x-input-error :messages="$errors->get('public')" class="mt-2" />
                 </div>
                 <div class="mt-5">
                     <button type="submit" class="flex items-center justify-center w-full px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-SecondaryBlack dark:bg-PrimaryBlack hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">ایجاد نظرسنجی</button>
@@ -382,9 +387,8 @@
             optionNumber.textContent = optionNumber.textContent + 1;
 
             newOption.innerHTML = `
-                <input type="text" placeholder="گزینه" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300">
+                <input type="text" placeholder="گزینه" class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300">
             `;
         });
-
     </script>
 </x-min-layout>
