@@ -50,13 +50,6 @@
         </div>
 
         <div>
-            <label for="name" class="block text-sm text-gray-500 dark:text-gray-300">نام نمایشی</label>
-            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name"
-                class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 {{ $errors->has('name') ? 'border-red-500 focus:border-red-500' : '' }}" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
-        <div>
             <label for="username" class="block text-sm text-gray-500 dark:text-gray-300">نام کاربری</label>
             <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" required autocomplete="username"
                 class="block mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-PrimaryBlack dark:text-gray-300 dark:focus:border-blue-300 {{ $errors->has('username') ? 'border-red-500 focus:border-red-500' : '' }}" />
