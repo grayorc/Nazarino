@@ -41,7 +41,7 @@ class Election extends Model
 
     public function userCount():null|int
     {
-        return $this->votes()->whereIn('option_id', $this->options->pluck('id'))
+        return Vote::whereIn('option_id', $this->options->pluck('id'))
             ->distinct('user_id')
             ->count();
     }
