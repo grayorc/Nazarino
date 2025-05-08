@@ -11,7 +11,7 @@
                     </h1>
 
                     <!-- <p class="mt-4 text-gray-500 dark:text-gray-400">
-                        Let’s get you all set up so you can verify your personal account and begin setting up your profile.
+                        Let's get you all set up so you can verify your personal account and begin setting up your profile.
                     </p> -->
 <!--
                     <div class="mt-6">
@@ -40,36 +40,50 @@
                         </div>
                     </div> -->
 
-                    <form method="POST" action="{{ route('login') }}" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+                    <form method="POST" action="{{ route('register') }}" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
                         @csrf
                         <div>
+                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام کاربری</label>
+                            <input type="text" name="username" placeholder="نام کاربری" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                        </div>
+
+                        <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام</label>
-                            <input type="text" placeholder="احمد" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input type="text" name="first_name" placeholder="احمد" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
                         </div>
 
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام خانوادگی</label>
-                            <input type="text" placeholder="محمدی" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input type="text" name="last_name" placeholder="محمدی" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                         </div>
 
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">شماره همراه</label>
-                            <input type="text" placeholder="09123456789" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input type="text" name="phone_number" placeholder="09123456789" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
                         </div>
 
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">ایمیل</label>
-                            <input type="email" placeholder="example@example.com" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input type="email" name="email" placeholder="example@example.com" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">گذرواژه</label>
-                            <input type="password" placeholder="گذرواژه خود را وارد کنید" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input type="password" name="password" placeholder="گذرواژه خود را وارد کنید" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
 
                         <div>
-                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">تایید گذرواؤه</label>
-                            <input type="password" placeholder="گذرواژه خود را وارد کنید" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">تایید گذرواژه</label>
+                            <input type="password" name="password_confirmation" placeholder="گذرواژه خود را وارد کنید" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                        </div>
+                        <div>
                         </div>
 
                         <button

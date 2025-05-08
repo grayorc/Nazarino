@@ -22,8 +22,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'first_name',
+        'last_name',
         'email',
+        'phone_number',
         'password',
     ];
 
@@ -49,6 +52,22 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getFullNameAttribute(): string
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    /**
+     * Get the display name (either username or full name).
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->getFullNameAttribute() ?: $this->username;
     }
 
     public function IsAdmin()

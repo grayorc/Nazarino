@@ -17,13 +17,14 @@ class UserController extends Controller
     {
         $query = User::query();
 
-
-
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
+                $q->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
                     ->orWhere('id', $search);
             });
         }
@@ -37,8 +38,11 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('admin.users.all', compact('users'))
-            ->fragmentIf(request()->hasHeader('HX-Request'),'table-section');
+        if (request()->hasHeader('HX-Request')) {
+            return view('admin.users.all', compact('users'))->fragment('table-section');
+        }
+
+        return view('admin.users.all', compact('users'));
     }
 
     /**
@@ -55,15 +59,21 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255','unique:users'],
-            'email' => ['required', 'email','max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8','max:255','confirmed'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'phone_number' => ['nullable', 'string', 'max:20', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
         ]);
+
         $user = User::create($data);
+
         if($request->has('activateEmail')){
             $user->markEmailAsVerified();
         }
 
+        return redirect(route('admin.users.index'));
     }
 
     /**
@@ -79,7 +89,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit',compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -88,16 +98,21 @@ class UserController extends Controller
     public function update(Request $request, string $id): \Illuminate\Http\RedirectResponse
     {
         $data = $request->validate([
-            'name' => ['string', 'max:255',Rule::unique('users')->ignore($id)],
-            'email' => ['email','max:255', Rule::unique('users')->ignore($id)],
-            'password' => ['max:255','confirmed'],
+            'username' => ['string', 'max:255', Rule::unique('users')->ignore($id)],
+            'first_name' => ['string', 'max:255'],
+            'last_name' => ['string', 'max:255'],
+            'email' => ['email', 'max:255', Rule::unique('users')->ignore($id)],
+            'phone_number' => ['nullable', 'string', 'max:20', Rule::unique('users')->ignore($id)],
+            'password' => ['max:255', 'confirmed'],
         ]);
 
         if($request->input('password') == null) {
-            $data = Arr::except($data,['password']);
+            $data = Arr::except($data, ['password']);
         }
+
         $user = User::find($id);
         $user->update($data);
+
         if($request->has('activateEmail')){
             $user->markEmailAsVerified();
         }

@@ -1,46 +1,65 @@
-@component('admin.layouts.content', ['title'=>'کاربران'])
+@component('admin.layouts.content', ['title'=>'ایجاد کاربر'])
     @slot('breadcrumb')
         <li class="breadcrumb-item"><a href="/admin">داشبورد</a></li>
-        <li class="breadcrumb-item active">ساخت کاربر</li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">لیست کاربران</a></li>
+        <li class="breadcrumb-item active">ایجاد کاربر</li>
     @endslot
 
     @include('admin.layouts.errors')
-    <div class="card card-light"> 
-        <div class="card-header">
-          <h3 class="card-title">اطلاعات کاربر</h3>
-        </div>
-        <!-- /.card-header -->
-        <!-- form start -->
-        <form role="form" method="post" action="{{ route('users.store') }}">
-          @csrf
-          <div class="card-body">
-          <div class="form-group">
-            <label for="InputٔName">نام کاربر</label>
-            <input name="name" type="text" class="form-control" id="InputٔName" placeholder="ایمیل را وارد کنید">
-          </div>
-            <div class="form-group">
-              <label for="InputEmail1">آدرس ایمیل</label>
-              <input name="email" type="email" class="form-control" id="InputEmail1" placeholder="ایمیل را وارد کنید">
-            </div>
-            <div class="form-group">
-              <label for="InputPassword1">گذرواژه</label>
-              <input name="password" type="password" class="form-control" id="InputPassword1" placeholder="پسورد را وارد کنید">
-            </div>
-            <div class="form-group">
-              <label for="InputPassword1">تایید گذرواژه</label>
-              <input name="password_confirmation" type="password" class="form-control" id="InputPassword1" placeholder="پسورد را وارد کنید">
-            </div>
-            <div class="form-check">
-              <input name="activateEmail" type="checkbox" class="form-check-input" id="Check1">
-              <label class="form-check-label" for="Check1">فعالسازی ایمیل</label>
-            </div>
-          </div>
-          <!-- /.card-body -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">فرم ایجاد کاربر</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="{{ route('admin.users.store') }}" method="POST">
+                    @csrf
 
-          <div class="card-footer">
-            <button type="submit" class="btn btn-primary">ارسال</button>
-          </div>
-        </form>
-      </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">نام کاربری</label>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="نام کاربری را وارد کنید" value="{{ old('username') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name" class="col-sm-2 control-label">نام</label>
+                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="نام را وارد کنید" value="{{ old('first_name') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name" class="col-sm-2 control-label">نام خانوادگی</label>
+                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="نام خانوادگی را وارد کنید" value="{{ old('last_name') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">ایمیل</label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="ایمیل را وارد کنید" value="{{ old('email') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number" class="col-sm-2 control-label">شماره تماس</label>
+                            <input type="text" class="form-control" name="phone_number" id="phone_number" placeholder="شماره تماس را وارد کنید" value="{{ old('phone_number') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">پسورد</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="پسورد را وارد کنید">
+                        </div>
+                        <div class="form-group">
+                            <label for="password_confirmation" class="col-sm-2 control-label">تکرار پسورد</label>
+                            <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="پسورد را تکرار کنید">
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="activateEmail" id="activateEmail">
+                            <label class="form-check-label" for="activateEmail">اکانت فعال باشد</label>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-info">ثبت کاربر</button>
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-default float-left">لغو</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endcomponent
