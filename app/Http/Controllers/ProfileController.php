@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -16,8 +19,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
@@ -26,13 +32,39 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        /** @var User $user */
+        $user = Auth::user();
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Handle avatar upload first
+        /** @var UploadedFile|null $avatar */
+        $avatar = $validated['avatar'] ?? null;
+        if ($avatar instanceof UploadedFile) {
+            // Store in avatars directory
+            $path = $avatar->store('avatars', 'public');
+
+            // Delete old image if exists
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image->path);
+                $user->image->delete();
+            }
+
+            // Create new image
+            $user->image()->create([
+                'path' => $path
+            ]);
         }
 
-        $request->user()->save();
+        // Remove avatar from validated data since we handled it separately
+        unset($validated['avatar']);
+
+        $user->fill($validated);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -46,7 +78,8 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = $request->user();
+        /** @var User $user */
+        $user = Auth::user();
 
         Auth::logout();
 

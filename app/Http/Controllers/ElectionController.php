@@ -372,7 +372,7 @@ class ElectionController extends Controller
             }
         }
 
-        return redirect()->route('elections.show', $election->id)
+        return redirect()->route('elections.index', $election->id)
             ->with('success', 'نظرسنجی با موفقیت بروزرسانی شد.');
     }
 }
