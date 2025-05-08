@@ -9,7 +9,7 @@
 
     <!-- User Info -->
     <div class="flex flex-col items-center mt-6 -mx-2">
-        <img class="object-cover w-16 h-16 md:w-24 md:h-24 mx-2 rounded-full" src="{{ Storage::url(auth()->user()->image?->path) }}" alt="avatar">
+        <img class="object-cover w-16 h-16 md:w-24 md:h-24 mx-2 rounded-full" src="{{ auth()->user()->image?Storage::url(auth()->user()->image->path) : "/dist/img/def-pfp.jpg" }}" alt="avatar">
         <h4 class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200 text-sm md:text-base">{{ Auth::user()->name }}</h4>
         <p class="mx-2 mt-1 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 truncate max-w-[200px]">{{ Auth::user()->email }}</p>
     </div>
