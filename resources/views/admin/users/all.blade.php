@@ -13,13 +13,13 @@
 
                     <div class="card-tools d-flex">
                         <form
-                            hx-get="{{ route('users.index') }}"
+                            hx-get="{{ route('admin.users.index') }}"
                             hx-target="#table-section"
                             hx-swap="outerHTML"
                             hx-trigger="change, keyup from:input"
                             class="d-flex"
                         >
-                            <button class="btn btn-light btn-sm" name="refresh" id="refresh" hx-get="{{ route('users.index') }}" hx-trigger="click" hx-target="#table-section" hx-swap="outerHTML">
+                            <button class="btn btn-light btn-sm" name="refresh" id="refresh" hx-get="{{ route('admin.users.index') }}" hx-trigger="click" hx-target="#table-section" hx-swap="outerHTML">
                                 <i class="ri-reset-left-line"></i>
                             </button>
                             <div class="input-group input-group-sm" style="width: 150px;">
@@ -73,7 +73,7 @@
                                     <td>
                                         @can('remove-user',$user)
                                         <button class="btn btn-light btn-sm text-danger"
-                                                hx-delete="{{ route('users.destroy', $user->id) }}"
+                                                hx-delete="{{ route('admin.users.destroy', $user->id) }}"
                                                 hx-trigger="click"
                                                 hx-target="#row-{{ $user->id }}"
                                                 hx-swap="outerHTML"
@@ -82,7 +82,7 @@
                                         ><i class="ri-delete-bin-2-line ri-fw"></i></button>
                                         @endcan
                                         @can('edit-user', $user)
-                                        <a href="{{ route('users.edit',$user->id) }}">
+                                        <a href="{{ route('admin.users.edit',$user->id) }}">
                                             <button class="btn btn-light btn-sm text-primary">
                                                 <i class="ri-edit-2-line ri-1x"></i>
                                             </button>
@@ -96,12 +96,27 @@
                     </table>
                 </div>
                 <!-- /.card-body -->
-                <div id="pagination-section">
-                    {{ $users->appends(request()->input())->links() }}
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted">
+                            صفحه <span class="font-weight-bold text-dark">{{ $users->currentPage() }} از {{ $users->lastPage() }}</span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ $users->previousPageUrl() }}"
+                               class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 {{ $users->onFirstPage() ? 'disabled opacity-50' : '' }}">
+                                <i class="ri-arrow-right-s-line"></i>
+                                <span>صفحه قبل</span>
+                            </a>
+
+                            <a href="{{ $users->nextPageUrl() }}"
+                               class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 {{ $users->onLastPage() ? 'disabled opacity-50' : '' }}">
+                                <span>صفحه بعد</span>
+                                <i class="ri-arrow-left-s-line"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                {{-- <div class="card-footer">
-                  {{ $users->render() }}
-                </div> --}}
             </div>
             <!-- /.card -->
         </div>

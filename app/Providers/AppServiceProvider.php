@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Policies\AdminPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;

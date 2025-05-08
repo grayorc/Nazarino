@@ -303,53 +303,76 @@ class ElectionController extends Controller
         return view('dash.elections.edit', compact('election'));
     }
 
-    public function update(Request $Request, Election $election)
+    public function update(Request $request, Election $election)
     {
-        $data = $Request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'end_date' => ['sometimes','jdate:Y.m.d','nullable', new AfterNow()],
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'public' => ['nullable', 'string'],
+            'comment' => ['nullable', 'string'],
+            'has_end_date' => ['nullable', 'string'],
+            'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5120'],
         ]);
 
-        $data['end_date'] = $this->convertDate($request->get('end_date'));
-        $data['user_id'] = auth()->user()->id;
-        //change it with 'sometimes' validation
-//        if($request->has('date-check') && $request->has('end_date')){
-//            if($request->end_date > now()){
-//                $data['end_date'] = $request->end_date;
-//            }else{
-//                return redirect()->back()->with('error', 'تاریخ انتخابی باید بیشتر از تاریخ حال باشد');
-//            }
-//        }
-        $data['is_public'] = true;
-        if($request->has('comment')){
-            $data['has_comment'] = true;
-        }else{
-            $data['has_comment'] = false;
+        // Handle end date
+        if ($request->has('has_end_date') && $request->input('has_end_date') === "on") {
+            $request->validate([
+                'end_date' => ['required', new AfterNow()]
+            ]);
+
+            $endDate = $this->convertDate($request->input('end_date'));
+        } else {
+            $endDate = null;
         }
 
-        if($request->has('public')){
-            $data['is_public'] = true;
-        }else{
-            $data['is_public'] = false;
-        }
+        // Prepare data for update
+        $data = [
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'end_date' => $endDate,
+            'has_comment' => $request->has('comment'),
+            'is_public' => $request->has('public'),
+        ];
 
-        $election = Election::create($data);
-        if($request->hasFile('image')){
-            //verify if it is image
-            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
-                $image = $request->file('image')->store('elections', 'public');
-                $image = Image::create([
-                    'path' => $image,
+        // Update the election record
+        $election->update($data);
+
+        // Handle image upload if present
+        if ($request->hasFile('image')) {
+            try {
+                if (!$request->file('image')->isValid()) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(['image' => 'خطا در آپلود تصویر. لطفا دوباره تلاش کنید.']);
+                }
+
+                // Delete old image if exists
+                if ($election->image) {
+                    // Delete file from storage
+                    Storage::disk('public')->delete($election->image->path);
+
+                    // Delete image record
+                    $election->image->delete();
+                }
+
+                // Store new image
+                $imagePath = $request->file('image')->store('elections', 'public');
+
+                // Create new image record
+                Image::create([
+                    'path' => $imagePath,
                     'imageable_id' => $election->id,
                     'imageable_type' => 'App\Models\Election',
                 ]);
-            }else{
-                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['image' => 'خطا در آپلود تصویر. لطفا دوباره تلاش کنید.']);
             }
         }
 
-//        return redirect()->route('options.create', $election->id);
-
+        return redirect()->route('elections.show', $election->id)
+            ->with('success', 'نظرسنجی با موفقیت بروزرسانی شد.');
     }
 }

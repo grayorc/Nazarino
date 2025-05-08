@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 Route::post('vote', [\App\Http\Controllers\ElectionController::class, 'vote'])->name('vote');
 require __DIR__.'/auth.php';
 
-Route::prefix('admin')->middleware(['AdminMiddleware','auth'])->group( function () {
+Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->group( function () {
     require __DIR__.'/admin.php';
 });
 

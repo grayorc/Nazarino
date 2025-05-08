@@ -39,7 +39,7 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="
-                  {{ route('users.index') }}
+                  {{ route('admin.users.index') }}
                    " class="nav-link">
                     <i class="ri-circle-line nav-icon"></i>
                     <p>لیست کاربران</p>
@@ -48,7 +48,7 @@
                 @can('create-user')
                     <li class="nav-item">
                       <a href="
-                      {{ route('users.create') }}
+                      {{ route('admin.users.create') }}
                        " class="nav-link">
                         <i class="ri-circle-line nav-icon"></i>
                         <p>ساخت کاربر جدید</p>

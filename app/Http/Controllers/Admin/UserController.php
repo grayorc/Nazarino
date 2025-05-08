@@ -35,7 +35,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->paginate(20);
+        $users = $query->paginate(10);
 
         return view('admin.users.all', compact('users'))
             ->fragmentIf(request()->hasHeader('HX-Request'),'table-section');
@@ -102,7 +102,7 @@ class UserController extends Controller
             $user->markEmailAsVerified();
         }
 
-        return redirect(route('users.index'));
+        return redirect(route('admin.users.index'));
     }
 
     /**

@@ -1,9 +1,9 @@
 <x-inc-layout>
         <div class="absolute top-0 -z-10 h-full w-full"><div class="absolute bottom-auto left-auto right-0 top-0 h-[300px] w-[300px] -translate-x-[30%] translate-y-[30%] rounded-full bg-primaryColor opacity-30 blur-[80px]"></div></div>
-            <div id="landing" class="text-center px-6 py-8 bg-primaryBlack max-w-lvh min-h-lvh mx-auto mt-20">
+            <div id="landing" class="relative text-center px-6 py-8 bg-primaryBlack max-w-lvh min-h-lvh mx-auto mt-20">
                 <div class="mb-6">
                     <div class="mx-auto flex items-center justify-center animate-float">
-                        <img src="/dist/img/main-logo.png" class="w-96">
+                        <img src="/dist/img/main-logo.png" class="w-96 max-w-full sm:w-96">
                     </div>
                 </div>
                 <h1 class="text-primaryBlack text-2xl font-bold mb-4">نظرسنجی آنلاین بسازید</h1>
@@ -19,7 +19,7 @@
                     >
                     شروع کنید!
                 </a>
-                <div class="absolute top-0 -z-10 h-full w-full"><div class="absolute bottom-auto left-autotop-0 h-[300px] w-[300px] -translate-x-[50%] translate-y-[-20%] rounded-full bg-primaryColor opacity-30 blur-[80px]"></div></div>
+                <div class="absolute top-0 -z-10 h-full w-full hidden sm:block"><div class="absolute bottom-auto left-autotop-0 h-[300px] w-[300px] -translate-x-[50%] translate-y-[-20%] rounded-full bg-primaryColor opacity-30 blur-[80px] sm:-translate-x-[30%] sm:translate-y-[30%]"></div></div>
             </div>
         </div>
         <div class="overflow-hidden py-24 sm:py-32 relative isolate" id="featurs">
