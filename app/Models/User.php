@@ -132,7 +132,7 @@ class User extends Authenticatable
 
     public function userVote($option_id)
     {
-        return $this->votes()->where('option_id', $option_id)->value('vote');
+        return $this->votes()->where('option_id', $option_id)->value('vote') ?? null;
     }
 
 }
