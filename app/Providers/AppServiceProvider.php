@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::automaticallyEagerLoadRelationships();
+        // Model::automaticallyEagerLoadRelationships();
         Gate::define('view-user', [UserPolicy::class, 'viewAny']);
         Gate::define('remove-user', [UserPolicy::class, 'delete']);
         Gate::define('edit-user', [UserPolicy::class, 'edit']);
