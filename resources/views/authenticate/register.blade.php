@@ -42,23 +42,25 @@
 
                     <form method="POST" action="{{ route('register') }}" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
                         @csrf
+
+                        <div>
+                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام</label>
+                            <input type="text" name="first_name" placeholder="احمد" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                            </div>
+
+                            <div>
+                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام خانوادگی</label>
+                            <input type="text" name="last_name" placeholder="محمدی" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+                        </div>
+
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام کاربری</label>
                             <input type="text" name="username" placeholder="نام کاربری" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
                             <x-input-error :messages="$errors->get('username')" class="mt-2" />
                         </div>
 
-                        <div>
-                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام</label>
-                            <input type="text" name="first_name" placeholder="احمد" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
-                            <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
-                        </div>
-
-                        <div>
-                            <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">نام خانوادگی</label>
-                            <input type="text" name="last_name" placeholder="محمدی" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-primaryColor dark:focus:border-primaryColor focus:ring-primaryColor focus:outline-none focus:ring focus:ring-opacity-40" />
-                            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
-                        </div>
 
                         <div>
                             <label class="block mb-2 text-sm text-gray-500 dark:text-gray-200">شماره همراه</label>

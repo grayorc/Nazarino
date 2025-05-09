@@ -1,7 +1,7 @@
 <x-inc-layout>
-    <div class="flex w-10/12 mx-auto min-h-lvh">
+    <div class="flex flex-col md:flex-row w-11/12 lg:w-10/12 mx-auto min-h-lvh">
         @include('elections.layouts.sidebar')
-        <div class="flex flex-col w-4/6 mx-auto my-16">
+        <div class="flex flex-col w-full md:w-4/6 mx-auto my-4 md:my-16">
             @foreach($options as $option)
                 <div class="flex flex-col p-3 bg-postBg  rounded-2xl
                     @if (!$loop->first)
@@ -9,15 +9,15 @@
                     @endif
                 ">
                     <a href="{{ route('option.show', ['election_id' => $election->id, 'option_id' => $option->id]) }}">
-                        <div class="font-bold text-2xl">
+                        <div class="font-bold text-xl md:text-2xl">
                             {{ $option->title }}
                         </div>
-                        <div>
+                        <div class="text-sm md:text-base">
                             {{ $option->description }}
                         </div>
                     </a>
 
-                    <div class="flex gap-6">
+                    <div class="flex flex-wrap gap-4 md:gap-6 mt-3">
                         <div class="flex flex-col items-center gap-4">
                             <div class="flex w-fit flex-row items-center gap-0 rounded-full border-black
                             bg-zinc-800/30
