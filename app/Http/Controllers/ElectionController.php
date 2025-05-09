@@ -149,7 +149,6 @@ class ElectionController extends Controller
             'option_id' => 'required',
             'vote_type' => ['required', 'in:UP,DOWN']
         ]);
-        // return $data;
         $vote_type = "";
         $option = Option::find($data['option_id']);
         if (Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()) {

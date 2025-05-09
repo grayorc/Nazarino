@@ -14,12 +14,8 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
-        /** @var User $user */
         $user = Auth::user();
 
         return view('profile.edit', [
@@ -32,30 +28,23 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        /** @var User $user */
         $user = Auth::user();
         $validated = $request->validated();
 
-        // Handle avatar upload first
-        /** @var UploadedFile|null $avatar */
         $avatar = $validated['avatar'] ?? null;
         if ($avatar instanceof UploadedFile) {
-            // Store in avatars directory
             $path = $avatar->store('avatars', 'public');
 
-            // Delete old image if exists
             if ($user->image) {
                 Storage::disk('public')->delete($user->image->path);
                 $user->image->delete();
             }
 
-            // Create new image
             $user->image()->create([
                 'path' => $path
             ]);
         }
 
-        // Remove avatar from validated data since we handled it separately
         unset($validated['avatar']);
 
         $user->fill($validated);
@@ -78,7 +67,6 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        /** @var User $user */
         $user = Auth::user();
 
         Auth::logout();

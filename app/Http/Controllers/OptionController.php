@@ -68,7 +68,7 @@ class OptionController extends Controller
         $comments->withRelationshipAutoloading();
         $option->user_vote = auth()->user()->userVote($option->id);
 
-        $option->comment_count = $option->comments->count();
+        $option->comment_count = $option->comments?->count();
         return view('elections.options.single', compact('option', 'election','comments'));
     }
 

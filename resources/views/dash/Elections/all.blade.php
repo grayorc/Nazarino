@@ -11,7 +11,7 @@
                     <div class="flex items-center gap-x-3">
 {{--                        <h2 class="text-lg font-medium text-gray-800 dark:text-white">Customers</h2>--}}
 
-                        <span class="px-3 py-1 text-xs text-primaryColor bg-blue-100 rounded-full dark:bg-SecondaryBlack dark:text-blue-400">{{ auth()->user()->elections()->count() }} نظرسنجی ساخته شده</span>
+                        <span class="px-3 py-1 text-xs text-primaryColor bg-blue-100 rounded-full dark:bg-SecondaryBlack dark:text-blue-400">{{ auth()->user()->elections()?->count() }} نظرسنجی ساخته شده</span>
                     </div>
 
 {{--                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">این نظرسنجی ها از قبل ایجاد شده اند</p>--}}
