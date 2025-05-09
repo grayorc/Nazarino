@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use phpDocumentor\Reflection\PseudoTypes\Numeric_;
+use Illuminate\Support\Collection;
 
 class Election extends Model
 {
@@ -23,7 +23,6 @@ class Election extends Model
         return $this->morphOne(Image::class, 'imageable');
     }
 
-
     public function options():HasMany
     {
         return $this->hasMany(Option::class);
@@ -34,15 +33,53 @@ class Election extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function votes():HasMany
-    {
-        return $this->hasMany(Vote::class);
-    }
-
     public function userCount():null|int
     {
         return Vote::whereIn('option_id', $this->options->pluck('id'))
             ->distinct('user_id')
             ->count();
+    }
+
+    public function getTotalVotes(): int
+    {
+        return Vote::whereIn('option_id', $this->options->pluck('id'))->count();
+    }
+
+    public function getVotesPerOption(): Collection
+    {
+        return $this->options()
+            ->withCount('votes')
+            ->get()
+            ->map(function ($option) {
+                return [
+                    'option_id' => $option->id,
+                    'title' => $option->title,
+                    'votes_count' => $option->votes_count
+                ];
+            });
+    }
+
+    public function getDetailedVoteStats(): Collection
+    {
+        return $this->options()
+            ->withCount([
+                'votes',
+                'votes as upvotes_count' => function ($query) {
+                    $query->where('vote', 1);
+                },
+                'votes as downvotes_count' => function ($query) {
+                    $query->where('vote', -1);
+                }
+            ])
+            ->get()
+            ->map(function ($option) {
+                return [
+                    'option_id' => $option->id,
+                    'title' => $option->title,
+                    'total_votes' => $option->votes_count,
+                    'upvotes' => $option->upvotes_count,
+                    'downvotes' => $option->downvotes_count
+                ];
+            });
     }
 }

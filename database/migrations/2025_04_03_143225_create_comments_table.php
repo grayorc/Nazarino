@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('body');
             $table->morphs('commentable');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

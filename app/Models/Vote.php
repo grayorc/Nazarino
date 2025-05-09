@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class Vote extends Model
 {
-    protected $fillable = ['user_id', 'option_id', 'vote', 'election_id'];
+    protected $fillable = ['user_id', 'option_id', 'vote'];
 
     public function option():BelongsTo
     {
@@ -17,11 +18,4 @@ class Vote extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function election():BelongsTo
-    {
-        return $this->belongsTo(Election::class);
-    }
-
-
 }

@@ -40,12 +40,11 @@ return new class extends Migration
         });
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('election_id')->unsigned();
-            $table->foreign('election_id')->references('id')->on('elections')->onDelete('cascade');
             $table->bigInteger('option_id')->unsigned();
             $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->tinyInteger('vote');
             $table->timestamps();
         });
     }
