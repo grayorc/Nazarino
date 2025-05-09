@@ -8,6 +8,7 @@ use App\Models\Election;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class OptionController extends Controller
 {
@@ -66,7 +67,8 @@ class OptionController extends Controller
 //        $election->withRelationshipAutoloading();
         $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
         $comments->withRelationshipAutoloading();
-        $option->user_vote = auth()->user()->userVote($option->id);
+
+        $option->user_vote = Auth::hasUser() ? Auth::user()->userVote($option->id) : 0;
 
         $option->comment_count = $option->comments()->count();
         return view('elections.options.single', compact('option', 'election','comments'));
