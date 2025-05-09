@@ -12,7 +12,7 @@
             <div class="flex flex-col items-center m-auto">
                 <i class="ri-chat-1-fill"></i>
                 <div class="text-sm font-medium">
-                    {{ $election->comments?->count() }}
+                    {{ $election->comments()->count() }}
                 </div>
             </div>
             <div class="flex flex-col items-center m-auto">
@@ -24,7 +24,7 @@
             <div class="flex flex-col items-center m-auto">
                 <i class="ri-chat-poll-fill"></i>
                 <div class="text-sm font-medium">
-                    {{ $election->votes?->count() }}
+                    {{ $election->votes()->count() }}
                 </div>
             </div>
             <div class="flex flex-col items-center m-auto ">
