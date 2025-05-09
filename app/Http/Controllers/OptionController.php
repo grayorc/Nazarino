@@ -66,7 +66,7 @@ class OptionController extends Controller
 //        $election->withRelationshipAutoloading();
         $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
         $comments->withRelationshipAutoloading();
-        $option->user_vote = auth()->user()->userVote($option->id);
+        $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
 
         $option->comment_count = $option->comments()->count();
         return view('elections.options.single', compact('option', 'election','comments'));

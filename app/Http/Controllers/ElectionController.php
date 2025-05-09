@@ -131,7 +131,7 @@ class ElectionController extends Controller
         $options = $election->options;
         if(auth()->check()){
             foreach ($options as $option) {
-                $option->user_vote = auth()->user()->userVote($option->id);
+                $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
             }
         }
         return view('elections.single',compact('election','options'));
