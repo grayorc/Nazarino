@@ -374,4 +374,11 @@ class ElectionController extends Controller
         return redirect()->route('elections.index', $election->id)
             ->with('success', 'نظرسنجی با موفقیت بروزرسانی شد.');
     }
+
+    public function destroy(Election $election)
+    {
+        $election->delete();
+        return redirect()->route('elections.index')
+            ->with('success', 'نظرسنجی با موفقیت حذف شد.');
+    }
 }

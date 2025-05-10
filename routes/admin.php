@@ -29,13 +29,13 @@ Route::get('/users/{user}', [UserController::class, 'show'])
     ->can('view-user')
     ->name('users.show');
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])
-    ->can('edit-user')
+    ->can('edit-user','user')
     ->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])
-    ->can('edit-user')
+    ->can('edit-user','user')
     ->name('users.update');
 Route::delete('/users/{user}', [UserController::class, 'destroy'])
-    ->can('remove-user')
+    ->can('remove-user','user')
     ->name('users.destroy');
 
 //elections

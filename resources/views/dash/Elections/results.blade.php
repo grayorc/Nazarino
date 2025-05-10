@@ -4,8 +4,8 @@
         @include('dash.layouts.sidebar')
 
         <!-- Main Content -->
-        <section class="container px-4 sm:px-6 mx-auto flex-grow pb-8 sm:pb-32">
-            <div class="">
+        <section class="container px-2 sm:px-4 md:px-6 mx-auto flex-grow pb-4 sm:pb-8 md:pb-16">
+            <div class="w-full">
                 <div dir="ltr"
                     x-data="{
                         tabSelected: 1,
@@ -29,7 +29,7 @@
                     }"
 
                     x-init="tabRepositionMarker($refs.tabButtons.firstElementChild);"
-                    class="flex flex-col mt-6 bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 relative w-full">
+                    class="flex flex-col mt-4 sm:mt-6 bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 md:p-6 relative w-full">
 
                     <!-- Tab Navigation -->
                     <div x-ref="tabButtons" class="relative inline-grid items-center justify-center w-full h-10 grid-cols-2 p-1 text-gray-500 bg-white border border-gray-100 rounded-lg select-none">
@@ -61,22 +61,26 @@
                     </div>
 
                     <!-- Tab Content -->
-                    <div class="relative flex items-center justify-center w-full p-5 mt-2 text-xs text-gray-400 border rounded-md content border-gray-200/70">
+                    <div class="relative flex items-center justify-center w-full p-3 sm:p-4 md:p-5 mt-2 text-xs sm:text-sm text-gray-400 border rounded-md content border-gray-200/70">
                         <!-- Tab 1 Content -->
-                        <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative">
-                            <h2 class="text-xl sm:text-2xl font-bold text-gray-100 mb-6">{{ $election->title }}</h2>
+                        <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative w-full">
+                            <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-100 mb-4 sm:mb-6">{{ $election->title }}</h2>
 
-                            <div class="flex flex-col lg:flex-row gap-6 sm:gap-8 justify-between items-start">
+                            <div class="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 justify-between items-start">
                                 <!-- Bar Chart -->
-                                <div class="bg-gray-700 rounded-lg shadow-md p-4 sm:p-6 w-full lg:w-1/2">
-                                    <h3 class="text-lg font-medium text-gray-300 mb-4">Upvotes vs Downvotes</h3>
-                                    {!! $barChart->render() !!}
+                                <div class="bg-gray-700 rounded-lg shadow-md p-3 sm:p-4 md:p-6 w-full lg:w-1/2">
+                                    <h3 class="text-base sm:text-lg font-medium text-gray-300 mb-3 sm:mb-4">رای های منفی و مثبت</h3>
+                                    <div class="w-full overflow-x-auto">
+                                        {!! $barChart->render() !!}
+                                    </div>
                                 </div>
 
                                 <!-- Pie Chart -->
-                                <div class="bg-gray-700 rounded-lg shadow-md p-4 sm:p-6 w-full lg:w-1/2">
-                                    <h3 class="text-lg font-medium text-gray-300 mb-4">Vote Share</h3>
-                                    {!! $pieChart->render() !!}
+                                <div class="bg-gray-700 rounded-lg shadow-md p-3 sm:p-4 md:p-6 w-full lg:w-1/2">
+                                    <h3 class="text-base sm:text-lg font-medium text-gray-300 mb-3 sm:mb-4">نسبت رای ها</h3>
+                                    <div class="w-full overflow-x-auto">
+                                        {!! $pieChart->render() !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -84,8 +88,6 @@
                         <!-- Tab 2 Content -->
                         <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative" x-cloak>
                             <div class="text-gray-100">
-                                <h3 class="text-lg font-medium">Tab 2 Content</h3>
-                                <p>This is the content for Tab 2. Add your content here.</p>
                             </div>
                         </div>
 
