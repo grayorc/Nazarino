@@ -58,32 +58,8 @@
               </ul>
             </li>
             @endcan
-            <!-- محصولات -->
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="ri-book-3-fill nav-icon"></i>
-                <p>
-                  محصولات
-                  <i class="right fa fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="./index.html" class="nav-link">
-                    <i class="ri-circle-line nav-icon"></i>
-                    <p>لیست محصولات</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index2.html" class="nav-link">
-                    <i class="ri-circle-line nav-icon"></i>
-                    <p>ساخت محصول جدید</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
             <!-- مدیران -->
-            <li class="nav-item has-treeview">
+            <!-- <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="ri-shield-star-fill nav-icon"></i>
 
@@ -112,7 +88,7 @@
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> -->
             <!--  -->
         </nav>
         <!-- /.sidebar-menu -->
