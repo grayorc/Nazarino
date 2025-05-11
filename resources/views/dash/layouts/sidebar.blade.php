@@ -1,9 +1,9 @@
-<!-- Mobile Backdrop -->
-<div id="sidebar-backdrop" class="fixed inset-0 bg-gray-800 bg-opacity-50 z-40 hidden md:hidden"></div>
+<!-- Backdrop -->
+<div id="sidebar-backdrop" class="fixed inset-0 bg-gray-800 bg-opacity-50 z-40 hidden"></div>
 
-<aside id="sidebar" class="fixed top-0 md:sticky flex inset-y-0 right-0 flex-col w-64 h-screen px-4 py-8 bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-Sidebar_background dark:border-gray-700 transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50">
+<aside id="sidebar" class="fixed top-0 flex inset-y-0 right-0 flex-col w-64 h-screen px-4 py-8 bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-Sidebar_background dark:border-gray-700 transform translate-x-full transition-transform duration-300 ease-in-out z-50">
     <!-- Logo -->
-    <a href="#" class="mx-auto">
+    <a href="#" class=" mx-auto">
         <img class="w-auto h-6 sm:h-7" src="/dist/img/logo.png" alt="Logo">
     </a>
 
@@ -60,7 +60,7 @@
 </aside>
 
 <!-- Toggle Button -->
-<button id="sidebar-toggle" class="fixed top-4 right-4 z-50 md:hidden p-2 bg-primaryColor text-white rounded-md focus:outline-none hover:bg-primaryColor/90 transition-colors">
+<button id="sidebar-toggle" class="fixed top-4 right-4 z-50 p-2 bg-primaryColor text-white rounded-md focus:outline-none hover:bg-primaryColor/90 transition-colors">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
@@ -80,10 +80,5 @@
     toggleButton.addEventListener('click', toggleSidebar);
     backdrop.addEventListener('click', toggleSidebar);
 
-    // Close sidebar on window resize if it's open (mobile to desktop transition)
-    window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768 && !sidebar.classList.contains('translate-x-full')) {
-            toggleSidebar();
-        }
-    });
+    // No need for resize handler since sidebar behavior is same on all screens
 </script>
