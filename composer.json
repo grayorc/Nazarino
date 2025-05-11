@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "devrabiul/laravel-toaster-magic": "^1.0",
+        "farayaz/larapay": "^1.26",
         "hekmatinasser/verta": "^8.5",
         "icehouse-ventures/laravel-chartjs": "^4.2",
         "laravel/framework": "^12.8",

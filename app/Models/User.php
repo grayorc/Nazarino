@@ -135,4 +135,30 @@ class User extends Authenticatable
         return $this->votes()->where('option_id', $option_id)->value('vote') ?? null;
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(SubscriptionUser::class);
+    }
+
+    public function receiptUsers()
+    {
+        return $this->hasMany(ReceiptUser::class);
+    }
+
+    public function receipts()
+    {
+        return $this->belongsToMany(Receipt::class, 'receipt_users')
+            ->withPivot('amount', 'status')
+            ->withTimestamps();
+    }
+
+    public function hasSubFeature($subFeatureKey): bool
+    {
+        return $this->subscriptions()
+            ->where('status', 'active')
+            ->whereHas('subscriptionTier.subFeatures', function ($query) use ($subFeatureKey) {
+                $query->where('key', $subFeatureKey);
+            })
+            ->exists();
+    }
 }

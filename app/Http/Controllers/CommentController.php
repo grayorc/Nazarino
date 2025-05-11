@@ -19,7 +19,7 @@ class CommentController extends Controller
         ]);
 
         $election = Election::find($request->input('election_id'));
-
+// subscription
         if(!$election->has_comment){
             return response()->json([
                 'status' => 'failed',

@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Models\Role;
+use App\Models\SubscriptionTier;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('index');
+    $subscriptionTiers = SubscriptionTier::with('subFeatures')
+        ->orderBy('price')
+        ->get();
+
+    return view('index', compact('subscriptionTiers'));
 })->name('index');
 
 //Route::get('/dashboard', function () {

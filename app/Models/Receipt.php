@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Receipt extends Model
+{
+    use SoftDeletes;
+
+    protected $fillable = [
+        'receipt_number',
+        'subscription_user_id',
+        'total',
+        'currency',
+        'payment_method',
+        'payment_status',
+        'meta_data',
+        'paid_at'
+    ];
+
+    protected $casts = [
+        'meta_data' => 'array',
+        'paid_at' => 'datetime'
+    ];
+
+    public function subscriptionUser(): BelongsTo
+    {
+        return $this->belongsTo(SubscriptionUser::class);
+    }
+
+    public function receiptUsers(): HasMany
+    {
+        return $this->hasMany(ReceiptUser::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'receipt_users')
+            ->withPivot('amount', 'status')
+            ->withTimestamps();
+    }
+}
