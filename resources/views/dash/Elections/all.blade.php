@@ -266,7 +266,7 @@
                 x-transition:leave="ease-in duration-300"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                @click="deleteModalOpen=false" class="absolute inset-0 w-full h-full bg-white backdrop-blur-sm bg-opacity-70"></div>
+                @click="deleteModalOpen=false" class="absolute inset-0 w-full h-full bg-white dark:bg-SecondaryBlack/70 backdrop-blur-sm bg-opacity-70"></div>
             <div x-show="deleteModalOpen"
                 x-trap.inert.noscroll="deleteModalOpen"
                 x-transition:enter="ease-out duration-300"

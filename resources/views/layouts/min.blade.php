@@ -12,6 +12,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="#EB5E28">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        {!! ToastMagic::styles() !!}
 
         <!-- Preload critical fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
@@ -37,5 +38,9 @@
     </head>
     <body class="min-h-screen bg-primaryWhite antialiased">
         {{ $slot }}
+        {!! ToastMagic::scripts() !!}
+        <script>
+            
+        </script>
     </body>
 </html>

@@ -1,7 +1,7 @@
 <x-min-layout>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
-        <section class="container px-4 mx-auto flex-grow-1 pb-32">
+        <section class="container px-4 mx-auto flex-grow-1 pb-32 dark:bg-PrimaryBlack">
             <form action="{{ route('elections.store') }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                 @csrf
                 <div class="flex flex-row">
@@ -58,7 +58,7 @@
 
                                 <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
                                        :class="{ 'text-blue-600': switchOn, 'text-gray-400': !switchOn }"
-                                       class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                       class="select-none text-sm text-gray-500 dark:text-gray-300"
                                        x-cloak>
                                 </label>
                             </div>
@@ -321,7 +321,7 @@
 
                             <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
                                    :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
-                                   class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                   class="select-none text-sm text-gray-500 dark:text-gray-300"
                                    x-cloak>
                                 امکان درج کامنت
                             </label>
@@ -347,7 +347,7 @@
 
                             <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
                                    :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
-                                   class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                   class="select-none text-sm text-gray-500 dark:text-gray-300"
                                    x-cloak>
                                 عمومی
                             </label>
