@@ -36,11 +36,11 @@
             }
         </style>
     </head>
-    <body class="min-h-screen bg-primaryWhite antialiased">
+    <body class="min-h-screen bg-primaryWhite">
         {{ $slot }}
         {!! ToastMagic::scripts() !!}
         <script>
-            
+
         </script>
     </body>
 </html>

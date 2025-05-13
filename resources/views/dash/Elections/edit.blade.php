@@ -1,6 +1,5 @@
 <x-min-layout>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
-        @include('dash.layouts.sidebar')
         <section class="container px-4 mx-auto flex-grow-1 pb-32">
             <form action="{{ route('elections.update', $election) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                 @csrf

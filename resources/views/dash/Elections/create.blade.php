@@ -241,7 +241,7 @@
                                                 readonly
                                                 :disabled="isDisabled"
                                             />
-                                            
+
                                             <div
                                                 @click="if (!isDisabled) { datePickerOpen=!datePickerOpen; if(datePickerOpen){ $refs.datePickerInput.focus() }}"
                                                 :class="isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:text-neutral-500'"

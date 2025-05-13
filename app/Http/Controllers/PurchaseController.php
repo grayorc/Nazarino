@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Receipt;
 use App\Models\SubscriptionTier;
+use App\Models\SubscriptionUser;
+use Carbon\Carbon;
 use Farayaz\Larapay\Exceptions\LarapayException;
 use Farayaz\Larapay\Larapay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 
@@ -34,21 +39,25 @@ class PurchaseController extends Controller
         // Generate a unique payment ID
         $paymentId = time() . rand(1000, 9999);
 
+        // Get subscription tier
+        $subscriptionTier = SubscriptionTier::findOrFail($request->subscription_tier_id);
+
         // Payment details
         $paymentData = [
-            'amount' => 10000,
+            'amount' => $subscriptionTier->price,
             'id' => $paymentId,
             'callbackUrl' => route('purchase.verify'),
-            'nationalId' => '1234567890',
-            'mobile' => '09131234567',
+            'nationalId' => '1234567890', // TODO: Get from user profile
+            'mobile' => '09131234567',    // TODO: Get from user profile
         ];
 
         // Store payment data in session
         session([
             'payment_id' => $paymentId,
-            'payment_amount' => 10000,
+            'payment_amount' => $subscriptionTier->price,
             'payment_national_id' => $paymentData['nationalId'],
-            'payment_mobile' => $paymentData['mobile']
+            'payment_mobile' => $paymentData['mobile'],
+            'subscription_tier_id' => $subscriptionTier->id
         ]);
 
         try {
@@ -130,17 +139,43 @@ class PurchaseController extends Controller
                     $params
                 );
 
-            // Payment verified successfully
-            // Create transaction record
-            $transaction = [
-                'result' => $result['result'],
-                'reference_id' => $result['reference_id'],
-                'tracking_code' => $result['tracking_code'],
-                'card' => $result['card'],
-                'fee' => $result['fee']
-            ];
+            // Start database transaction
+            DB::beginTransaction();
 
-            // TODO: Save transaction record to database
+            try {
+                // Create subscription
+                $subscription = SubscriptionUser::create([
+                    'user_id' => Auth::id(),
+                    'subscription_tier_id' => session('subscription_tier_id'),
+                    'status' => 'active',
+                    'starts_at' => now(),
+                    'ends_at' => now()->addMonth() // TODO: Get duration from subscription tier
+                ]);
+
+                // Create receipt
+                $receipt = Receipt::create([
+                    'receipt_number' => $result['tracking_code'],
+                    'subscription_user_id' => $subscription->id,
+                    'total' => session('payment_amount'),
+                    'currency' => 'IRR',
+                    'payment_method' => 'online',
+                    'payment_status' => 'paid',
+                    'meta_data' => [
+                        'result' => $result['result'],
+                        'reference_id' => $result['reference_id'],
+                        'tracking_code' => $result['tracking_code'],
+                        'card' => $result['card'],
+                        'fee' => $result['fee']
+                    ],
+                    'paid_at' => now()
+                ]);
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+
 
             ToastMagic::success('پرداخت با موفقیت انجام شد. کد پیگیری: ' . $result['tracking_code']);
             return redirect()->route('dashboard');

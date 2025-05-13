@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\OptionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('dash.index');
-})->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/elections', [ElectionController::class, 'index'])->name('elections.index');
 Route::get('/elections/create', [ElectionController::class, 'create'])->name('elections.create');

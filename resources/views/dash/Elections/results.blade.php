@@ -1,8 +1,6 @@
 <x-min-layout>
     <div class="flex flex-col md:flex-row relative min-h-screen bg-gray-900">
-        <!-- Sidebar -->
         @include('dash.layouts.sidebar')
-
         <!-- Main Content -->
         <section class="container px-2 sm:px-4 md:px-6 mx-auto flex-grow pb-4 sm:pb-8 md:pb-16">
             <div class="w-full">
