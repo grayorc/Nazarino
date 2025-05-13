@@ -16,7 +16,8 @@
         "icehouse-ventures/laravel-chartjs": "^4.2",
         "laravel/framework": "^12.8",
         "laravel/tinker": "^2.10.1",
-        "mckenziearts/laravel-notify": "^2.7"
+        "mckenziearts/laravel-notify": "^2.7",
+        "prism-php/prism": "^0.67.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
