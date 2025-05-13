@@ -11,7 +11,7 @@ class AiController extends Controller
     public function generate()
     {
         $prism = Prism::text()
-        ->using('openrouter', 'llama-4-maverick:free')
+        ->using(Provider::DeepSeek, 'deepseek-chat')
         ->withSystemPrompt(view('prompts.nyx'))
         ->withPrompt('Explain quantum computing to a 5-year-old.')
         ->asText();

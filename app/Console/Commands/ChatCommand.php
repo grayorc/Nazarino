@@ -40,7 +40,7 @@ class ChatCommand extends Command
     protected function getPrism()
     {
         $prism = Prism::text()
-        ->using(Provider::Ollama, 'meta-llama/llama-3.3-70b-instruct:free');
+            ->using(Provider::DeepSeek, 'deepseek-chat');
 
         return $prism;
     }
