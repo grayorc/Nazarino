@@ -23,17 +23,20 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Calculate remaining subscription days
+        //remaining subscription days
         $user = Auth::user();
-        $remainingDays = SubscriptionUser::where('user_id', $user->id)->first();
-        if ($remainingDays) {
-            $endDate = Carbon::parse($remainingDays->ends_at);
-            $remainingDays = Number::format(now()->diffInDays($endDate), precision: 0);
-            $remainingDays = max(0, $remainingDays); // Ensure it doesn't go negative
-        }
+        $remainingDays = $user->getRemainingDays();
+        //total votes
+        $totalVotes = $user->getTotalVotes();
+        //total active elections
+        $totalElections = $user->totalActiveElections();
+        //total comments on users each election
+        $totalComments = $user->getTotalComments();
 
-        // Get most voted elections
-        $topElections = Election::select('elections.id', 'elections.title', DB::raw('COUNT(votes.id) as total_votes'))
+
+        // Get most voted elections for current user
+        $topElections = $user->elections()
+            ->select('elections.id', 'elections.title', DB::raw('COUNT(votes.id) as total_votes'))
             ->join('options', 'elections.id', '=', 'options.election_id')
             ->join('votes', 'options.id', '=', 'votes.option_id')
             ->groupBy('elections.id', 'elections.title')
@@ -126,6 +129,6 @@ class DashboardController extends Controller
                 ],
             ]);
 
-        return view('dash.index', compact('topElectionsChart', 'remainingDays', 'topElections'));
+        return view('dash.index', compact('topElectionsChart', 'remainingDays', 'topElections', 'totalVotes', 'totalElections', 'totalComments'));
     }
 }

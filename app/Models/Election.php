@@ -45,6 +45,13 @@ class Election extends Model
         return Vote::whereIn('option_id', $this->options->pluck('id'))->count();
     }
 
+    public function getTotalComments(): int
+    {
+        return $this->options()->each(function ($option) {
+            return $option->comments()->count();
+        });
+    }
+
     public function getVotesPerOption(): Collection
     {
         return $this->options()

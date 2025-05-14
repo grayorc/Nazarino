@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Number;
 
 class User extends Authenticatable
 {
@@ -160,5 +163,58 @@ class User extends Authenticatable
                 $query->where('key', $subFeatureKey);
             })
             ->exists();
+    }
+
+    public function subEnd()
+    {
+        return $this->subscriptions()->where('status', 'active')->first()->ends_at ?? 0 ;
+    }
+
+    public function hasSubscription(): bool
+    {
+        return $this->subscriptions()->where('status', 'active')->exists();
+    }
+
+    public function getTotalVotes()
+    {
+        return array_sum($this->elections()->get()->map(function ($election) {
+            return $election->getTotalVotes();
+        })->toArray());
+    }
+
+    public function getTotalComments()
+    {
+        return $this->elections()->get()->map(function ($election) {
+            return $election->options()->get()->map(function ($option) {
+                return $option->comments()->count();
+            });
+        })->flatten()->sum();
+    }
+
+    public function getRemainingDays()
+    {
+        $endDate = Carbon::parse($this->subEnd());
+        return max(Number::format(now()->diffInDays($endDate), precision: 0), 0);
+    }
+
+    public function totalElections()
+    {
+        return $this->elections()->count();
+    }
+
+    public function totalActiveElections()
+    {
+        return $this->elections()
+            ->where('is_open', true)
+            ->where(function ($query) {
+                $query->where('is_public', true)
+                    ->orWhere('end_date', '>=', Carbon::now())
+                    ->orWhere('end_date', null);
+            })->count();
+    }
+
+    public function totalInactiveElections()
+    {
+        return $this->totalElections() - $this->totalActiveElections();
     }
 }

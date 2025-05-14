@@ -10,12 +10,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/elections', [ElectionController::class, 'index'])->name('elections.index');
-Route::get('/elections/create', [ElectionController::class, 'create'])->name('elections.create');
-Route::post('/elections', [ElectionController::class, 'store'])->name('elections.store');
-Route::get('/elections/{election}', [ElectionController::class, 'showResult'])->name('elections.result');
-Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])->name('elections.edit');
-Route::put('/elections/{election}', [ElectionController::class, 'update'])->name('elections.update');
+Route::get('/elections', [ElectionController::class, 'index'])
+    ->name('elections.index');
+
+Route::get('/elections/create', [ElectionController::class, 'create'])
+    ->can('unlimited-access')
+    ->name('elections.create');
+
+Route::post('/elections', [ElectionController::class, 'store'])
+    ->can('unlimited-access')
+    ->name('elections.store');
+
+Route::get('/elections/{election}', [ElectionController::class, 'showResult'])
+
+    ->name('elections.result');
+Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])
+    ->can('charts')
+    ->name('elections.edit');
+
+Route::put('/elections/{election}', [ElectionController::class, 'update'])
+    ->name('elections.update');
+
 Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])->name('elections.destroy');
 
 Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');

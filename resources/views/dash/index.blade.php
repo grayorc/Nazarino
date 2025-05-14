@@ -54,7 +54,7 @@
                             <div>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">نظرسنجی‌های فعال</span>
                                 <h4 class="mt-2 text-xl font-bold text-gray-800 dark:text-white">
-                                    45
+                                    {{ $totalElections }}
                                 </h4>
                             </div>
 
@@ -79,7 +79,7 @@
                             <div>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">آرای ثبت شده</span>
                                 <h4 class="mt-2 text-xl font-bold text-gray-800 dark:text-white">
-                                    2,790
+                                    {{ $totalVotes }}
                                 </h4>
                             </div>
 
@@ -104,7 +104,7 @@
                             <div>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">نظرات</span>
                                 <h4 class="mt-2 text-xl font-bold text-gray-800 dark:text-white">
-                                    325
+                                    {{ $totalComments }}
                                 </h4>
                             </div>
 
