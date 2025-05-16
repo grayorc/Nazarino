@@ -12,15 +12,8 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $receipts = auth()->user()->receipts()->paginate(5);
+        return view('dash.receipt.all', compact('receipts'));
     }
 
     /**

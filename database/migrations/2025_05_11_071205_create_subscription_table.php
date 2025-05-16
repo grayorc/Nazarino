@@ -68,32 +68,25 @@ return new class extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->string('receipt_number')->unique();
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
             $table->foreignId('subscription_user_id')
                 ->nullable()
                 ->constrained('subscription_users')
                 ->nullOnDelete();
-            $table->decimal('total', 10, 2);
+            $table->decimal('amount', 10, 2);
             $table->string('currency')->default('تومان');
+            $table->enum('status', ['pending', 'paid', 'failed', 'refunded'])->default('pending');
             $table->string('payment_method')->nullable();
-            $table->string('payment_status');
             $table->json('meta_data')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-        });
-
-        Schema::create('receipt_users', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignId('receipt_id')
-                ->constrained('receipts')
-                ->onDelete('cascade');
-            $table->decimal('amount', 10, 2);
-            $table->string('status')->default('pending');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->index('user_id');
+            $table->index('status');
+            $table->index('paid_at');
         });
 
 
@@ -103,7 +96,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('receipt_users');
         Schema::dropIfExists('receipts');
         Schema::dropIfExists('subscription_users');
         Schema::dropIfExists('subscription_tier_permissions');

@@ -26,6 +26,10 @@ class PurchaseController extends Controller
 
     public function index(SubscriptionTier  $subscriptionTier)
     {
+        if (auth()->user()->hasActiveSubscriptionTier()) {
+            ToastMagic::error('شما اشتراک فعال دارید');
+            return redirect()->route('dashboard');
+        }
         return view('dash.purchase.receipt', compact('subscriptionTier'));
     }
 
@@ -51,15 +55,6 @@ class PurchaseController extends Controller
             'mobile' => '09131234567',    // TODO: Get from user profile
         ];
 
-        // Store payment data in session
-        session([
-            'payment_id' => $paymentId,
-            'payment_amount' => $subscriptionTier->price,
-            'payment_national_id' => $paymentData['nationalId'],
-            'payment_mobile' => $paymentData['mobile'],
-            'subscription_tier_id' => $subscriptionTier->id
-        ]);
-
         try {
             $gateway = $this->larapay->gateway('test', $gatewayConfig);
 
@@ -70,6 +65,28 @@ class PurchaseController extends Controller
                 nationalId: $paymentData['nationalId'],
                 mobile: $paymentData['mobile'],
             );
+
+            $receipt = Receipt::create([
+                'receipt_number' => $paymentId,
+                'user_id' => Auth::id(),
+                'subscription_user_id' => null,
+                'amount' => $subscriptionTier->price,
+                'status' => 'pending',
+                'currency' => 'IRR',
+                'payment_method' => 'online',
+                'meta_data' => [
+                    'subscription_tier_id' => $subscriptionTier->id,
+                    'national_id' => $paymentData['nationalId'],
+                    'mobile' => $paymentData['mobile'],
+                    'payment_id' => $paymentId
+                ],
+                'paid_at' => null
+            ]);
+
+            // Store minimal data in session for verification
+            session([
+                'payment_id' => $paymentId
+            ]);
 
             // Redirect to payment page
             return $gateway->redirect(
@@ -96,15 +113,25 @@ class PurchaseController extends Controller
                 'merchant_id' => config('larapay.gateways.test.merchant_id'),
             ];
 
-            // Get payment data from session
+            // Get payment ID from session
             $id = session('payment_id');
-            $amount = session('payment_amount');
-            $nationalId = session('payment_national_id');
-            $mobile = session('payment_mobile');
 
             if (empty($id)) {
                 throw new LarapayException('Payment ID is required');
             }
+
+            // Find the receipt with waiting_to_pay status
+            $receipt = Receipt::where('receipt_number', $id)
+                ->where('status', 'pending')
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            // Extract payment data from receipt
+            $amount = $receipt->amount;
+            $metaData = $receipt->meta_data;
+            $nationalId = $metaData['national_id'] ?? '';
+            $mobile = $metaData['mobile'] ?? '';
+            $subscriptionTierId = $metaData['subscription_tier_id'] ?? null;
 
             if (empty($amount)) {
                 throw new LarapayException('Payment amount is required');
@@ -120,13 +147,6 @@ class PurchaseController extends Controller
 
             // Get all request parameters
             $params = $request->all();
-
-            // Log payment verification attempt
-            Log::info('Payment verification attempt', [
-                'session_id' => $id,
-                'session_amount' => $amount,
-                'request_params' => $params
-            ]);
 
             // Verify the payment
             $result = $this->larapay->gateway('test', $gatewayConfig)
@@ -146,27 +166,23 @@ class PurchaseController extends Controller
                 // Create subscription
                 $subscription = SubscriptionUser::create([
                     'user_id' => Auth::id(),
-                    'subscription_tier_id' => session('subscription_tier_id'),
+                    'subscription_tier_id' => $subscriptionTierId,
                     'status' => 'active',
                     'starts_at' => now(),
                     'ends_at' => now()->addMonth() // TODO: Get duration from subscription tier
                 ]);
 
-                // Create receipt
-                $receipt = Receipt::create([
-                    'receipt_number' => $result['tracking_code'],
+                // Update the existing receipt
+                $receipt->update([
                     'subscription_user_id' => $subscription->id,
-                    'total' => session('payment_amount'),
-                    'currency' => 'IRR',
-                    'payment_method' => 'online',
-                    'payment_status' => 'paid',
-                    'meta_data' => [
+                    'status' => 'paid',
+                    'meta_data' => array_merge($metaData, [
                         'result' => $result['result'],
                         'reference_id' => $result['reference_id'],
                         'tracking_code' => $result['tracking_code'],
                         'card' => $result['card'],
                         'fee' => $result['fee']
-                    ],
+                    ]),
                     'paid_at' => now()
                 ]);
 

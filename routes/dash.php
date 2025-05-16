@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ReceiptController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -39,3 +40,6 @@ Route::post('elections/{id}/options', [OptionController::class, 'store'])->name(
 Route::get('purchase/{subscriptionTier:title}',[PurchaseController::class, 'index'])->name('purchase.index');
 Route::post('purchase/payment-process',[PurchaseController::class, 'paymentProcess'])->name('purchase.payment-process');
 Route::post('purchase/verify',[PurchaseController::class, 'verify'])->name('purchase.verify');
+
+Route::get('receipts', [ReceiptController::class, 'index'])->name('receipts.index');
+

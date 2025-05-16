@@ -13,11 +13,12 @@ class Receipt extends Model
 
     protected $fillable = [
         'receipt_number',
+        'user_id',
         'subscription_user_id',
-        'total',
+        'amount',
         'currency',
+        'status',
         'payment_method',
-        'payment_status',
         'meta_data',
         'paid_at'
     ];
@@ -32,15 +33,8 @@ class Receipt extends Model
         return $this->belongsTo(SubscriptionUser::class);
     }
 
-    public function receiptUsers(): HasMany
+    public function user(): BelongsTo
     {
-        return $this->hasMany(ReceiptUser::class);
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'receipt_users')
-            ->withPivot('amount', 'status')
-            ->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 }
