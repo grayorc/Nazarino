@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Services\AI;
+
+interface AIServiceInterface
+{
+    public function chatCompletion(array $messages, array $options = []);
+
+    /**
+     * Get a simple response from the AI.
+     *
+     * @param string $prompt
+     * @param array $options
+     * @return strin|null
+     */
+    public function ask(string $prompt, array $options = []);
+
+    /**
+     * Continue a conversation with the AI.
+     *
+     * @param array $conversation
+     * @param string $newMessage
+     * @param array $options
+     * @return array|null
+     */
+    public function continueConversation(array $conversation, string $newMessage, array $options = []);
+
+    /**
+     * Generate a summary of comments for an option.
+     *
+     * @param array $comments Array of comment objects or strings
+     * @param string|null $language Language code
+     * @param array $options Additional options for the AI request
+     * @return string|null The generated summary
+     */
+    public function summarizeComments(array $comments, ?string $language = null, array $options = []);
+}

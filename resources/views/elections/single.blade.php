@@ -8,7 +8,7 @@
                         mt-4
                     @endif
                 ">
-                    <a href="{{ route('option.show', ['election_id' => $election->id, 'option_id' => $option->id]) }}">
+                    <a href="{{ route('option.show', ['election' => $election->id, 'option' => $option->id]) }}">
                         <div class="font-bold text-xl md:text-2xl">
                             {{ $option->title }}
                         </div>

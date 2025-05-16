@@ -35,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->
     require __DIR__.'/admin.php';
 });
 
-Route::get('election/{election}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
-Route::get('election/{election_id}/option/{option_id}', [\App\Http\Controllers\OptionController::class, 'show'])->name('option.show');
+Route::get('election/{election:id}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
+Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])->name('option.show');
+Route::get('options/{option}/ai-summary', [\App\Http\Controllers\OptionController::class, 'getAiSummary'])->name('option.ai-summary');
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');

@@ -83,6 +83,111 @@
             </div>
 
             <div class="mt-6 md:mt-8 px-2 md:px-0">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="font-bold text-lg md:text-xl">خلاصه هوش مصنوعی</div>
+                        <button
+                            class="text-xs md:text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-lg flex items-center gap-1"
+                            hx-get="/options/{{ $option->id }}/ai-summary"
+                            hx-target="#ai-summary-content"
+                            hx-trigger="click"
+                            hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M3 5h4"/><path d="M19 17v4"/><path d="M17 19h4"/></svg>
+                            تحلیل هوشمند
+                        </button>
+                    </div>
+                    <div id="ai-summary-container" class="relative overflow-hidden rounded-lg">
+                        <div class="absolute inset-0 moving-gradient"></div>
+                        <div id="ai-summary-content" class="relative bg-white/70 dark:text-black backdrop-blur-sm p-4 rounded-lg text-sm md:text-base">
+                            @if(cache()->has('comment_summary_' . $option->id))
+                                <div class="text-gray-500 text-center dark:text-black rtl:text-right">{{ cache()->get('comment_summary_' . $option->id) }}</div>
+                            @else
+                                <div class="text-gray-500 text-center dark:text-black">برای دریافت تحلیل هوشمند نظرات، دکمه بالا را کلیک کنید.</div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Gemini-style loading animation template -->
+                    <template id="ai-summary-skeleton">
+                        <div class="flex flex-col gap-2 rtl">
+                            <div class="gemini-loading-bar h-5 w-3/4"></div>
+                            <div class="gemini-loading-bar h-5 w-full" style="animation-delay: 150ms"></div>
+                            <div class="gemini-loading-bar h-5 w-5/6" style="animation-delay: 300ms"></div>
+                            <div class="gemini-loading-bar h-5 w-4/6" style="animation-delay: 450ms"></div>
+                            <div class="gemini-loading-bar h-5 w-full" style="animation-delay: 600ms"></div>
+                        </div>
+                    </template>
+
+                    <style>
+                        /* Moving gradient background */
+                        .moving-gradient {
+                            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+                            background-size: 400% 400%;
+                            animation: gradient 10s ease infinite;
+                            height: 100%;
+                            width: 100%;
+                        }
+
+                        @keyframes gradient {
+                            0% {
+                                background-position: 0% 50%;
+                            }
+                            50% {
+                                background-position: 100% 50%;
+                            }
+                            100% {
+                                background-position: 0% 50%;
+                            }
+                        }
+
+                        /* Gemini-style loading animation */
+                        @keyframes expanding {
+                            0% {
+                                transform: scaleX(0);
+                                opacity: 0;
+                            }
+                            100% {
+                                transform: scaleX(1);
+                                opacity: 1;
+                            }
+                        }
+
+                        @keyframes moving {
+                            0% {
+                                background-position: 0 0;
+                            }
+                            100% {
+                                background-position: -200% 0;
+                            }
+                        }
+
+                        .gemini-loading-bar {
+                            transform-origin: right; /* RTL support - expand from right */
+                            animation: expanding 0.4s forwards linear, moving 1s 0.4s infinite forwards linear;
+                            border-radius: 0.25rem;
+                            background-image: linear-gradient(to left, #eff6ff 30%, #2563eb60 60%, #eff6ff); /* RTL support */
+                            background-size: 200% auto;
+                            opacity: 0;
+                        }
+                    </style>
+
+                    <script>
+                        document.addEventListener('htmx:beforeRequest', function(event) {
+                            if (event.detail.target.id === 'ai-summary-content') {
+                                // Get the skeleton template content
+                                const skeletonTemplate = document.getElementById('ai-summary-skeleton');
+                                if (skeletonTemplate) {
+                                    // Clone the template content
+                                    const skeletonContent = skeletonTemplate.content.cloneNode(true);
+                                    // Clear the target and append the skeleton
+                                    event.detail.target.innerHTML = '';
+                                    event.detail.target.appendChild(skeletonContent);
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+
                 <div class="font-bold text-xl md:text-2xl mb-4">نظرات</div>
 
                 @if($election->has_comment)

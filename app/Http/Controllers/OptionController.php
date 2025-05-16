@@ -8,6 +8,8 @@ use App\Models\Election;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Cache;
+use App\Facades\AI;
 
 class OptionController extends Controller
 {
@@ -58,41 +60,84 @@ class OptionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $election_id, string $option_id)
+    public function show(Request $request, Election $election, Option $option)
     {
-        $option = Option::find($option_id);
-        $option->withRelationshipAutoloading();
-        $election = Election::find($election_id);
-//        $election->withRelationshipAutoloading();
-        $comments = Comment::where('commentable_id', $option->id)->get()->sortByDesc('created_at');
-        $comments->withRelationshipAutoloading();
+        // TODO : put this in a middleware
+        if($option->election_id != $election->id){
+            abort(404);
+        }
+        
+        $comments = $option->comments()->get()->sortByDesc('created_at');
         $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
 
         $option->comment_count = $option->comments()->count();
         return view('elections.options.single', compact('option', 'election','comments'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function getCommentSummary(Request $request, string $option_id)
     {
-        //
+        $option = Option::find($option_id);
+
+        if (!$option) {
+            return response()->json(['error' => 'Option not found'], 404);
+        }
+
+        $comments = Comment::where('commentable_id', $option->id)->get();
+
+        if ($comments->count() < 3) {
+            return response()->json([
+                'summary' => null,
+                'message' => 'Not enough comments to generate a summary'
+            ]);
+        }
+
+        $cacheKey = 'comment_summary_' . $option->id;
+
+        if ($request->has('refresh') && $request->refresh) {
+            Cache::forget($cacheKey);
+        }
+
+        $summary = Cache::remember($cacheKey, now()->addDay(), function () use ($comments) {
+            return $this->generateCommentSummary($comments);
+        });
+
+        return response()->json([
+            'summary' => $summary,
+            'comment_count' => $comments->count()
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    protected function generateCommentSummary($comments)
     {
-        //
-    }
+        try {
+            if ($comments->isEmpty()) {
+                return null;
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+            return AI::summarizeComments($comments->toArray());
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error generating comment summary: ' . $e->getMessage());
+            return null;
+        }
+    }
+    public function getAiSummary(Option $option)
     {
-        //
+        $comments = $option->comments;
+
+        if ($comments->count() < 3) {
+            return response('<div class="text-gray-500 text-center">تعداد نظرات برای تحلیل کافی نیست (حداقل ۳ نظر نیاز است).</div>');
+        }
+
+        $cacheKey = 'comment_summary_' . $option->id;
+
+        $summary = Cache::remember($cacheKey, now()->addDay(), function () use ($comments) {
+            return $this->generateCommentSummary($comments);
+        });
+
+        if (!$summary) {
+            return response('<div class="text-red-500 text-center">متأسفانه در تحلیل نظرات خطایی رخ داد. لطفاً دوباره تلاش کنید.</div>');
+        }
+
+        return response('<div class="rtl text-gray-800 dark:text-black">' . nl2br(e($summary)) . '</div>');
     }
 }
