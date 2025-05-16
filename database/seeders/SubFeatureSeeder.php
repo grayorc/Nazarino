@@ -11,9 +11,9 @@ class SubFeatureSeeder extends Seeder
     {
         $subFeatures = [
             [
-                'name' => 'دسترسی نامحدود',
-                'description' => 'دسترسی به تمام امکانات نظرینو',
-                'key' => 'unlimited_access',
+                'name' => 'نظرسنجی نامحدود',
+                'description' => 'امکان ساخت تعداد نامحدود نظرسنجی',
+                'key' => 'unlimited_elections',
             ],
             [
                 'name' => 'نمودار ها',
@@ -34,6 +34,11 @@ class SubFeatureSeeder extends Seeder
                 'name' => 'دعوت به نظرسنجی',
                 'description' => 'امکان دعوت افراد به نظرسنجی',
                 'key' => 'invite_to_election',
+            ],
+            [
+                'name' => 'تحلیل هوش مصنوعی',
+                'description' => 'امکان استفاده از هوش مصنوعی در نظرسنجی',
+                'key' => 'ai_analysis',
             ],
         ];
 

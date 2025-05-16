@@ -2,31 +2,31 @@
     <div class="flex flex-col md:flex-row w-11/12 lg:w-10/12 mx-auto min-h-lvh">
         @include('elections.layouts.sidebar')
         <div class="flex flex-col w-full md:w-4/6 mx-auto my-4 md:my-16">
-            <div class="flex flex-col p-3 bg-postBg rounded-2xl mt-4">
-                <div class="font-bold text-xl md:text-2xl">
+            <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30 mt-4">
+                <div class="font-bold text-xl md:text-2xl text-PrimaryBlack dark:text-primaryWhite">
                     {{ $option->title }}
                 </div>
-                <div class="text-sm md:text-base mt-2">
+                <div class="text-sm md:text-base mt-2 text-SecondaryBlack/90 dark:text-SecondaryWhite/90">
                     {{ $option->description }}
                 </div>
 
                 <div class="flex flex-wrap gap-4 md:gap-6 mt-3">
                     <div class="flex flex-col items-center gap-4">
-                        <div class="flex w-fit flex-row items-center gap-0 rounded-full border-black
-                            bg-zinc-800/30
+                        <div class="flex w-fit flex-row items-center gap-0 rounded-full border border-gray-300 dark:border-gray-700 shadow-sm
+                            bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm
                             "
                              @auth()
                                  @if($option->user_vote != null)
                                      style="
                                     background-color:@if($option->user_vote === 1)
-                                    #009e42
+                                    rgba(0, 158, 66, 0.9)
                                     @elseif($option->user_vote === -1)
-                                    #ea002a
+                                    rgba(234, 0, 42, 0.9)
                                     @endif "
                             @endif
                             @endauth
                         >
-                            <button class="rounded-full p-1 hover:bg-zinc-800/30"
+                            <button class="rounded-full p-1.5 hover:bg-gray-200/70 dark:hover:bg-zinc-700/70 transition-colors duration-200"
                                     hx-post="/vote"
                                     hx-target="#vote-count-{{ $option->id }}"
                                     hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'
@@ -37,21 +37,21 @@
                                     @if($option->user_vote === 1)
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-white fill-white"><path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path></svg>
                                     @elseif($option->user_vote === -1 || $option->user_vote == null)
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black dark:text-primaryWhite">
                                             <path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path>
                                         </svg>
                                     @endif
                                 @endauth
                                 @guest()
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-up text-black dark:text-primaryWhite">
                                         <path d="M9 18v-6H5l7-7 7 7h-4v6H9z"></path>
                                     </svg>
                                 @endguest
                             </button>
-                            <span class="min-w-8 p-1 text-center text-black">
+                            <span class="min-w-10 p-1 text-center font-medium text-PrimaryBlack dark:text-primaryWhite">
                                     <number-flow class="font-mono" id="vote-count-{{ $option->id }}">{{ $option->votes->sum('vote') }}</number-flow>
                                 </span>
-                            <button class="rounded-full p-1 hover:bg-zinc-800/30"
+                            <button class="rounded-full p-1.5 hover:bg-gray-200/70 dark:hover:bg-zinc-700/70 transition-colors duration-200"
                                     hx-post="/vote"
                                     hx-target="#vote-count-{{ $option->id }}"
                                     hx-headers='{"X-CSRF-TOKEN": "{{ csrf_token() }}"}'
@@ -62,19 +62,19 @@
                                     @if($option->user_vote === -1)
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-white fill-white"><path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path></svg>
                                     @elseif($option->user_vote === 1 || $option->user_vote == null)
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black dark:text-primaryWhite">
                                             <path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path>
                                         </svg>
                                     @endif
                                 @endauth
                                 @guest()
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-big-down text-black dark:text-primaryWhite">
                                         <path d="M15 6v6h4l-7 7-7-7h4V6h6z"></path>
                                     </svg>
                             @endguest
                         </div>
                     </div>
-                    <div class="flex flex-row gap-1 items-center">
+                    <div class="flex flex-row gap-1.5 items-center text-SecondaryBlack/80 dark:text-SecondaryWhite/80 bg-white/50 dark:bg-zinc-800/50 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
                         <i class="ri-chat-1-fill"></i>
                         <!-- count comments -->
                         <span class="text-sm md:text-base">{{ $option->comments?->count() }}</span>
@@ -83,6 +83,8 @@
             </div>
 
             <div class="mt-6 md:mt-8 px-2 md:px-0">
+                @auth()
+                @if(auth()->user()->hasSubFeature('ai_analysis') && $election->comments)
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-3">
                         <div class="font-bold text-lg md:text-xl">خلاصه هوش مصنوعی</div>
@@ -187,8 +189,10 @@
                         });
                     </script>
                 </div>
+                @endif
+                @endauth
 
-                <div class="font-bold text-xl md:text-2xl mb-4">نظرات</div>
+                <div class="font-bold text-xl md:text-2xl mb-4 text-PrimaryBlack dark:text-primaryWhite">نظرات</div>
 
                 @if($election->has_comment)
                     <form class="mb-6"
@@ -263,17 +267,17 @@
                                         const comment = response.comment;
 
                                     const commentTemplate = `
-          <article class="p-6 mb-6 text-base bg-white rounded-lg" id="comment-${comment.id}">
+          <article class="p-6 mb-6 text-base bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" id="comment-${comment.id}">
             <footer class="flex justify-between items-center mb-2">
               <div class="flex items-center">
-                <p class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-primaryWhite font-semibold">
                   ${comment.user_name}
                 </p>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                   <time>${comment.created_at}</time>
                 </p>
               </div>
-              <button class="text-gray-400 hover:text-gray-600"
+              <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
                       hx-delete="/comments/${comment.id}"
                       hx-target="#comment-${comment.id}"
                       hx-swap="outerHTML"
@@ -282,7 +286,7 @@
                 <i class="ri-delete-bin-line"></i>
               </button>
             </footer>
-            <p class="text-gray-500">${comment.body}</p>
+            <p class="text-gray-500 dark:text-gray-300">${comment.body}</p>
           </article>
         `;
 
@@ -303,23 +307,23 @@
                         });
                     </script>
                 @else
-                    <span class="text-gray-600"> امکان ثبت دیدگاه وجود ندارد</span>
+                    <span class="text-gray-600 dark:text-gray-400"> امکان ثبت دیدگاه وجود ندارد</span>
                 @endif
 
                 <div id="comments-list">
                     @foreach($comments as $comment)
-                        <article class="p-4 md:p-6 mb-4 md:mb-6 text-sm md:text-base bg-white rounded-lg" id="comment-{{ $comment->id }}">
+                        <article class="p-4 md:p-6 mb-4 md:mb-6 text-sm md:text-base bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" id="comment-{{ $comment->id }}">
                             <footer class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
-                                    <p class="inline-flex items-center mr-2 md:mr-3 text-xs md:text-sm text-gray-900 font-semibold">
+                                    <p class="inline-flex items-center mr-2 md:mr-3 text-xs md:text-sm text-gray-900 dark:text-primaryWhite font-semibold">
                                         {{ $comment->user->name }}
                                     </p>
-                                    <p class="text-xs md:text-sm text-gray-600">
+                                    <p class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
                                         <time>{{ $comment->created_at->diffForHumans() }}</time>
                                     </p>
                                 </div>
                                 @if(auth()->id() === $comment->user_id)
-                                    <button class="text-gray-400 hover:text-gray-600 p-1"
+                                    <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 p-1"
                                         hx-delete="/comments/{{ $comment->id }}"
                                         hx-target="#comment-{{ $comment->id }}"
                                         hx-swap="outerHTML"
@@ -329,7 +333,7 @@
                                     </button>
                                 @endif
                             </footer>
-                            <p class="text-gray-500 text-sm md:text-base">{{ $comment->body }}</p>
+                            <p class="text-gray-500 dark:text-gray-300 text-sm md:text-base">{{ $comment->body }}</p>
                         </article>
                     @endforeach
                 </div>

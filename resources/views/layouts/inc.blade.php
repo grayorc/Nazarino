@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl" class="scroll-smooth">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl" class="scroll-smooth dark:bg-PrimaryBlack">
     <head>
         <meta charset="utf-8">
         <!-- Ensure viewport meta is first after charset for proper mobile rendering -->
@@ -107,7 +107,7 @@
             }
         </style>
     </head>
-    <body class="min-h-screen bg-primaryWhite">
+    <body class="min-h-screen bg-primaryWhite dark:bg-PrimaryBlack dark:text-primaryWhite transition-colors duration-300">
 
         <!-- Sticky Header -->
         <header class="sticky-header bg-PrimaryBlack/95">
