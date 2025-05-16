@@ -34,4 +34,15 @@ interface AIServiceInterface
      * @return string|null The generated summary
      */
     public function summarizeComments(array $comments, ?string $language = null, array $options = []);
+
+    /**
+     * Generate an analysis of all comments for an election.
+     *
+     * @param array $comments Array of comment objects or strings from all options
+     * @param array $election Election data for context
+     * @param string|null $language Language code
+     * @param array $options Additional options for the AI request
+     * @return string|null The generated analysis
+     */
+    public function summarizeElectionComments(array $comments, array $election, ?string $language = null, array $options = []);
 }

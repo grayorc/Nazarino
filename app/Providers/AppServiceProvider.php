@@ -76,5 +76,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('excel-export', [FeaturePolicy::class, 'excelExport']);
         Gate::define('private-elections', [FeaturePolicy::class, 'privateElections']);
         Gate::define('invite-to-election', [FeaturePolicy::class, 'inviteToElection']);
+        Gate::define('ai-analysis', [FeaturePolicy::class, 'aiAnalysis']);
     }
 }

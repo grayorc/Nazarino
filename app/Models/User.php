@@ -148,6 +148,11 @@ class User extends Authenticatable
         return $this->hasMany(Receipt::class);
     }
 
+    public function aiAnalysis()
+    {
+        return $this->hasMany(AiAnalysis::class);
+    }
+
     public function hasSubFeature($subFeatureKey): bool
     {
         return $this->subscriptions()

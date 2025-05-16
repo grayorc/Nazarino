@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Election;
 use App\Models\Image;
 use App\Models\Role;
+use App\Models\AiAnalysis;
 use App\Notifications\InviteNotification;
 use App\Rules\AfterNow;
 use Hekmatinasser\Verta\Verta;
@@ -12,6 +13,10 @@ use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use App\Models\Option;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Cache;
+use App\Facades\AI;
+use Illuminate\Support\Str;
 
 class ElectionController extends Controller
 {
@@ -195,6 +200,55 @@ class ElectionController extends Controller
                 'vote_type' => $vote_type,
                 'option_id' => $data['option_id'],
             ]);
+    }
+
+    public function getAiAnalysis(Election $election)
+    {
+        $allComments = collect();
+
+        foreach ($election->options as $option) {
+            $comments = $option->comments;
+            if ($comments && $comments->count() > 0) {
+                $allComments = $allComments->merge($comments);
+            }
+        }
+
+        if ($allComments->count() < 3) {
+            return response('<div class="text-gray-300 text-center">تعداد نظرات برای تحلیل کافی نیست (حداقل ۳ نظر نیاز است).</div>');
+        }
+
+        $analysis = $election->aiAnalysis;
+
+        if (!$analysis) {
+            $content = $this->generateElectionAnalysis($allComments, $election);
+
+            if (!$content) {
+                return response('<div class="text-red-500 text-center">متأسفانه در تحلیل نظرات خطایی رخ داد. لطفاً دوباره تلاش کنید.</div>');
+            }
+
+            $analysis = new AiAnalysis([
+                'user_id' => auth()->user()->id,
+                'election_id' => $election->id,
+                'content' => $content
+            ]);
+            $analysis->save();
+        }
+
+        return response('<div class="rtl text-gray-200">' . Str::markdown($analysis->content) . '</div>');
+    }
+
+    protected function generateElectionAnalysis($comments, $election)
+    {
+        try {
+            if ($comments->isEmpty()) {
+                return null;
+            }
+
+            return AI::summarizeElectionComments($comments->toArray(), $election->toArray());
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error generating election analysis: ' . $e->getMessage());
+            return null;
+        }
     }
 
     private function convertDate($persianDateString)

@@ -78,7 +78,7 @@ class OpenRouterService implements AIServiceInterface
                 $options
             );
 
-            $timeout = config('ai.timeout', 30);
+            $timeout = config('ai.timeout', 60);
 
             $response = Http::withoutVerifying()
                 ->timeout($timeout)
@@ -168,7 +168,7 @@ class OpenRouterService implements AIServiceInterface
         if (empty($commentTexts)) {
             return null;
         }
-        
+
         $prompt = config('ai.default_prompt');
         $prompt .= implode("\n---\n", $commentTexts);
         $prompt .= config('ai.default_instruction');
@@ -184,6 +184,57 @@ class OpenRouterService implements AIServiceInterface
      * @param array $options Additional options for the AI request
      * @return array|null The AI response including the full conversation
      */
+    /**
+     * Generate an analysis of all comments for an election.
+     *
+     * @param array $comments Array of comment objects or strings from all options
+     * @param array $election Election data for context
+     * @param string|null $language Language code (default: fa for Persian)
+     * @param array $options Additional options for the AI request
+     * @return string|null The generated analysis
+     */
+    public function summarizeElectionComments(array $comments, array $election, ?string $language = null, array $options = [])
+    {
+        if (empty($comments)) {
+            return null;
+        }
+
+        $lang = $language ?? $this->language;
+
+        $commentTexts = array_map(function ($comment) {
+            if (is_string($comment)) {
+                return $comment;
+            } elseif (is_object($comment) && isset($comment->body)) {
+                return $comment->body;
+            } elseif (is_array($comment) && isset($comment['body'])) {
+                return $comment['body'];
+            }
+            return '';
+        }, $comments);
+
+        // Filter out empty comments
+        $commentTexts = array_filter($commentTexts);
+
+        if (empty($commentTexts)) {
+            return null;
+        }
+
+        // Create a prompt that includes election context
+        $electionTitle = $election['title'] ?? 'نظرسنجی';
+        $electionDescription = $election['description'] ?? '';
+
+        $prompt = "تحلیل جامع نظرات برای نظرسنجی '{$electionTitle}':\n\n";
+        $prompt .= "توضیحات نظرسنجی: {$electionDescription}\n\n";
+        $prompt .= "نظرات کاربران:\n";
+        $prompt .= implode("\n---\n", $commentTexts);
+        $prompt .= "\n\nلطفاً یک تحلیل جامع و دقیق از نظرات فوق ارائه دهید. نکات مهم، الگوهای تکرار شونده، و دیدگاه‌های متفاوت را مشخص کنید. این تحلیل باید به زبان فارسی و با لحنی رسمی و حرفه‌ای باشد.";
+
+        // Set higher token limit for comprehensive analysis
+        $options['max_tokens'] = $options['max_tokens'] ?? 1500;
+
+        return $this->ask($prompt, $options);
+    }
+
     public function continueConversation(array $conversation, string $newMessage, array $options = [])
     {
         $conversation[] = [

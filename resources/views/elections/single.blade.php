@@ -92,10 +92,10 @@
 {{--                                <i class="ri-arrow-down-circle-line ri-xl"></i>--}}
 {{--                            </button>--}}
 {{--                        </div>--}}
-                        <div class="flex flex-row gap-1">
+                        <div class="flex flex-row gap-1.5 items-center text-SecondaryBlack/80 dark:text-SecondaryWhite/80 bg-white/50 dark:bg-zinc-800/50 px-3 py-1.5 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
                             <i class="ri-chat-1-fill"></i>
                             <!-- count comments -->
-                            {{ $option->comments?->count() }}
+                            <span class="text-sm md:text-base">{{ $option->comments?->count() }}</span>
                         </div>
                     </div>
                 </div>

@@ -32,6 +32,9 @@ Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])
 Route::put('/elections/{election}', [ElectionController::class, 'update'])
     ->name('elections.update');
 
+Route::get('/elections/{election}/ai-analysis', [ElectionController::class, 'getAiAnalysis'])
+    ->name('elections.ai-analysis');
+
 Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])->name('elections.destroy');
 
 Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');

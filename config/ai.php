@@ -3,6 +3,26 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | AI Analysis Enable/Disable
+    |--------------------------------------------------------------------------
+    |
+    | This value determines whether the AI analysis feature is enabled or not.
+    |
+    */
+    'enabled' => env('AI_ENABLED', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | AI Analysis Timeout
+    |--------------------------------------------------------------------------
+    |
+    | This value determines how many minutes must pass before allowing
+    | a new AI analysis for the same election.
+    |
+    */
+    'analysis_timeout' => env('AI_ANALYSIS_TIMEOUT', 30),
+    /*
+    |--------------------------------------------------------------------------
     | Default AI Model
     |--------------------------------------------------------------------------
     |
@@ -37,7 +57,7 @@ return [
     | from the AI service before timing out.
     |
     */
-    'timeout' => env('AI_REQUEST_TIMEOUT', 30),
+    'timeout' => env('AI_REQUEST_TIMEOUT', 60),
     /*
     |--------------------------------------------------------------------------
     | Default Prompt

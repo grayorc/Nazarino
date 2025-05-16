@@ -26,7 +26,7 @@ class ProgrammingLanguagesElectionSeeder extends Seeder
             'user_id' => $user->id,
             'title' => 'بهترین زبان های برنامه نویسی',
             'description' => 'در این نظرسنجی بهترین زبان‌های برنامه‌نویسی را انتخاب کنید.',
-            'has_comments' => true,
+            'has_comment' => true,
             'is_open' => true,
             'is_public' => true,
         ]);

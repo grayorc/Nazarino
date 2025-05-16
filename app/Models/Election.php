@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 class Election extends Model
@@ -43,6 +44,11 @@ class Election extends Model
     public function getTotalVotes(): int
     {
         return Vote::whereIn('option_id', $this->options->pluck('id'))->count();
+    }
+
+    public function aiAnalysis(): HasOne
+    {
+        return $this->hasOne(AiAnalysis::class);
     }
 
     public function getTotalComments(): int
