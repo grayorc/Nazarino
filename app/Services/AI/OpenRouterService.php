@@ -168,7 +168,7 @@ class OpenRouterService implements AIServiceInterface
         if (empty($commentTexts)) {
             return null;
         }
-
+        
         $prompt = config('ai.default_prompt');
         $prompt .= implode("\n---\n", $commentTexts);
         $prompt .= config('ai.default_instruction');
