@@ -204,9 +204,16 @@
                                         </td>
 
                                         <td class="relative px-4 py-4 text-sm whitespace-nowrap">
+
                                             <a href="{{ route('elections.edit',$election) }}">
                                                 <button class="px-1 py-1 text-[#008CBA] transition-colors duration-200 rounded-lg hover:bg-gray-700">
                                                     <i class="ri-edit-2-line ri-lg"></i>
+                                                </button>
+                                            </a>
+
+                                            <a href="{{ route('election.invite',$election) }}">
+                                                <button class="px-1 py-1 text-green-600 transition-colors duration-200 rounded-lg hover:bg-gray-700">
+                                                    <i class="ri-user-add-line ri-lg"></i>
                                                 </button>
                                             </a>
 

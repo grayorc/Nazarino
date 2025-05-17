@@ -222,4 +222,24 @@ class User extends Authenticatable
     {
         return $this->totalElections() - $this->totalActiveElections();
     }
+
+    public function followers()
+    {
+        return $this->hasMany(Follower::class, 'user_id');
+    }
+
+    public function followings()
+    {
+        return $this->hasMany(Follower::class, 'follower_id');
+    }
+
+    public function countFollowers()
+    {
+        return $this->followers()->count();
+    }
+
+    public function countFollowings()
+    {
+        return $this->followings()->count();
+    }
 }

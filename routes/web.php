@@ -36,7 +36,16 @@ Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->
 });
 
 Route::get('election/{election:id}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
-Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])->name('option.show');
-Route::get('options/{option}/ai-summary', [\App\Http\Controllers\OptionController::class, 'getAiSummary'])->name('option.ai-summary');
-Route::get('elections/{election}/ai-analysis', [\App\Http\Controllers\ElectionController::class, 'getAiAnalysis'])->name('election.ai-analysis');
+Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])
+    ->name('option.show');
+Route::get('options/{option}/ai-summary', [\App\Http\Controllers\OptionController::class, 'getAiSummary'])
+    ->middleware('auth')
+    ->can('ai-analysis')
+    ->name('option.ai-summary');
+
+Route::get('elections/{election}/ai-analysis', [\App\Http\Controllers\ElectionController::class, 'getAiAnalysis'])
+    ->middleware('auth')
+    ->can('ai-analysis')
+    ->name('election.ai-analysis');
+
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');

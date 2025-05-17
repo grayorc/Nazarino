@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\InviteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -47,3 +48,6 @@ Route::post('purchase/verify',[PurchaseController::class, 'verify'])->name('purc
 Route::get('receipts', [ReceiptController::class, 'index'])->name('receipts.index');
 Route::get('subscription', [PurchaseController::class, 'subscriptionIndex'])->name('subscription.index');
 
+Route::get('election/invite/{election:id}', [InviteController::class, 'index'])
+    ->can('invite-to-election')
+    ->name('election.invite');
