@@ -66,7 +66,7 @@ class OptionController extends Controller
         if($option->election_id != $election->id){
             abort(404);
         }
-        
+
         $comments = $option->comments()->get()->sortByDesc('created_at');
         $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
 
@@ -74,52 +74,21 @@ class OptionController extends Controller
         return view('elections.options.single', compact('option', 'election','comments'));
     }
 
-    public function getCommentSummary(Request $request, string $option_id)
-    {
-        $option = Option::find($option_id);
-
-        if (!$option) {
-            return response()->json(['error' => 'Option not found'], 404);
-        }
-
-        $comments = Comment::where('commentable_id', $option->id)->get();
-
-        if ($comments->count() < 3) {
-            return response()->json([
-                'summary' => null,
-                'message' => 'Not enough comments to generate a summary'
-            ]);
-        }
-
-        $cacheKey = 'comment_summary_' . $option->id;
-
-        if ($request->has('refresh') && $request->refresh) {
-            Cache::forget($cacheKey);
-        }
-
-        $summary = Cache::remember($cacheKey, now()->addDay(), function () use ($comments) {
-            return $this->generateCommentSummary($comments);
-        });
-
-        return response()->json([
-            'summary' => $summary,
-            'comment_count' => $comments->count()
-        ]);
-    }
-
-    protected function generateCommentSummary($comments)
+    protected function generateCommentSummary($option)
     {
         try {
+            $comments = $option->comments;
             if ($comments->isEmpty()) {
                 return null;
             }
 
-            return AI::summarizeComments($comments->toArray());
+            return AI::summarizeComments($option->toArray() + $comments->toArray());
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Error generating comment summary: ' . $e->getMessage());
             return null;
         }
     }
+
     public function getAiSummary(Option $option)
     {
         $comments = $option->comments;
@@ -128,10 +97,11 @@ class OptionController extends Controller
             return response('<div class="text-gray-500 text-center">تعداد نظرات برای تحلیل کافی نیست (حداقل ۳ نظر نیاز است).</div>');
         }
 
+
         $cacheKey = 'comment_summary_' . $option->id;
 
-        $summary = Cache::remember($cacheKey, now()->addDay(), function () use ($comments) {
-            return $this->generateCommentSummary($comments);
+        $summary = Cache::remember($cacheKey, now()->addDay(), function () use ($option) {
+            return $this->generateCommentSummary($option);
         });
 
         if (!$summary) {
