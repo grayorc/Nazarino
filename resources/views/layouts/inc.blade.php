@@ -194,7 +194,7 @@
             </main>
         </div>
 
-        <footer class="bg-PrimaryBlack">
+        <footer class="bg-PrimaryBlack mt-28">
             <div class="container flex flex-col items-center justify-between p-4 md:p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row max-w-7xl">
                 <a href="#" class="mb-4 sm:mb-0">
                     <img class="w-auto h-6 md:h-7" src="/dist/img/logo.png" alt="">

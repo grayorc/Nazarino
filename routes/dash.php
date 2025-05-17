@@ -45,4 +45,5 @@ Route::post('purchase/payment-process',[PurchaseController::class, 'paymentProce
 Route::post('purchase/verify',[PurchaseController::class, 'verify'])->name('purchase.verify');
 
 Route::get('receipts', [ReceiptController::class, 'index'])->name('receipts.index');
+Route::get('subscription', [PurchaseController::class, 'subscriptionIndex'])->name('subscription.index');
 

@@ -97,7 +97,7 @@
 
                         <!-- Tab 2 Content -->
                         <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative w-full" x-cloak dir="rtl">
-                            @if(auth()->user()->can('ai-analysis'))
+                            @can('ai-analysis')
                             <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-100 mb-4 sm:mb-6">تحلیل هوشمند نظرات</h2>
 
                             <div class="flex flex-col gap-6 w-full">
@@ -164,16 +164,22 @@
                                         </svg>
                                     </button>
                                 </div>
-                                @endif
+                                @endcan
 
                                 <!-- Options with comment counts -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                     @foreach ($election->options as $option)
                                         <div class="bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-600">
                                             <h3 class="text-gray-200 font-medium mb-2">{{ $option->title }}</h3>
-                                            <div class="flex flex-row gap-1.5 items-center text-gray-300 bg-gray-600/50 px-3 py-1.5 rounded-full shadow-sm border border-gray-500 w-fit">
-                                                <i class="ri-chat-1-fill"></i>
-                                                <span class="text-sm md:text-base">{{ $option->comments?->count() }} نظر</span>
+                                            <div class="flex flex-row gap-3 items-center">
+                                                <div class="flex flex-row gap-1.5 items-center text-gray-300 bg-gray-600/50 px-3 py-1.5 rounded-full shadow-sm border border-gray-500">
+                                                    <i class="ri-chat-1-fill"></i>
+                                                    <span class="text-sm md:text-base">{{ $option->comments?->count() }} نظر</span>
+                                                </div>
+                                                <div class="flex flex-row gap-1.5 items-center text-gray-300 bg-gray-600/50 px-3 py-1.5 rounded-full shadow-sm border border-gray-500">
+                                                    <i class="ri-thumb-up-fill"></i>
+                                                    <span class="text-sm md:text-base">{{ $option->votes->sum('vote') }} رای</span>
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach

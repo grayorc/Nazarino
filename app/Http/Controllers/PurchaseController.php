@@ -213,4 +213,10 @@ class PurchaseController extends Controller
         ToastMagic::error('خطا در تایید پرداخت: ' . $e->getMessage());
         return redirect()->route('dashboard');
     }
+
+    public function subscriptionIndex()
+    {
+        $subscriptionTiers = SubscriptionTier::all();
+        return view('dash.subscription.all', compact('subscriptionTiers'));
+    }
 }

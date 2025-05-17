@@ -42,7 +42,7 @@ class ProgrammingLanguagesElectionSeeder extends Seeder
 
         foreach ($options as $option) {
             Option::create([
-                'election_id' => 1,
+                'election_id' => $election->id,
                 'title' => $option[0],
                 'description' => $option[1],
             ]);

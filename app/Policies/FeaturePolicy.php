@@ -11,7 +11,7 @@ class FeaturePolicy
      */
     public function unlimitedAccess(User $user): bool
     {
-        return $user->hasSubFeature('unlimited_elections') || $user->elections()->doesntExist();
+        return $user->hasSubFeature('unlimited_elections') || $user->elections()->doesntExist() || $user->is_admin;
     }
 
     /**
@@ -19,7 +19,7 @@ class FeaturePolicy
      */
     public function charts(User $user): bool
     {
-        return $user->hasSubFeature('charts');
+        return $user->hasSubFeature('charts') || $user->is_admin;
     }
 
     /**
@@ -27,7 +27,7 @@ class FeaturePolicy
      */
     public function excelExport(User $user): bool
     {
-        return $user->hasSubFeature('exel_export');
+        return $user->hasSubFeature('exel_export') || $user->is_admin;
     }
 
     /**
@@ -35,7 +35,7 @@ class FeaturePolicy
      */
     public function privateElections(User $user): bool
     {
-        return $user->hasSubFeature('private_elections');
+        return $user->hasSubFeature('private_elections') || $user->is_admin;
     }
 
     /**
@@ -43,11 +43,11 @@ class FeaturePolicy
      */
     public function inviteToElection(User $user): bool
     {
-        return $user->hasSubFeature('invite_to_election');
+        return $user->hasSubFeature('invite_to_election') || $user->is_admin;
     }
 
     public function aiAnalysis(User $user): bool
     {
-        return $user->hasSubFeature('ai_analysis');
+        return $user->hasSubFeature('ai_analysis') || $user->is_admin;
     }
 }
