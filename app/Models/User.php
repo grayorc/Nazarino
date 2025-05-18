@@ -252,5 +252,4 @@ class User extends Authenticatable
     {
         return $this->receivedInvites()->where('election_id', $electionId)->exists();
     }
-
 }
