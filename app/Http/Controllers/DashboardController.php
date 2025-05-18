@@ -23,14 +23,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //remaining subscription days
         $user = Auth::user();
         $remainingDays = $user->getRemainingDays();
-        //total votes
         $totalVotes = $user->getTotalVotes();
-        //total active elections
         $totalElections = $user->totalActiveElections();
-        //total comments on users each election
         $totalComments = $user->getTotalComments();
 
 
@@ -41,7 +37,7 @@ class DashboardController extends Controller
             ->join('votes', 'options.id', '=', 'votes.option_id')
             ->groupBy('elections.id', 'elections.title')
             ->orderBy('total_votes', 'desc')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
         // Prepare data for chart

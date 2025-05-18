@@ -51,3 +51,11 @@ Route::get('subscription', [PurchaseController::class, 'subscriptionIndex'])->na
 Route::get('election/invite/{election:id}', [InviteController::class, 'index'])
     ->can('invite-to-election')
     ->name('election.invite');
+    
+Route::post('election/send-invite', [InviteController::class, 'sendInvite'])
+    ->can('invite-to-election')
+    ->name('election.send-invite');
+    
+Route::post('election/{election}/send-email-invite', [InviteController::class, 'sendEmailInvite'])
+    ->can('invite-to-election')
+    ->name('election.send-email-invite');

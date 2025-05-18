@@ -17,12 +17,13 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Cache;
 use App\Facades\AI;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class ElectionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = auth()->user()->elections();
+        $query = Auth::user()->elections();
 
         if ($request->has('search') && !empty($request->input('search'))) {
             $search = $request->input('search');
@@ -94,7 +95,7 @@ class ElectionController extends Controller
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'end_date' => $endDate,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'has_comment' => $request->has('comment'),
             'is_public' => $request->has('public'),
         ];
@@ -144,7 +145,7 @@ class ElectionController extends Controller
 
     public function vote(Request $request)
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return response()->json([
                 'message' => 'User not logged in',
             ]);
@@ -156,8 +157,8 @@ class ElectionController extends Controller
         ]);
         $vote_type = "";
         $option = Option::find($data['option_id']);
-        if (Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->exists()) {
-            $vote = Vote::where('user_id', auth()->user()->id)->where('option_id', $data['option_id'])->first();
+        if (Vote::where('user_id', Auth::user()->id)->where('option_id', $data['option_id'])->exists()) {
+            $vote = Vote::where('user_id', Auth::user()->id)->where('option_id', $data['option_id'])->first();
             if ($data['vote_type'] == 'UP') {
                 if ($vote->vote == 1) {
                     $vote->delete();
@@ -189,7 +190,7 @@ class ElectionController extends Controller
                     $vote_type = "DOWN";
                 }
                 $vote = Vote::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => Auth::user()->id,
                     'option_id' => $data['option_id'],
                     'vote' => $q_vote_type,
                     'election_id' => $option->election_id
@@ -227,7 +228,7 @@ class ElectionController extends Controller
             }
 
             $analysis = new AiAnalysis([
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::user()->id,
                 'election_id' => $election->id,
                 'content' => $content
             ]);
@@ -256,6 +257,44 @@ class ElectionController extends Controller
         $gregorianDate = Verta::parseFormat('Y/n/j', $persianDateString)->datetime();
 
         return $gregorianDate->format('Y-m-d H:i:s');
+    }
+
+    public function feed(Request $request)
+    {
+        $query = Election::where('is_public', true);
+
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->has('status')) {
+            switch ($request->input('status')) {
+                case 'open':
+                    $query->where('is_open', true);
+                    break;
+                case 'closed':
+                    $query->where('is_open', false);
+                    break;
+            }
+        }
+
+        $elections = $query->with(['user', 'options'])->latest()->paginate(6);
+
+        if(auth()->check()) {
+            foreach ($elections as $election) {
+                foreach ($election->options as $option) {
+                    $option->user_vote = auth()->user()->userVote($option->id);
+                }
+            }
+        }
+
+        $elections->appends($request->all());
+
+        return view('elections.feed', compact('elections'));
     }
 
     public function showResult(Election $election)

@@ -35,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->
     require __DIR__.'/admin.php';
 });
 
+Route::get('elections', [\App\Http\Controllers\ElectionController::class, 'feed'])->name('elections.feed');
 Route::get('election/{election:id}', [\App\Http\Controllers\ElectionController::class, 'show'])->name('election.show');
 Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])
     ->name('option.show');
@@ -49,3 +50,8 @@ Route::get('elections/{election}/ai-analysis', [\App\Http\Controllers\ElectionCo
     ->name('election.ai-analysis');
 
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');
+
+Route::get('users/{user:username}', [\App\Http\Controllers\UserProfileController::class, 'show'])->name('users.profile');
+Route::post('users/{user:username}/follow', [\App\Http\Controllers\UserProfileController::class, 'follow'])->name('users.follow');
+Route::get('users/{user:username}/followers', [\App\Http\Controllers\UserProfileController::class, 'followers'])->name('users.followers');
+Route::get('users/{user:username}/followings', [\App\Http\Controllers\UserProfileController::class, 'followings'])->name('users.followings');

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             SubscriptionTierSubFeatureSeeder::class,
             SubscriptionUserSeeder::class,
             ProgrammingLanguagesElectionSeeder::class,
+            PopularElectionsSeeder::class,
         ]);
     }
 }

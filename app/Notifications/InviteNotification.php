@@ -11,13 +11,18 @@ use Illuminate\Notifications\Notification;
 class InviteNotification extends Notification
 {
     use Notifiable;
+    
+    /**
+     * Notification data
+     */
+    public $data;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(array $data = [])
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -27,7 +32,7 @@ class InviteNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['toDatabase'];
+        return ['database'];
     }
 
     public function toDatabase($notifiable)
@@ -40,16 +45,7 @@ class InviteNotification extends Notification
     }
 
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
+    // Mail method removed as requested
 
     /**
      * Get the array representation of the notification.
@@ -58,8 +54,6 @@ class InviteNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+        return $this->data;
     }
 }

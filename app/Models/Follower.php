@@ -12,6 +12,10 @@ class Follower extends Model
     protected $table = 'followers';
     protected $fillable = ['user_id', 'follower_id'];
 
+    public $incrementing = false;
+    protected $primaryKey = ['user_id', 'follower_id'];
+    protected $keyType = 'array';
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

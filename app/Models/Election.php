@@ -50,6 +50,11 @@ class Election extends Model
     {
         return $this->hasOne(AiAnalysis::class);
     }
+    
+    public function invites(): HasMany
+    {
+        return $this->hasMany(Invite::class);
+    }
 
     public function getTotalComments(): int
     {

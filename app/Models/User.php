@@ -242,4 +242,10 @@ class User extends Authenticatable
     {
         return $this->followings()->count();
     }
+
+    public function receivedInvites()
+    {
+        return $this->hasMany(Invite::class, 'user_id');
+    }
+
 }
