@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\InviteResponseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -51,11 +53,18 @@ Route::get('subscription', [PurchaseController::class, 'subscriptionIndex'])->na
 Route::get('election/invite/{election:id}', [InviteController::class, 'index'])
     ->can('invite-to-election')
     ->name('election.invite');
-    
+
 Route::post('election/send-invite', [InviteController::class, 'sendInvite'])
     ->can('invite-to-election')
     ->name('election.send-invite');
-    
+
 Route::post('election/{election}/send-email-invite', [InviteController::class, 'sendEmailInvite'])
     ->can('invite-to-election')
     ->name('election.send-email-invite');
+
+Route::get('notifications', [NotificationsController::class, 'index'])->name('notifications.index');
+Route::post('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
+Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+
+Route::post('invites/{invite}/accept', [InviteResponseController::class, 'accept'])->name('invites.accept');
+Route::post('invites/{invite}/reject', [InviteResponseController::class, 'reject'])->name('invites.reject');

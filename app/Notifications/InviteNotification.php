@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 class InviteNotification extends Notification
 {
     use Notifiable;
-    
+
     /**
      * Notification data
      */
@@ -37,15 +37,22 @@ class InviteNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-        return [
+        $data = [
             'title' => $this->data['title'],
             'message' => $this->data['message'],
             'url' => $this->data['url'],
         ];
+
+        if (isset($this->data['invite_id'])) {
+            $data['invite_id'] = $this->data['invite_id'];
+        }
+
+        if (isset($this->data['election_id'])) {
+            $data['election_id'] = $this->data['election_id'];
+        }
+
+        return $data;
     }
-
-
-    // Mail method removed as requested
 
     /**
      * Get the array representation of the notification.

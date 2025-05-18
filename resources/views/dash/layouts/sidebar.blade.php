@@ -24,12 +24,15 @@
                 <span class="mx-4 font-medium">داشبورد</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 text-sm md:text-base text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-Sidebar_background_hover dark:hover:text-gray-200 hover:text-gray-700" href="#">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <a class="flex items-center px-4 py-2 text-sm md:text-base text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-Sidebar_background_hover dark:hover:text-gray-200 hover:text-gray-700" href="{{ route('notifications.index') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                 </svg>
-                <span class="mx-4 font-medium">اعلان ها</span>
+                <span class="mx-4 font-medium">اعلان‌ها</span>
+                @if(auth()->user()->unreadNotifications->count() > 0)
+                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full mr-2">{{ auth()->user()->unreadNotifications->count() }}</span>
+                @endif
             </a>
 
             <a class="flex items-center px-4 py-2 text-sm md:text-base text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-Sidebar_background_hover dark:hover:text-gray-200 hover:text-gray-700" href="{{ route('elections.index') }}">

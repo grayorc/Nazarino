@@ -248,4 +248,9 @@ class User extends Authenticatable
         return $this->hasMany(Invite::class, 'user_id');
     }
 
+    public function isInvitedToElection($electionId)
+    {
+        return $this->receivedInvites()->where('election_id', $electionId)->exists();
+    }
+
 }

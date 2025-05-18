@@ -112,7 +112,7 @@
                                                 </div>
 
                                                 <!-- Invite Button -->
-                                                @if(!\App\Models\Invite::wasInvited($follower->follower->id, $election->id))
+                                                @if(!$follower->follower->isInvitedToElection($election->id))
                                                 <button
                                                     class="invite-button px-4 py-2 rounded-lg bg-primaryColor hover:bg-primaryColor/90 text-white transition-all duration-300 flex items-center gap-2 text-sm"
                                                     hx-vals='{"user_id": "{{ $follower->follower->id }}", "election_id": "{{ $election->id }}"}'

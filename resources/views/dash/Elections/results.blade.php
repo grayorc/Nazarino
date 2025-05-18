@@ -4,30 +4,23 @@
         <!-- Main Content -->
         <section class="container px-2 sm:px-4 md:px-6 mx-auto flex-grow pb-4 sm:pb-8 md:pb-16">
             <div class="w-full">
-                <div dir="ltr"
+                <div
                     x-data="{
-                        tabSelected: 1,
+                        tabSelected: 'charts',
                         tabId: $id('tabs'),
-                        tabButtonClicked(tabButton){
-                            this.tabSelected = tabButton.id.replace(this.tabId + '-', '');
+                        tabButtonClicked(tabButton, tabName){
+                            this.tabSelected = tabName;
                             this.tabRepositionMarker(tabButton);
                         },
                         tabRepositionMarker(tabButton){
-                            this.$refs.tabMarker.style.width=tabButton.offsetWidth + 'px';
-                            this.$refs.tabMarker.style.height=tabButton.offsetHeight + 'px';
-                            this.$refs.tabMarker.style.left=tabButton.offsetLeft + 'px';
-                        },
-                        tabContentActive(tabContent){
-                            return this.tabSelected == tabContent.id.replace(this.tabId + '-content-', '');
-                        },
-                        tabButtonActive(tabContent){
-                            const tabId = tabContent.id.split('-').slice(-1);
-                            return this.tabSelected == tabId;
+                            this.$refs.tabMarker.style.width = tabButton.offsetWidth + 'px';
+                            this.$refs.tabMarker.style.height = '2px';
+                            this.$refs.tabMarker.style.left = tabButton.offsetLeft + 'px';
+                            this.$refs.tabMarker.style.bottom = '0px';
                         }
                     }"
-
                     x-init="
-                        tabRepositionMarker($refs.tabButtons.firstElementChild);
+                        tabRepositionMarker($refs.tabButtons.querySelector('[data-tab=charts]'));
                         Alpine.store('aiAnalysis', {
                             loading: false,
                             content: null,
@@ -42,38 +35,33 @@
                     class="flex flex-col mt-4 sm:mt-6 bg-gray-800 rounded-lg shadow-lg p-3 sm:p-4 md:p-6 relative w-full">
 
                     <!-- Tab Navigation -->
-                    <div x-ref="tabButtons" class="relative inline-grid items-center justify-center w-full h-10 grid-cols-2 p-1 text-gray-500 bg-white border border-gray-100 rounded-lg select-none">
-                        <button :id="$id(tabId)"
-                                @click="tabButtonClicked($el);"
-                                type="button"
-                                :class="{ 'bg-gray-100 text-gray-700' : tabButtonActive($el) }"
-                                class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">
-                            Tab 1
-                        </button>
-                        <button :id="$id(tabId)"
-                                @click="tabButtonClicked($el);"
-                                type="button"
-                                :class="{ 'bg-gray-100 text-gray-700' : tabButtonActive($el) }"
-                                class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">
-                            Tab 2
-                        </button>
-{{--                        <button :id="$id(tabId)"--}}
-{{--                                @click="tabButtonClicked($el);"--}}
-{{--                                type="button"--}}
-{{--                                :class="{ 'bg-gray-100 text-gray-700' : tabButtonActive($el) }"--}}
-{{--                                class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">--}}
-{{--                            Tab 3--}}
-{{--                        </button>--}}
-                        <!-- Tab Marker -->
-                        <div x-ref="tabMarker" class="absolute left-0 z-10 w-1/3 h-full duration-300 ease-out" x-cloak>
-                            <div class="w-full h-full bg-gray-100 rounded-md shadow-sm"></div>
-                        </div>
+                    <div class="border-b border-gray-200 dark:border-gray-700 relative">
+                        <nav x-ref="tabButtons" class="flex flex-wrap" aria-label="Tabs">
+                            <button
+                                data-tab="charts"
+                                @click="tabButtonClicked($el, 'charts')"
+                                :class="{'text-primaryColor font-bold': tabSelected === 'charts', 'text-gray-500 dark:text-gray-400': tabSelected !== 'charts'}"
+                                class="px-4 py-4 text-center font-medium text-sm w-1/2 transition-colors duration-200 relative z-10"
+                            >
+                                <i class="ri-bar-chart-2-line ml-1"></i>نمودارها
+                            </button>
+                            <button
+                                data-tab="analysis"
+                                @click="tabButtonClicked($el, 'analysis')"
+                                :class="{'text-primaryColor font-bold': tabSelected === 'analysis', 'text-gray-500 dark:text-gray-400': tabSelected !== 'analysis'}"
+                                class="px-4 py-4 text-center font-medium text-sm w-1/2 transition-colors duration-200 relative z-10"
+                            >
+                                <i class="ri-magic-line ml-1"></i>تحلیل هوشمند
+                            </button>
+                            <!-- Tab Marker -->
+                            <div x-ref="tabMarker" class="absolute bg-primaryColor duration-300 ease-out transition-all" x-cloak></div>
+                        </nav>
                     </div>
 
                     <!-- Tab Content -->
-                    <div class="relative flex items-center justify-center w-full p-3 sm:p-4 md:p-5 mt-2 text-xs sm:text-sm text-gray-400 border rounded-md content border-gray-200/70">
-                        <!-- Tab 1 Content -->
-                        <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative w-full">
+                    <div class="p-6">
+                        <!-- Charts Tab Content -->
+                        <div x-show="tabSelected === 'charts'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" class="relative w-full">
                             <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-100 mb-4 sm:mb-6">{{ $election->title }}</h2>
 
                             <div class="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 justify-between items-start">
@@ -95,8 +83,8 @@
                             </div>
                         </div>
 
-                        <!-- Tab 2 Content -->
-                        <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative w-full" x-cloak dir="rtl">
+                        <!-- Analysis Tab Content -->
+                        <div x-show="tabSelected === 'analysis'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" class="relative w-full">
                             @can('ai-analysis')
                             <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-100 mb-4 sm:mb-6">تحلیل هوشمند نظرات</h2>
 

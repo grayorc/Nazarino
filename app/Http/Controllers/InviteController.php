@@ -49,7 +49,7 @@ class InviteController extends Controller
         }
 
         if (!$invitedUser->isInvitedToElection($election->id)) {
-            Invite::create([
+            $invite = Invite::create([
                 'election_id' => $election->id,
                 'user_id' => $invitedUser->id,
                 'status' => 'pending'
@@ -59,6 +59,7 @@ class InviteController extends Controller
                 'title' => 'دعوت به نظرسنجی',
                 'message' => 'شما به نظرسنجی "' . $election->title . '" دعوت شده‌اید.',
                 'election_id' => $election->id,
+                'invite_id' => $invite->id,
                 'url' => route('election.show', $election->id)
             ]);
 
