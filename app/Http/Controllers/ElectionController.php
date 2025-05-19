@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Facades\AI;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ElectionController extends Controller
 {
@@ -221,8 +222,8 @@ class ElectionController extends Controller
         $analysis = $election->aiAnalysis;
 
         if (!$analysis) {
-            $content = $this->generateElectionAnalysis($allComments, $election);
-
+            $content = $this->sendElectionToAI($election);
+            
             if (!$content) {
                 return response('<div class="text-red-500 text-center">متأسفانه در تحلیل نظرات خطایی رخ داد. لطفاً دوباره تلاش کنید.</div>');
             }
@@ -238,16 +239,45 @@ class ElectionController extends Controller
         return response('<div class="rtl text-gray-200">' . Str::markdown($analysis->content) . '</div>');
     }
 
-    protected function generateElectionAnalysis($comments, $election)
+
+
+    public function sendElectionToAI(Election $election)
     {
         try {
-            if ($comments->isEmpty()) {
+            if ($election->options->count() < 3) {
                 return null;
             }
 
-            return AI::summarizeElectionComments($comments->toArray(), $election->toArray());
+            $optionsWithComments = [];
+
+            foreach ($election->options as $option) {
+                $comments = [];
+
+                foreach ($option->comments as $comment) {
+                    $comments[] = [
+                        'body' => $comment->body,
+                    ];
+                }
+
+                $optionsWithComments[] = [
+                    'title' => $option->title,
+                    'description' => $option->description,
+                    'votes_count' => $option->votes->count(),
+                    'upvotes_count' => $option->votes->where('vote', 1)->count(),
+                    'downvotes_count' => $option->votes->where('vote', -1)->count(),
+                    'comments' => $comments
+                ];
+            }
+
+            $electionData = [
+                'title' => $election->title,
+                'description' => $election->description,
+                'options' => $optionsWithComments
+            ];
+            return AI::analyzeElectionWithOptions($electionData);
+
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error generating election analysis: ' . $e->getMessage());
+            Log::error('Error sending election to AI: ' . $e->getMessage());
             return null;
         }
     }

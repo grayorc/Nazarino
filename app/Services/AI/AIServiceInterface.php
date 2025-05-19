@@ -45,4 +45,14 @@ interface AIServiceInterface
      * @return string|null The generated analysis
      */
     public function summarizeElectionComments(array $comments, array $election, ?string $language = null, array $options = []);
+    
+    /**
+     * Analyze election data with options and their comments
+     *
+     * @param array $electionData Complete election data with options and comments
+     * @param string|null $language Language code
+     * @param array $options Additional options for the AI request
+     * @return string|null The generated comprehensive analysis
+     */
+    public function analyzeElectionWithOptions(array $electionData, ?string $language = null, array $options = []);
 }
