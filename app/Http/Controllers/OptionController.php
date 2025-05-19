@@ -6,8 +6,6 @@ use App\Models\Image;
 use App\Models\Option;
 use App\Models\Election;
 use Illuminate\Http\Request;
-use App\Models\Vote;
-use App\Models\Comment;
 use Illuminate\Support\Facades\Cache;
 use App\Facades\AI;
 
@@ -24,9 +22,13 @@ class OptionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request, $id)
     {
-        return view('dash.Options.create');
+        // Get the election and its options
+        $election = Election::findOrFail($id);
+        $options = Option::where('election_id', $id)->get();
+
+        return view('dash.Options.create', compact('election', 'options'));
     }
 
     /**
@@ -38,21 +40,22 @@ class OptionController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'image' => ['nullable','file','image','mimes:jpeg,png,jpg,gif,svg','max:5120'],
         ]);
         $data['election_id'] = $request->id;
+        //TODO: move to Policy
+        if(Election::findOrFail($request->id)->user_id != auth()->user()->id){
+            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ایجاد کنید');
+        }
         // dd($data);
         $option = Option::Create($data);
         if($request->hasFile('image')){
-            if($request->file('image')->getClientOriginalExtension() == 'png' || $request->file('image')->getClientOriginalExtension() == 'jpg' || $request->file('image')->getClientOriginalExtension() == 'jpeg'){
-                $image = $request->file('image')->store('options', 'public');
-                $image = Image::create([
-                    'path' => $image,
-                    'imageable_id' => $option->id,
-                    'imageable_type' => 'App\Models\Option',
-                ]);
-            }else{
-                return redirect()->back()->with('error', 'فرمت تصویر معتبر نیست');
-            }
+            $image = $request->file('image')->store('options', 'public');
+            $image = Image::create([
+                'path' => $image,
+                'imageable_id' => $option->id,
+                'imageable_type' => 'App\Models\Option',
+            ]);
         }
         return redirect()->route('options.create', $request->id)->with('success', 'گزینه با موفقیت ایجاد شد');
     }
@@ -109,5 +112,61 @@ class OptionController extends Controller
         }
 
         return response('<div class="rtl text-gray-800 dark:text-black">' . nl2br(e($summary)) . '</div>');
+    }
+
+    /**
+     * Show the form for editing the specified option.
+     */
+    public function edit(Option $option)
+    {
+        $election = $option->election;
+
+
+        if (!$election) {
+            $election = Election::findOrFail($option->election_id);
+        }
+
+        //TODO: move to Policy
+        if($election->user_id != auth()->user()->id){
+            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ویرایش کنید');
+        }
+
+        return view('dash.Options.edit', compact('option', 'election'));
+    }
+
+    /**
+     * Update the specified option in storage.
+     */
+    public function update(Request $request, Option $option)
+    {
+        $data = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'image' => ['nullable','file','image','mimes:jpeg,png,jpg,gif,svg','max:5120']
+        ]);
+
+        $option->update($data);
+
+        //TODO: move to Policy
+        if($option->election->user_id != auth()->user()->id){
+            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ویرایش کنید');
+        }
+
+        if ($request->hasFile('image')) {
+            if ($option->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($option->image->path);
+                $option->image->delete();
+            }
+
+            $imagePath = $request->file('image')->store('options', 'public');
+            Image::create([
+                'path' => $imagePath,
+                'imageable_id' => $option->id,
+                'imageable_type' => 'App\Models\Option',
+            ]);
+        }
+
+        return redirect()->route('options.create', $option->election_id)
+            ->with('success', 'گزینه با موفقیت بروزرسانی شد');
     }
 }

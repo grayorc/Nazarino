@@ -14,9 +14,9 @@ class Option extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function elections():HasMany
+    public function election()
     {
-        return $this->hasMany(Election::class);
+        return $this->belongsTo(Election::class);
     }
 
     public function votes():HasMany

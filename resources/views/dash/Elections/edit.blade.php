@@ -1,6 +1,61 @@
 <x-min-layout>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
-        <section class="container px-4 mx-auto flex-grow-1 pb-32">
+        @include('dash.layouts.sidebar')
+        <section class="container px-4 mx-auto flex-grow-1 pb-32 dark:bg-PrimaryBlack">
+            <div class="flex justify-between items-center mt-6">
+                <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300">ویرایش نظرسنجی "{{ $election->title }}"</h2>
+                <div class="flex space-x-2 rtl:space-x-reverse">
+                    <a href="{{ route('elections.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700">
+                        همه نظرسنجی‌ها
+                    </a>
+                    <a href="{{ route('options.create', $election->id) }}" class="px-4 py-2 text-sm font-medium text-white bg-primaryColor rounded-md hover:bg-opacity-80 transition">
+                        افزودن گزینه
+                    </a>
+                </div>
+            </div>
+            
+            @if(isset($options) && $options->count() > 0)
+                <div class="mt-6 bg-SecondaryBlack rounded-lg p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">گزینه‌های این نظرسنجی</h3>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">تعداد: {{ $options->count() }}</span>
+                    </div>
+                    
+                    <!-- Options List -->
+                    <div class="space-y-4">
+                        @foreach($options as $index => $option)
+                            <div class="p-4 bg-white dark:bg-gray-900 rounded-lg shadow">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-grow">
+                                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                            <span class="inline-flex items-center justify-center w-6 h-6 text-xs font-semibold text-white bg-primaryColor rounded-full">
+                                                {{ $index + 1 }}
+                                            </span>
+                                            <h4 class="font-medium text-gray-800 dark:text-gray-200">{{ $option->title }}</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{{ $option->description }}</p>
+                                        <div class="mt-3">
+                                            <a href="{{ route('options.edit', $option->id) }}" class="text-xs text-primaryColor hover:text-primaryColor/80 font-medium inline-flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 rtl:mr-1 rtl:ml-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                                ویرایش گزینه
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    @if($option->image)
+                                        <div class="ml-4 rtl:mr-4 rtl:ml-0">
+                                            <img src="{{ asset('storage/' . $option->image->path) }}" alt="{{ $option->title }}" 
+                                                class="w-16 h-16 object-cover rounded-lg">
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
             <form action="{{ route('elections.update', $election) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -68,7 +123,7 @@
 
                                 <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
                                        :class="{ 'text-blue-600': switchOn, 'text-gray-400': !switchOn }"
-                                       class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                       class="select-none text-sm text-gray-500 dark:text-gray-300"
                                        x-cloak>
                                 </label>
                             </div>
@@ -338,7 +393,7 @@
 
                             <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
                                    :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
-                                   class="text-sm select-none text-sm text-gray-500 dark:text-gray-300"
+                                   class="select-none text-sm text-gray-500 dark:text-gray-300"
                                    x-cloak>
                                 امکان درج کامنت
                             </label>

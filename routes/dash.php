@@ -42,6 +42,8 @@ Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])->
 
 Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');
 Route::post('elections/{id}/options', [OptionController::class, 'store'])->name('options.store');
+Route::get('options/{option}/edit', [OptionController::class, 'edit'])->name('options.edit');
+Route::put('options/{option}', [OptionController::class, 'update'])->name('options.update');
 
 Route::get('purchase/{subscriptionTier:title}',[PurchaseController::class, 'index'])->name('purchase.index');
 Route::post('purchase/payment-process',[PurchaseController::class, 'paymentProcess'])->name('purchase.payment-process');

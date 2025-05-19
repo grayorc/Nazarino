@@ -223,7 +223,7 @@ class ElectionController extends Controller
 
         if (!$analysis) {
             $content = $this->sendElectionToAI($election);
-            
+
             if (!$content) {
                 return response('<div class="text-red-500 text-center">متأسفانه در تحلیل نظرات خطایی رخ داد. لطفاً دوباره تلاش کنید.</div>');
             }
@@ -421,8 +421,9 @@ class ElectionController extends Controller
 
     public function edit(Election $election)
     {
+        $options = $election->options()->get();
 
-        return view('dash.elections.edit', compact('election'));
+        return view('dash.elections.edit', compact('election', 'options'));
     }
 
     public function update(Request $request, Election $election)
