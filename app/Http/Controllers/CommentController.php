@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Election;
+use App\Models\User;
 use Devrabiul\ToastMagic\Facades\ToastMagic;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\Option;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -19,7 +21,7 @@ class CommentController extends Controller
         ]);
 
         $election = Election::find($request->input('election_id'));
-// subscription
+        // TODO : move to policy
         if(!$election->has_comment){
             return response()->json([
                 'status' => 'failed',
@@ -28,12 +30,15 @@ class CommentController extends Controller
             ]);
         }
 
+        // Create and save the comment
         $comment = new Comment();
         $comment->body = $request->comment;
         $comment->user_id = auth()->user()->id;
         $comment->commentable_id = $request->option_id;
-        $comment->commentable_type = 'App\Models\Option';
+        $comment->commentable_type = Option::class;
         $comment->save();
+
+        $userName = auth()->user()->name ?? 'کاربر';
 
         if ($request->hasHeader('HX-Request')) {
             return response()->json([
@@ -43,10 +48,44 @@ class CommentController extends Controller
                     'id' => $comment->id,
                     'body' => $comment->body,
                     'created_at' => $comment->created_at->diffForHumans(),
-                    'user_name' => $comment->user->name ?? 'کاربر'
+                    'user_name' => $userName
                 ]
             ]);
         }
         return redirect()->back();
+    }
+
+    /**
+     * Delete a comment
+     */
+    public function destroy($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        // TODO : move to policy
+        if (Auth::user()->id !== $comment->user_id) {
+            if ($comment->commentable && $comment->commentable instanceof Option) {
+                $election = $comment->commentable->election;
+                if ($election && $election->user_id !== Auth::user()->id) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'شما مجاز به حذف این نظر نیستید'
+                    ], 403);
+                }
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'شما مجاز به حذف این نظر نیستید'
+                ], 403);
+            }
+        }
+
+        $comment->delete();
+
+        if (request()->hasHeader('HX-Request')) {
+            return response('', 200);
+        }
+
+        return redirect()->back()->with('success', 'نظر با موفقیت حذف شد');
     }
 }

@@ -50,6 +50,7 @@ Route::get('elections/{election}/ai-analysis', [\App\Http\Controllers\ElectionCo
     ->name('election.ai-analysis');
 
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');
+Route::delete('comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('comment.destroy')->middleware('auth');
 
 Route::get('users/{user:username}', [\App\Http\Controllers\UserProfileController::class, 'show'])->name('users.profile');
 Route::post('users/{user:username}/follow', [\App\Http\Controllers\UserProfileController::class, 'follow'])->name('users.follow');
