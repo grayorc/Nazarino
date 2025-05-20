@@ -274,12 +274,7 @@
                                         const commentsList = document.getElementById('comments-list');
                                         if (commentsList) {
                                             commentsList.insertAdjacentHTML('afterbegin', commentTemplate);
-                                            console.log('Comment added to #comments-list');
-                                        } else {
-                                            console.warn('#comments-list element not found in DOM');
                                         }
-                                    } else {
-                                        console.warn('Response status not success or comment missing');
                                     }
                                 } catch (error) {
                                     console.error('Error parsing JSON or inserting comment:', error);
@@ -303,12 +298,14 @@
                                         <time>{{ $comment->created_at->diffForHumans() }}</time>
                                     </p>
                                 </div>
-                                @if(auth()->id() === $comment->user_id || auth()->user()->id == $election->user_id)
-                                    <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 p-1"
-                                        @click="deleteModalOpen = true; commentToDelete = {{ $comment->id }}">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                @endif
+                                @auth
+                                    @if(auth()->id() === $comment->user_id || auth()->user()->id == $election->user_id)
+                                        <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 p-1"
+                                            @click="deleteModalOpen = true; commentToDelete = {{ $comment->id }}">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    @endif
+                                @endauth
                             </footer>
                             <p class="text-gray-500 dark:text-gray-300 text-sm md:text-base">{{ $comment->body }}</p>
                         </article>
