@@ -11,7 +11,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="#EB5E28">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'نظرینو') }}</title>
 
         <!-- Preload critical fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
@@ -122,9 +122,10 @@
                     <!-- Desktop Navigation - Centered -->
                     <nav class="hidden sm:flex items-center justify-center flex-1 mx-4">
                         <div class="flex items-center space-x-8 rtl:space-x-reverse">
-                            <a href="#" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">صفحه اصلی</a>
-                            <a href="#featurs" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">ویژگی ها</a>
-                            <a href="#prices" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">قیمت‌ها</a>
+                            <a href="{{ route('index') }}#" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">صفحه اصلی</a>
+                            <a href="{{ route('index') }}#featurs" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">ویژگی ها</a>
+                            <a href="{{ route('index') }}#pricing" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">قیمت‌ها</a>
+                            <a href="{{ route('elections.feed') }}" class="text-primaryWhite hover:text-primaryColor transition-colors duration-200">نظرسنجی های اخیر</a>
                         </div>
                     </nav>
 

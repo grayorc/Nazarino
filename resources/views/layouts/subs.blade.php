@@ -1,4 +1,4 @@
-<div class="mx-auto mt-16 grid max-w-xl grid-cols-1 items-center gap-y-6 gap-x-6 sm:mt-20 sm:gap-y-6 lg:max-w-6xl lg:grid-cols-3 lg:gap-x-8">
+<div class="mx-auto mt-16 grid max-w-xl grid-cols-1 items-center gap-y-6 gap-x-6 sm:mt-20 sm:gap-y-6 lg:max-w-6xl lg:grid-cols-3 lg:gap-x-8" id="pricing">
     @foreach($subscriptionTiers as $tier)
         <div class="@if($tier->price > 0) relative rounded-3xl bg-PrimaryBlack shadow-2xl @else rounded-3xl rounded-t-3xl bg-white/60 dark:bg-PrimaryBlack/80 dark:ring-gray-700/30 @endif p-8 ring-1 ring-gray-900/10 sm:p-10 h-full w-full sm:w-80 md:w-96 mx-auto flex flex-col">
             <h3 id="tier-{{ Str::slug($tier->title) }}" class="text-base/7 font-semibold text-primaryColor">
