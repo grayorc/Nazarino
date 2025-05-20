@@ -23,4 +23,9 @@ class Option extends Model
     {
         return $this->hasMany(Vote::class);
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

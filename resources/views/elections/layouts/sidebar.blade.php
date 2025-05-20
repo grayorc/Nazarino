@@ -1,4 +1,11 @@
 <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30 w-full md:w-1/4 my-4 md:my-16 mx-auto">
+    @if($election->image)
+    <div class="flex justify-center mb-4">
+        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-primaryWhite dark:border-PrimaryBlack shadow-md bg-white dark:bg-gray-800">
+            <img src="{{ asset('storage/' . $election->image->path) }}" alt="{{ $election->title }}" class="w-full h-full object-cover">
+        </div>
+    </div>
+    @endif
     <div class="font-bold text-xl md:text-2xl text-PrimaryBlack dark:text-primaryWhite">
         {{ $election->title }}
     </div>

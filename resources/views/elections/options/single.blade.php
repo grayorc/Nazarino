@@ -8,6 +8,57 @@
         @include('elections.layouts.sidebar')
         <div class="flex flex-col w-full md:w-4/6 mx-auto my-4 md:my-16">
             <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30 mt-4">
+                @if($option->image)
+                <div x-data="{
+                    imageModalOpen: false,
+                    imageUrl: '{{ asset('storage/' . $option->image->path) }}',
+                    imageAlt: '{{ $option->title }}',
+                    openImage() {
+                        this.imageModalOpen = true;
+                    },
+                    closeImage() {
+                        this.imageModalOpen = false;
+                    }
+                }" 
+                @keydown.window.escape="closeImage"
+                class="mb-3 rounded-xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
+                    <img 
+                        @click="openImage" 
+                        src="{{ asset('storage/' . $option->image->path) }}" 
+                        alt="{{ $option->title }}" 
+                        class="w-full h-auto object-cover cursor-zoom-in">
+                    
+                    <!-- Image Modal -->
+                    <template x-teleport="body">
+                        <div 
+                            x-show="imageModalOpen" 
+                            x-transition:enter="transition ease-in-out duration-300" 
+                            x-transition:enter-start="opacity-0" 
+                            x-transition:leave="transition ease-in-in duration-300" 
+                            x-transition:leave-end="opacity-0" 
+                            @click="closeImage" 
+                            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-80 select-none cursor-zoom-out" 
+                            x-cloak>
+                            <div class="relative flex items-center justify-center w-11/12 xl:w-4/5 h-11/12"> 
+                                <img 
+                                    x-show="imageModalOpen" 
+                                    x-transition:enter="transition ease-in-out duration-300" 
+                                    x-transition:enter-start="opacity-0 transform scale-50" 
+                                    x-transition:leave="transition ease-in-in duration-300" 
+                                    x-transition:leave-end="opacity-0 transform scale-50" 
+                                    class="object-contain object-center w-full h-full max-h-[90vh] select-none cursor-zoom-out" 
+                                    :src="imageUrl" 
+                                    :alt="imageAlt">
+                                <button @click="closeImage" class="absolute top-4 right-4 bg-white/10 text-white rounded-full p-2 hover:bg-white/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                @endif
                 <div class="font-bold text-xl md:text-2xl text-PrimaryBlack dark:text-primaryWhite">
                     {{ $option->title }}
                 </div>

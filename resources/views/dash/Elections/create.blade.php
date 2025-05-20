@@ -43,7 +43,7 @@
                     <div class="flex flex-row items-center space-x-4">
                         <div class="flex flex-row items-center space-x-4">
                             <!-- The switch component -->
-                            <div dir="ltr" x-data="{ switchOn: true }" class="flex items-center justify-center space-x-2">
+                            <div dir="ltr" x-data="{ switchOn: false }" class="flex items-center justify-center space-x-2">
                                 <input id="has_end_date" type="checkbox" name="has_end_date" class="hidden" :checked="switchOn">
 
                                 <button
