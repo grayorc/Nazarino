@@ -30,13 +30,12 @@ class CommentController extends Controller
             ]);
         }
 
-        // Create and save the comment
-        $comment = new Comment();
-        $comment->body = $request->comment;
-        $comment->user_id = auth()->user()->id;
-        $comment->commentable_id = $request->option_id;
-        $comment->commentable_type = Option::class;
-        $comment->save();
+        $comment = Comment::create([
+            'body' => $request->comment,
+            'user_id' => auth()->user()->id,
+            'commentable_id' => $request->option_id,
+            'commentable_type' => Option::class,
+        ]);
 
         $userName = auth()->user()->name ?? 'کاربر';
 
@@ -64,7 +63,7 @@ class CommentController extends Controller
 
         // TODO : move to policy
         if (Auth::user()->id !== $comment->user_id) {
-            if ($comment->commentable && $comment->commentable instanceof Option) {
+            if ($comment->commentable instanceof Option) {
                 $election = $comment->commentable->election;
                 if ($election && $election->user_id !== Auth::user()->id) {
                     return response()->json([
