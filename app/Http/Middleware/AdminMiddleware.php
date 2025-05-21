@@ -15,10 +15,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->is_admin){
-            return $next($request);
-        }else{
-            abort(403);
-        }
+        abort_unless($request->user()->is_admin, 403, 'شما به این بخش دسترسی ندارید');
+        return $next($request);
     }
 }
