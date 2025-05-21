@@ -84,6 +84,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('view-election', [ElectionPolicy::class, 'view']);
         Gate::define('update-election', [ElectionPolicy::class, 'update']);
         Gate::define('delete-election', [ElectionPolicy::class, 'delete']);
-        Gate::define('update-election', [ElectionPolicy::class, 'update']);
     }
 }

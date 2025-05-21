@@ -14,71 +14,77 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/elections', [ElectionController::class, 'index'])
+
+Route::prefix('elections')->group(function () {
+    Route::get('/', [ElectionController::class, 'index'])
     ->name('elections.index');
 
-Route::get('/elections/create', [ElectionController::class, 'create'])
+    Route::get('/create', [ElectionController::class, 'create'])
     ->can('unlimited-access')
     ->name('elections.create');
 
-Route::post('/elections', [ElectionController::class, 'store'])
+    Route::post('/', [ElectionController::class, 'store'])
     ->can('unlimited-access')
     ->name('elections.store');
 
-Route::get('/elections/{election}', [ElectionController::class, 'showResult'])
+    Route::get('/{election}', [ElectionController::class, 'showResult'])
     ->can('view-election', 'election')
     ->name('elections.result');
-Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])
+
+    Route::get('/{election}/edit', [ElectionController::class, 'edit'])
     ->can('update-election', 'election')
     ->name('elections.edit');
 
-Route::put('/elections/{election}', [ElectionController::class, 'update'])
+    Route::put('/{election}', [ElectionController::class, 'update'])
     ->can('update-election', 'election')
     ->name('elections.update');
 
-Route::get('/elections/{election}/ai-analysis', [ElectionController::class, 'getAiAnalysis'])
+    Route::get('/{election}/ai-analysis', [ElectionController::class, 'getAiAnalysis'])
     ->can('ai-analysis')
     ->name('elections.ai-analysis');
 
-Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])
+    Route::delete('/{election}', [ElectionController::class, 'destroy'])
     ->can('delete-election', 'election')
     ->name('elections.destroy');
 
-Route::get('elections/{election}/options/create', [OptionController::class, 'create'])
+    Route::get('/{election}/options/create', [OptionController::class, 'create'])
     ->can('update-election', 'election')
     ->name('options.create');
-Route::post('elections/{election}/options', [OptionController::class, 'store'])
+    Route::post('/{election}/options', [OptionController::class, 'store'])
     ->can('update-election', 'election')
     ->name('options.store');
-Route::get('elections/{election}/options/{option}/edit', [OptionController::class, 'edit'])
+    Route::get('/{election}/options/{option}/edit', [OptionController::class, 'edit'])
     ->can('update-election', 'election', 'option')
     ->name('options.edit');
-Route::put('elections/{election}/options/{option}', [OptionController::class, 'update'])
+    Route::put('/{election}/options/{option}', [OptionController::class, 'update'])
     ->can('update-election', 'election', 'option')
     ->name('options.update');
 
-Route::get('purchase/{subscriptionTier:title}',[PurchaseController::class, 'index'])->name('purchase.index');
-Route::post('purchase/payment-process',[PurchaseController::class, 'paymentProcess'])->name('purchase.payment-process');
-Route::post('purchase/verify',[PurchaseController::class, 'verify'])->name('purchase.verify');
+    Route::get('/{election}/invite', [InviteController::class, 'index'])
+    ->can('invite-to-election')
+    ->name('election.invite');
+
+    Route::post('/{election}/send-invite', [InviteController::class, 'sendInvite'])
+    ->can('invite-to-election')
+    ->name('election.send-invite');
+});
+
+Route::prefix('purchase')->group(function () {
+    Route::get('/{subscriptionTier:title}',[PurchaseController::class, 'index'])->name('purchase.index');
+    Route::post('/payment-process',[PurchaseController::class, 'paymentProcess'])->name('purchase.payment-process');
+    Route::post('/verify',[PurchaseController::class, 'verify'])->name('purchase.verify');
+});
 
 Route::get('receipts', [ReceiptController::class, 'index'])->name('receipts.index');
 Route::get('subscription', [PurchaseController::class, 'subscriptionIndex'])->name('subscription.index');
 
-Route::get('election/invite/{election:id}', [InviteController::class, 'index'])
-    ->can('invite-to-election')
-    ->name('election.invite');
+Route::prefix('notifications')->name('notifications.')->group(function () {
+    Route::get('/', [NotificationsController::class, 'index'])->name('index');
+    Route::post('/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('mark-as-read');
+    Route::post('/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('mark-all-as-read');
+});
 
-Route::post('election/send-invite', [InviteController::class, 'sendInvite'])
-    ->can('invite-to-election')
-    ->name('election.send-invite');
-
-Route::post('election/{election}/send-email-invite', [InviteController::class, 'sendEmailInvite'])
-    ->can('invite-to-election')
-    ->name('election.send-email-invite');
-
-Route::get('notifications', [NotificationsController::class, 'index'])->name('notifications.index');
-Route::post('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
-Route::post('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
-
-Route::post('invites/{invite}/accept', [InviteResponseController::class, 'accept'])->name('invites.accept');
-Route::post('invites/{invite}/reject', [InviteResponseController::class, 'reject'])->name('invites.reject');
+Route::prefix('invites')->name('invites.')->group(function () {
+    Route::post('/{invite}/accept', [InviteResponseController::class, 'accept'])->name('accept');
+    Route::post('/{invite}/reject', [InviteResponseController::class, 'reject'])->name('reject');
+});
