@@ -1,7 +1,3 @@
-@php
-    $creator = $election->user;
-@endphp
-
 <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30 w-full md:w-1/4 my-4 md:my-16 mx-auto">
     @if($election->image)
     <div class="flex justify-center mb-4">
@@ -73,7 +69,7 @@
     }" class="relative mt-4 text-center" @mouseover="hoverCardEnter()" @mouseleave="hoverCardLeave()">
         <div class="flex items-center justify-center gap-2">
             <span class="text-sm text-SecondaryBlack/80 dark:text-SecondaryWhite/80">ایجاد شده توسط:</span>
-            <a href="{{ route('users.profile', $creator->username) }}" class="hover:underline text-primaryColor dark:text-primaryWhite font-medium">{{ '@' . $creator->username }}</a>
+            <a href="{{ route('users.profile', $election->user->username) }}" class="hover:underline text-primaryColor dark:text-primaryWhite font-medium">{{ '@' . $election->user->username }}</a>
         </div>
 
         <div x-show="hoverCardHovered" class="absolute top-full mt-2 w-[300px] z-30 -translate-x-1/2 left-1/2" x-cloak>
@@ -87,11 +83,11 @@
 
                 {{-- User Profile Image --}}
                 <div class="rounded-full w-14 h-14 overflow-hidden border-2 border-primaryWhite dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800">
-                    @if($creator->image)
-                        <img src="{{ asset('storage/' . $creator->image->path) }}" alt="{{ $creator->display_name }}" class="w-full h-full object-cover">
+                    @if($election->user->image)
+                        <img src="{{ asset('storage/' . $election->user->image->path) }}" alt="{{ $election->user->display_name }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex items-center justify-center bg-primaryColor text-white text-xl font-bold">
-                            {{ strtoupper(substr($creator->username, 0, 1)) }}
+                            {{ strtoupper(substr($election->user->username, 0, 1)) }}
                         </div>
                     @endif
                 </div>
@@ -99,25 +95,25 @@
                 {{-- User Information --}}
                 <div class="relative mr-3">
                     <div class="flex items-center gap-2 mb-1">
-                        <p class="font-bold text-PrimaryBlack dark:text-primaryWhite">{{ $creator->getDisplayNameAttribute() }}</p>
-                        @if($creator->hasRole('admin'))
+                        <p class="font-bold text-PrimaryBlack dark:text-primaryWhite">{{ $election->user->getDisplayNameAttribute() }}</p>
+                        @if($election->user->hasRole('admin'))
                             <span class="px-2 py-0.5 text-xs bg-primaryColor/10 text-primaryColor rounded-full">ادمین</span>
                         @endif
                     </div>
-                    <p class="text-sm text-SecondaryBlack/80 dark:text-SecondaryWhite/80 mb-2">{{ $creator->username.'@' }}</p>
+                    <p class="text-sm text-SecondaryBlack/80 dark:text-SecondaryWhite/80 mb-2">{{ $election->user->username.'@' }}</p>
 
                     {{-- Stats - Matching the user profile stats --}}
                     <div class="flex items-center gap-4 mt-2 text-xs">
                         <div class="text-center">
-                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ $creator->totalElections() }}</span>
+                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ $election->user->totalElections() }}</span>
                             <span class="text-gray-600 dark:text-gray-400">نظرسنجی‌ها</span>
                         </div>
                         <div class="text-center">
-                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ App\Models\Follower::where('user_id', $creator->id)->count() }}</span>
+                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ App\Models\Follower::where('user_id', $election->user->id)->count() }}</span>
                             <span class="text-gray-600 dark:text-gray-400">دنبال‌کنندگان</span>
                         </div>
                         <div class="text-center">
-                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ App\Models\Follower::where('follower_id', $creator->id)->count() }}</span>
+                            <span class="block font-bold text-PrimaryBlack dark:text-primaryWhite">{{ App\Models\Follower::where('follower_id', $election->user->id)->count() }}</span>
                             <span class="text-gray-600 dark:text-gray-400">دنبال‌شده‌ها</span>
                         </div>
                     </div>
