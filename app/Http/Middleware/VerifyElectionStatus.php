@@ -15,7 +15,7 @@ class VerifyElectionStatus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        abort_unless($request->election->is_open, 403, 'نظرسنجی بسته شده است');
+        abort_unless($request->election->is_open || $request->election->user_id == $request->user()->id, 403, 'نظرسنجی بسته شده است');
         return $next($request);
     }
 }
