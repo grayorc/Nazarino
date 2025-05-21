@@ -18,6 +18,7 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use App\Policies\ElectionPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,5 +78,12 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('private-elections', [FeaturePolicy::class, 'privateElections']);
         Gate::define('invite-to-election', [FeaturePolicy::class, 'inviteToElection']);
         Gate::define('ai-analysis', [FeaturePolicy::class, 'aiAnalysis']);
+
+        // Election gates
+        Gate::define('create-election', [ElectionPolicy::class, 'create']);
+        Gate::define('view-election', [ElectionPolicy::class, 'view']);
+        Gate::define('update-election', [ElectionPolicy::class, 'update']);
+        Gate::define('delete-election', [ElectionPolicy::class, 'delete']);
+        Gate::define('update-election', [ElectionPolicy::class, 'updateElection']);
     }
 }

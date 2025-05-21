@@ -37,14 +37,17 @@ Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->
 });
 
 Route::get('elections', [\App\Http\Controllers\ElectionController::class, 'feed'])->name('elections.feed');
-Route::get('election/{election:id}', [\App\Http\Controllers\ElectionController::class, 'show'])
+
+Route::get('election/{election}', [\App\Http\Controllers\ElectionController::class, 'show'])
     ->middleware('VerifyElectionStatus')
-    ->can('view', 'election')
+    ->can('view-election', 'election')
     ->name('election.show');
+
 Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])
     ->middleware('VerifyElectionStatus')
-    ->can('view', 'election')
+    ->can('view-election', 'election')
     ->name('option.show');
+
 Route::get('options/{option}/ai-summary', [\App\Http\Controllers\OptionController::class, 'getAiSummary'])
     ->middleware('auth')
     ->can('ai-analysis')

@@ -13,14 +13,14 @@
                     </a>
                 </div>
             </div>
-            
+
             @if(isset($options) && $options->count() > 0)
                 <div class="mt-6 bg-SecondaryBlack rounded-lg p-5">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">گزینه‌های این نظرسنجی</h3>
                         <span class="text-sm text-gray-500 dark:text-gray-400">تعداد: {{ $options->count() }}</span>
                     </div>
-                    
+
                     <!-- Options List -->
                     <div class="space-y-4">
                         @foreach($options as $index => $option)
@@ -35,7 +35,7 @@
                                         </div>
                                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{{ $option->description }}</p>
                                         <div class="mt-3">
-                                            <a href="{{ route('options.edit', $option->id) }}" class="text-xs text-primaryColor hover:text-primaryColor/80 font-medium inline-flex items-center">
+                                            <a href="{{ route('options.edit', [$option->election->id, $option->id]) }}" class="text-xs text-primaryColor hover:text-primaryColor/80 font-medium inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 rtl:mr-1 rtl:ml-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
@@ -43,10 +43,10 @@
                                             </a>
                                         </div>
                                     </div>
-                                    
+
                                     @if($option->image)
                                         <div class="ml-4 rtl:mr-4 rtl:ml-0">
-                                            <img src="{{ asset('storage/' . $option->image->path) }}" alt="{{ $option->title }}" 
+                                            <img src="{{ asset('storage/' . $option->image->path) }}" alt="{{ $option->title }}"
                                                 class="w-16 h-16 object-cover rounded-lg">
                                         </div>
                                     @endif

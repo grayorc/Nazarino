@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('options.update', $option->id) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
+            <form action="{{ route('options.update', [$election->id, $option->id]) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="flex flex-row">

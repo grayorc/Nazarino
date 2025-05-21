@@ -26,23 +26,36 @@ Route::post('/elections', [ElectionController::class, 'store'])
     ->name('elections.store');
 
 Route::get('/elections/{election}', [ElectionController::class, 'showResult'])
-
+    ->can('view-election', 'election')
     ->name('elections.result');
 Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])
+    ->can('update-election', 'election')
     ->name('elections.edit');
 
 Route::put('/elections/{election}', [ElectionController::class, 'update'])
+    ->can('update-election', 'election')
     ->name('elections.update');
 
 Route::get('/elections/{election}/ai-analysis', [ElectionController::class, 'getAiAnalysis'])
+    ->can('ai-analysis')
     ->name('elections.ai-analysis');
 
-Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])->name('elections.destroy');
+Route::delete('/elections/{election}', [ElectionController::class, 'destroy'])
+    ->can('delete-election', 'election')
+    ->name('elections.destroy');
 
-Route::get('elections/{id}/options/create', [OptionController::class, 'create'])->name('options.create');
-Route::post('elections/{id}/options', [OptionController::class, 'store'])->name('options.store');
-Route::get('options/{option}/edit', [OptionController::class, 'edit'])->name('options.edit');
-Route::put('options/{option}', [OptionController::class, 'update'])->name('options.update');
+Route::get('elections/{election}/options/create', [OptionController::class, 'create'])
+    ->can('update-election', 'election')
+    ->name('options.create');
+Route::post('elections/{election}/options', [OptionController::class, 'store'])
+    ->can('update-election', 'election')
+    ->name('options.store');
+Route::get('elections/{election}/options/{option}/edit', [OptionController::class, 'edit'])
+    ->can('update-election', 'election', 'option')
+    ->name('options.edit');
+Route::put('elections/{election}/options/{option}', [OptionController::class, 'update'])
+    ->can('update-election', 'election', 'option')
+    ->name('options.update');
 
 Route::get('purchase/{subscriptionTier:title}',[PurchaseController::class, 'index'])->name('purchase.index');
 Route::post('purchase/payment-process',[PurchaseController::class, 'paymentProcess'])->name('purchase.payment-process');

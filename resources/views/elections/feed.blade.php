@@ -39,24 +39,12 @@
                         <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>بسته</option>
                     </select>
                 </div>
-
-                @guest
-                <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 bg-primaryColor hover:bg-primaryColor/90 text-primaryWhite rounded-lg transition-all duration-300">
-                    <i class="ri-login-box-line ml-2"></i>
-                    ورود / ثبت نام
-                </a>
-                @endguest
             </div>
 
             <div id="elections-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($elections as $election)
                     <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30">
                         <a href="{{ route('election.show', $election->id) }}" class="flex flex-col h-full">
-                            @if($election->image)
-                            <div class="mb-3 rounded-xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
-                                <img src="{{ asset('storage/' . $election->image->path) }}" alt="{{ $election->title }}" class="w-full h-auto object-cover">
-                            </div>
-                            @endif
                             <div class="font-bold text-xl text-PrimaryBlack dark:text-primaryWhite">
                                 {{ $election->title }}
                             </div>

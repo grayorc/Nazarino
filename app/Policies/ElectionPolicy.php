@@ -4,7 +4,8 @@ namespace App\Policies;
 
 use App\Models\Election;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Option;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ElectionPolicy
 {
@@ -20,15 +21,15 @@ class ElectionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Election $election): bool
+    public function view(?User $user, Election $election): bool
     {
-        return $election->is_public ? true : ($user->InviteCheck($election->id) || $election->user_id == $user->id);
+        return $election->is_public ? true : auth()->check() && (auth()->user()->InviteCheck($election->id) || $election->user_id == auth()->user()->id);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Election $election): bool
     {
         return false;
     }
@@ -38,7 +39,7 @@ class ElectionPolicy
      */
     public function update(User $user, Election $election): bool
     {
-        return false;
+        return $election->user_id == $user->id;
     }
 
     /**
@@ -46,7 +47,7 @@ class ElectionPolicy
      */
     public function delete(User $user, Election $election): bool
     {
-        return false;
+        return $election->user_id == $user->id;
     }
 
     /**

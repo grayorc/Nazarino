@@ -36,7 +36,7 @@
                                         </div>
                                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{{ $option->description }}</p>
                                         <div class="mt-3">
-                                            <a href="{{ route('options.edit', $option->id) }}" class="text-xs text-primaryColor hover:text-primaryColor/80 font-medium inline-flex items-center">
+                                            <a href="{{ route('options.edit', [$option->election_id, $option->id]) }}" class="text-xs text-primaryColor hover:text-primaryColor/80 font-medium inline-flex items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 rtl:mr-1 rtl:ml-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
@@ -57,8 +57,7 @@
                     </div>
                 </div>
             @endif
-
-            <form action="{{ route('options.store',request()->route('id')) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
+            <form action="{{ route('options.store', request()->route('election')) }}" method="post" class="flex flex-col mt-6 bg-SecondaryBlack rounded-lg p-5" enctype="multipart/form-data">
                 @csrf
                 <div class="flex flex-row">
                     <div class="">
@@ -97,7 +96,7 @@
                     <button type="submit" class="flex items-center justify-center px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-SecondaryBlack dark:bg-PrimaryBlack hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">ایجاد گزینه</button>
 
                     @if($options->count() > 0)
-                        <a href="{{ route('elections.result', request()->route('id')) }}" class="flex items-center justify-center px-5 py-2 text-sm text-white transition-colors duration-200 bg-primaryColor border border-primaryColor rounded-lg gap-x-2 sm:w-auto hover:bg-opacity-90">
+                        <a href="{{ route('election.show', request()->route('election')) }}" class="flex items-center justify-center px-5 py-2 text-sm text-white transition-colors duration-200 bg-primaryColor border border-primaryColor rounded-lg gap-x-2 sm:w-auto hover:bg-opacity-90">
                             اتمام و مشاهده نظرسنجی
                         </a>
                     @endif

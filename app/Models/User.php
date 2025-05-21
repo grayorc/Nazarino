@@ -258,7 +258,7 @@ class User extends Authenticatable
         return $this->receivedInvites()->where('election_id', $electionId)->where('status', 'declined')->exists();
     }
 
-    public function InviteCheck($electionId)
+    public function InviteCheck($electionId):bool
     {
         return $this->isInvitedToElection($electionId) && !$this->isInviteRejected($electionId);
     }

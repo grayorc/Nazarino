@@ -36,17 +36,12 @@ class OptionController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all(),$request->id);
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
             'image' => ['nullable','file','image','mimes:jpeg,png,jpg,gif,svg','max:5120'],
         ]);
-        $data['election_id'] = $request->id;
-        //TODO: move to Policy
-        if(Election::findOrFail($request->id)->user_id != auth()->user()->id){
-            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ایجاد کنید');
-        }
+        $data['election_id'] = $request->election;
         // dd($data);
         $option = Option::Create($data);
         if($request->hasFile('image')){
@@ -57,7 +52,7 @@ class OptionController extends Controller
                 'imageable_type' => 'App\Models\Option',
             ]);
         }
-        return redirect()->route('options.create', $request->id)->with('success', 'گزینه با موفقیت ایجاد شد');
+        return redirect()->route('options.create', $request->election)->with('success', 'گزینه با موفقیت ایجاد شد');
     }
 
     /**
@@ -65,11 +60,6 @@ class OptionController extends Controller
      */
     public function show(Request $request, Election $election, Option $option)
     {
-        // TODO : put this in a middleware
-        if($option->election_id != $election->id){
-            abort(404);
-        }
-
         $comments = $option->comments()->get()->sortByDesc('created_at');
         $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
 
@@ -117,18 +107,10 @@ class OptionController extends Controller
     /**
      * Show the form for editing the specified option.
      */
-    public function edit(Option $option)
+    public function edit(Election $election, Option $option)
     {
-        $election = $option->election;
-
-
         if (!$election) {
             $election = Election::findOrFail($option->election_id);
-        }
-
-        //TODO: move to Policy
-        if($election->user_id != auth()->user()->id){
-            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ویرایش کنید');
         }
 
         return view('dash.Options.edit', compact('option', 'election'));
@@ -137,7 +119,7 @@ class OptionController extends Controller
     /**
      * Update the specified option in storage.
      */
-    public function update(Request $request, Option $option)
+    public function update(Request $request, Election $election, Option $option)
     {
         $data = $request->validate([
             'title' => 'required',
@@ -146,11 +128,6 @@ class OptionController extends Controller
         ]);
 
         $option->update($data);
-
-        //TODO: move to Policy
-        if($option->election->user_id != auth()->user()->id){
-            return redirect()->back()->with('error', 'شما نمی توانید این گزینه را ویرایش کنید');
-        }
 
         if ($request->hasFile('image')) {
             if ($option->image) {

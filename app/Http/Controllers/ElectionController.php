@@ -132,13 +132,10 @@ class ElectionController extends Controller
     public function show(Election $election)
     {
 //        $election->withRelationshipAutoloading();
-        if($election == null){
-            abort(404);
-        }
         $options = $election->options;
         if(auth()->check()){
             foreach ($options as $option) {
-                $option->user_vote = auth()->check() ? auth()->user()->userVote($option->id) : null;
+                $option->user_vote = auth()->user()->userVote($option->id);
             }
         }
         return view('elections.single',compact('election','options'));
