@@ -50,7 +50,7 @@ class Election extends Model
     {
         return $this->hasOne(AiAnalysis::class);
     }
-    
+
     public function invites(): HasMany
     {
         return $this->hasMany(Invite::class);
@@ -58,8 +58,8 @@ class Election extends Model
 
     public function getTotalComments(): int
     {
-        return $this->options()->each(function ($option) {
-            return $option->comments()->count();
+        return $this->options->sum(function ($option) {
+            return $option->getTotalComments();
         });
     }
 

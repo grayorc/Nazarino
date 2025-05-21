@@ -19,7 +19,7 @@
             <div class="flex flex-col items-center m-auto">
                 <i class="ri-chat-1-fill"></i>
                 <div class="text-xs md:text-sm font-medium mt-1">
-                    {{ $election->comments()->count() }}
+                    {{ $election->getTotalComments() }}
                 </div>
             </div>
             <div class="flex flex-col items-center m-auto">

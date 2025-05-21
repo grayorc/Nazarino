@@ -28,4 +28,9 @@ class Option extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function getTotalComments()
+    {
+        return $this->comments()->count();
+    }
 }
