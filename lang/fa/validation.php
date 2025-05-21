@@ -189,6 +189,7 @@ return [
         "country" => "کشور",
         "address" => "نشانی",
         "phone" => "تلفن",
+        "phone_number" => "شماره تلفن",
         "mobile" => "تلفن همراه",
         "age" => "سن",
         "sex" => "جنسیت",
@@ -223,6 +224,6 @@ return [
         "passport_no" => "شماره پاسپورت",
 		"sheba_number" => "شماره شبا",
 		"iban" => "شماره شبا",
-		"accountـnumber" => "شماره حساب"		
+		"accountـnumber" => "شماره حساب"
     ],
 ];

@@ -29,7 +29,6 @@ Route::get('/elections/{election}', [ElectionController::class, 'showResult'])
 
     ->name('elections.result');
 Route::get('/elections/{election}/edit', [ElectionController::class, 'edit'])
-    ->can('charts')
     ->name('elections.edit');
 
 Route::put('/elections/{election}', [ElectionController::class, 'update'])

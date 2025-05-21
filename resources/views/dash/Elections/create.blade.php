@@ -226,7 +226,7 @@
                                 <div class="container px-4 py-2 mx-auto md:py-10">
                                     <div class="w-full mb-5">
                                         <label for="datepicker" class="block mb-1 text-sm font-medium light:text-neutral-500 dark:text-gray-300">انتخاب تاریخ پایان</label>
-                                        <div class="relative w-[17rem]">
+                                        <div class="relative w-full sm:w-64 md:w-72">
                                             <input
                                                 x-ref="datePickerInput"
                                                 name="end_date"
@@ -252,7 +252,7 @@
                                                 x-show="datePickerOpen && !isDisabled"
                                                 x-transition
                                                 @click.away="datePickerOpen = false"
-                                                class="absolute top-0 right-0 z-50 max-w-lg p-4 mt-12 antialiased bg-white border rounded-lg shadow w-[17rem] border-neutral-200/70">
+                                                class="absolute top-0 right-0 z-50 p-4 mt-12 antialiased bg-white border rounded-lg shadow w-full sm:w-64 md:w-72 border-neutral-200/70 dark:bg-gray-800 dark:border-gray-700">
                                                 <div class="flex items-center justify-between mb-2">
                                                     <div>
                                                         <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
