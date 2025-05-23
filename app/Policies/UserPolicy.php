@@ -11,7 +11,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return auth()->user()->hasPermission('view-user');
+        return auth()->user()->hasPermission('view-user') || auth()->user()->roleHasPermission('view-user');
     }
 
     /**
@@ -19,7 +19,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->hasPermission('view-user') || $user->roleHasPermission('view-user');
     }
 
     /**
@@ -27,7 +27,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermission('create-user');
+        return $user->hasPermission('create-user') || $user->roleHasPermission('create-user');
     }
 
     /**

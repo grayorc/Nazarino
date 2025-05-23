@@ -51,25 +51,14 @@ class ElectionController extends Controller
 
         $elections->appends($request->all());
 
-        return view('admin.elections.all', compact('elections'))
-            ->fragmentIf(request()->hasHeader('HX-Request') && $request->has('search'), 'table-section');
+        if (request()->hasHeader('HX-Request')) {
+            return view('admin.elections.all', compact('elections'))->fragment('table-section');
+        }
+
+        return view('admin.elections.all', compact('elections'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // Create and store methods removed
 
     /**
      * Display the specified resource.
@@ -98,8 +87,10 @@ class ElectionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Election $election)
     {
-        //
+        $election->delete();
+        
+        return response('', 200);
     }
 }

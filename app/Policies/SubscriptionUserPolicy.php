@@ -21,7 +21,6 @@ class SubscriptionUserPolicy
      */
     public function view(User $user, SubscriptionUser $subscriptionUser): bool
     {
-        // Users can view their own subscriptions or admins with permission can view any
         return $user->id === $subscriptionUser->user_id || $user->hasPermission('view-user-subscription');
     }
 
@@ -44,7 +43,7 @@ class SubscriptionUserPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, SubscriptionUser $subscriptionUser): bool
+    public function delete(User $user, SubscriptionUser $subscriptionUser = null): bool
     {
         return $user->hasPermission('remove-user-subscription');
     }
@@ -60,7 +59,7 @@ class SubscriptionUserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, SubscriptionUser $subscriptionUser): bool
+    public function forceDelete(User $user, SubscriptionUser $subscriptionUser = null): bool
     {
         return $user->hasPermission('force-delete-user-subscription');
     }

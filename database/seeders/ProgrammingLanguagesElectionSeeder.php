@@ -20,6 +20,7 @@ class ProgrammingLanguagesElectionSeeder extends Seeder
             'username' => 'seedadmin',
             'email' => 'seedadmin@admin.com',
             'password' => 'password',
+            'is_admin' => true,
         ]);
 
         $election = Election::create([

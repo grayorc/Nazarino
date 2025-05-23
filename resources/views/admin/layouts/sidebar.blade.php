@@ -58,37 +58,106 @@
               </ul>
             </li>
             @endcan
-            <!-- مدیران -->
-            <!-- <li class="nav-item has-treeview">
+            
+            <!-- نقش‌ها و دسترسی‌ها -->
+            @if(auth()->user()->hasPermission('view-role') || auth()->user()->hasPermission('view-permission'))
+            <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="ri-shield-star-fill nav-icon"></i>
-
                 <p>
-                  مدیران
+                  نقش‌ها و دسترسی‌ها
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                @can('view-role')
+                <li class="nav-item">
+                  <a href="{{ route('admin.roles.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>لیست نقش‌ها</p>
+                  </a>
+                </li>
+                @endcan
+                @can('create-role')
+                <li class="nav-item">
+                  <a href="{{ route('admin.roles.create') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>ایجاد نقش جدید</p>
+                  </a>
+                </li>
+                @endcan
+                @can('view-permission')
+                <li class="nav-item">
+                  <a href="{{ route('admin.permissions.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>لیست دسترسی‌ها</p>
+                  </a>
+                </li>
+                @endcan
+
+              </ul>
+            </li>
+            @endif
+            
+            <!-- اشتراک‌ها -->
+            @if(auth()->user()->hasPermission('view-sub-feature') || auth()->user()->hasPermission('view-subscription') || auth()->user()->hasPermission('view-user-subscription'))
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="ri-vip-crown-fill nav-icon"></i>
+                <p>
+                  مدیریت اشتراک‌ها
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                @can('view-sub-feature')
+                <li class="nav-item">
+                  <a href="{{ route('admin.subfeatures.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>ویژگی‌های اشتراک</p>
+                  </a>
+                </li>
+                @endcan
+                @can('view-subscription')
+                <li class="nav-item">
+                  <a href="{{ route('admin.subscription-tiers.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>سطوح اشتراک</p>
+                  </a>
+                </li>
+                @endcan
+                @can('view-user-subscription')
+                <li class="nav-item">
+                  <a href="{{ route('admin.subscription-users.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>اشتراک کاربران</p>
+                  </a>
+                </li>
+                @endcan
+              </ul>
+            </li>
+            @endif
+            
+            <!-- نظرسنجی‌ها -->
+            @can('view-election')
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="ri-bar-chart-fill nav-icon"></i>
+                <p>
+                  نظرسنجی‌ها
                   <i class="right fa fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="./index.html" class="nav-link">
+                  <a href="{{ route('admin.elections.index') }}" class="nav-link">
                     <i class="ri-circle-line nav-icon"></i>
-                    <p>تنظیمات دستری</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index2.html" class="nav-link">
-                    <i class="ri-circle-line nav-icon"></i>
-                    <p>تنظیمات وظایف</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index2.html" class="nav-link">
-                    <i class="ri-circle-line nav-icon"></i>
-                    <p>لیست مدیران</p>
+                    <p>لیست نظرسنجی‌ها</p>
                   </a>
                 </li>
               </ul>
-            </li> -->
+            </li>
+            @endcan
             <!--  -->
         </nav>
         <!-- /.sidebar-menu -->

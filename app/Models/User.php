@@ -262,4 +262,9 @@ class User extends Authenticatable
     {
         return $this->isInvitedToElection($electionId) && !$this->isInviteRejected($electionId);
     }
+
+    public function assignRole($role)
+    {
+        return $this->roles()->attach($role);
+    }
 }

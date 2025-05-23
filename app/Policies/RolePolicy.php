@@ -2,44 +2,64 @@
 
 namespace App\Policies;
 
+use App\Models\Role;
 use App\Models\User;
 
 class RolePolicy
 {
     /**
-     * Create a new policy instance.
+     * Determine whether the user can view any models.
      */
-    public function __construct()
+    public function viewAny(User $user): bool
     {
-        //
+        return $user->hasPermission('view-role');
     }
 
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Role $role): bool
+    {
+        return $user->hasPermission('view-role');
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return $user->hasPermission('create-role');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Role $role): bool
+    {
+        return $user->hasPermission('edit-role');
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Role $role): bool
+    {
+        return $user->hasPermission('remove-role');
+    }
+
+    /**
+     * Determine whether the user can assign roles.
+     */
     public function assignRole(User $user): bool
     {
         return $user->hasPermission('assign-role');
     }
 
-    public function removeRole(User $user): bool
+    /**
+     * Determine whether the user can assign permissions to roles.
+     */
+    public function assignPermission(User $user): bool
     {
-        return $user->hasPermission('remove-role');
+        return $user->hasPermission('assign-permission-to-role');
     }
-
-    public function viewElection(User $user): bool
-    {
-        return $user->hasPermission('view-election');
-    }
-
-    public function editElection(User $user): bool
-    {
-        return $user->hasPermission('edit-election');
-    }
-
-    public function view(User $user, User $model): bool
-    {
-//        dd();
-        return true;
-//        return $user->hasRole('admin') || $user->hasPermission('view-admin');
-    }
-
-
 }

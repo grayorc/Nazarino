@@ -22,8 +22,11 @@ class ElectionPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, string|Election $election): bool
+    public function view(?User $user, string|Election $election = null): bool
     {
+        if($election == null){
+            return $user->hasPermission('view-election');
+        }
         if(is_numeric($election)){
             $election = Election::find($election);
         }
@@ -52,8 +55,11 @@ class ElectionPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, string|Election $election): bool
+    public function delete(User $user, string|Election $election = null): bool
     {
+        if($election == null){
+            return $user->hasPermission('delete-election');
+        }
         if(is_numeric($election)){
             $election = Election::find($election);
         }

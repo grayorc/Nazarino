@@ -14,23 +14,9 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $mod = Role::firstOrCreate(['name' => 'Moderator']);
-        $user = Role::firstOrCreate(['name' => 'User']);
-
-        $admin->permissions()->sync(Permission::all()->pluck('id'));
-
-        $mod->permissions()->sync(Permission::whereIn('name', [
-            'view-election',
-            'create-election',
-            'edit-election',
-            'remove-election',
-            'view-user'
-        ])->pluck('id'));
-
-        $user->permissions()->sync(Permission::whereIn('name', [
-            'view-election',
-            'view-user'
-        ])->pluck('id'));
+        // Just create the roles, permissions will be assigned in PermissionSeeder
+        Role::firstOrCreate(['name' => 'Admin']);
+        Role::firstOrCreate(['name' => 'Moderator']);
+        Role::firstOrCreate(['name' => 'User']);
     }
 }

@@ -38,26 +38,27 @@
 
                 <div class="card-header border-bottom-0">
                     <div class="d-flex gap-2">
-                        <a hx-boost="true" href="{{ route('admin.elections.index')}}" class="btn {{ request('filter') == null ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
+                        <a href="{{ route('admin.elections.index', []) }}"
+                           class="btn {{ (request('filter') == null && request('status') == null) ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
                             همه
                         </a>
 
-                        <a hx-boost="true" href="{{ route('admin.elections.index', array_merge(request()->except(['filter']), ['filter' => 'visible'])) }}"
+                        <a href="{{ route('admin.elections.index', array_merge(request()->except(['filter']), ['filter' => 'visible'])) }}"
                            class="btn {{ request('filter') == 'visible' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
                             عمومی
                         </a>
 
-                        <a hx-boost="true" href="{{ route('admin.elections.index', array_merge(request()->except('filter'), ['filter' => 'hidden'])) }}"
+                        <a href="{{ route('admin.elections.index', array_merge(request()->except('filter'), ['filter' => 'hidden'])) }}"
                            class="btn {{ request('filter') == 'hidden' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
                             خصوصی
                         </a>
 
-                        <a hx-boost="true" href="{{ route('admin.elections.index', array_merge(request()->except('status'), ['status' => 'open'])) }}"
+                        <a href="{{ route('admin.elections.index', array_merge(request()->except('status'), ['status' => 'open'])) }}"
                            class="btn {{ request('status') == 'open' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
                             باز
                         </a>
 
-                        <a hx-boost="true" href="{{ route('admin.elections.index', array_merge(request()->except('status'), ['status' => 'closed'])) }}"
+                        <a href="{{ route('admin.elections.index', array_merge(request()->except('status'), ['status' => 'closed'])) }}"
                            class="btn {{ request('status') == 'closed' ? 'btn-primary' : 'btn-outline-primary' }} btn-sm">
                             بسته
                         </a>
@@ -118,7 +119,7 @@
                                             </button>
                                         </a>
                                         @endcan
-                                        <a href="{{ route('admin.elections.show', $election->id) }}">
+                                        <a href="{{ route('election.show', $election->id) }}">
                                             <button class="btn btn-light btn-sm text-info">
                                                 <i class="ri-eye-line ri-1x"></i>
                                             </button>

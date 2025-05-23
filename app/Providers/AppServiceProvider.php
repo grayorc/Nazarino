@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\SubFeature;
 use App\Models\SubscriptionTier;
 use App\Models\SubscriptionUser;
 use App\Policies\AdminPolicy;
 use App\Policies\FeaturePolicy;
+use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\SubFeaturePolicy;
 use App\Policies\SubscriptionTierPolicy;
@@ -41,6 +43,22 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('view-user', [UserPolicy::class, 'viewAny']);
         Gate::define('remove-user', [UserPolicy::class, 'delete']);
         Gate::define('edit-user', [UserPolicy::class, 'edit']);
+        Gate::define('create-user', [UserPolicy::class, 'create']);
+
+        // Role gates
+        Gate::define('view-role', [RolePolicy::class, 'viewAny']);
+        Gate::define('create-role', [RolePolicy::class, 'create']);
+        Gate::define('edit-role', [RolePolicy::class, 'update']);
+        Gate::define('remove-role', [RolePolicy::class, 'delete']);
+        Gate::define('assign-role', [RolePolicy::class, 'assignRole']);
+        Gate::define('assign-permission-to-role', [RolePolicy::class, 'assignPermission']);
+
+        // Permission gates
+        Gate::define('view-permission', [PermissionPolicy::class, 'viewAny']);
+        Gate::define('create-permission', [PermissionPolicy::class, 'create']);
+        Gate::define('edit-permission', [PermissionPolicy::class, 'update']);
+        Gate::define('remove-permission', [PermissionPolicy::class, 'delete']);
+        Gate::define('assign-permission-to-user', [PermissionPolicy::class, 'assignToUser']);
 
         // SubscriptionTier gates
         Gate::define('view-subscription', [SubscriptionTierPolicy::class, 'viewAny']);
@@ -65,11 +83,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('remove-sub-feature', [SubFeaturePolicy::class, 'delete']);
         Gate::define('restore-sub-feature', [SubFeaturePolicy::class, 'restore']);
         Gate::define('force-delete-sub-feature', [SubFeaturePolicy::class, 'forceDelete']);
-
-        // Register policies
-        Gate::policy(SubscriptionTier::class, SubscriptionTierPolicy::class);
-        Gate::policy(SubscriptionUser::class, SubscriptionUserPolicy::class);
-        Gate::policy(SubFeature::class, SubFeaturePolicy::class);
 
         // Feature-specific gates
         Gate::define('unlimited-access', [FeaturePolicy::class, 'unlimitedAccess']);

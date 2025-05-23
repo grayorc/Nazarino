@@ -88,6 +88,11 @@
                                             </button>
                                         </a>
                                         @endcan
+                                        <a href="{{ route('admin.users.roles.edit',$user) }}">
+                                            <button class="btn btn-light btn-sm text-info" title="مدیریت نقش‌ها و دسترسی‌ها">
+                                                <i class="ri-shield-user-line ri-1x"></i>
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

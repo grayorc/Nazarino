@@ -19,7 +19,7 @@ class SubscriptionTierPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, SubscriptionTier $subscriptionTier): bool
+    public function view(User $user, SubscriptionTier $subscriptionTier = null): bool
     {
         return $user->hasPermission('view-subscription');
     }
@@ -35,7 +35,7 @@ class SubscriptionTierPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, SubscriptionTier $subscriptionTier): bool
+    public function update(User $user, SubscriptionTier $subscriptionTier = null): bool
     {
         return $user->hasPermission('edit-subscription');
     }
@@ -43,7 +43,7 @@ class SubscriptionTierPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, SubscriptionTier $subscriptionTier): bool
+    public function delete(User $user, SubscriptionTier $subscriptionTier = null): bool
     {
         return $user->hasPermission('remove-subscription');
     }
@@ -59,7 +59,7 @@ class SubscriptionTierPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, SubscriptionTier $subscriptionTier): bool
+    public function forceDelete(User $user, SubscriptionTier $subscriptionTier = null): bool
     {
         return $user->hasPermission('force-delete-subscription');
     }

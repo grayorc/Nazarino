@@ -35,7 +35,7 @@ class SubFeaturePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, SubFeature $subFeature): bool
+    public function update(User $user, SubFeature $subFeature = null): bool
     {
         return $user->hasPermission('edit-sub-feature');
     }
