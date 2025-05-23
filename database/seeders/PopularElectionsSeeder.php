@@ -24,7 +24,9 @@ class PopularElectionsSeeder extends Seeder
             ]);
         }
 
-        $bookElection = Election::create([
+        $user->assignRole(1);
+
+        $bookElection = Election::create([                             
             'user_id' => $user->id,
             'title' => 'بهترین کتاب‌های تمام دوران',
             'description' => 'در این نظرسنجی بهترین کتاب‌های تمام دوران را انتخاب کنید. کتاب‌هایی که تأثیر عمیقی بر ادبیات و فرهنگ جهانی داشته‌اند.',

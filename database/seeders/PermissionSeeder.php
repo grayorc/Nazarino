@@ -17,71 +17,72 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
             // Role permissions
-            'assign-role',
-            'create-role',
-            'edit-role',
-            'delete-role',
-            'remove-role',
-            'view-role',
+            ['name' => 'assign-role', 'display_name' => 'دادن نقش'],
+            ['name' => 'create-role', 'display_name' => 'ایجاد نقش'],
+            ['name' => 'edit-role', 'display_name' => 'ویرایش نقش'],
+            ['name' => 'delete-role', 'display_name' => 'حذف نقش'],
+            ['name' => 'remove-role', 'display_name' => 'برداشتن نقش'],
+            ['name' => 'view-role', 'display_name' => 'مشاهده نقش'],
 
             // Permission permissions
-            'view-permission',
-            'create-permission',
-            'edit-permission',
-            'remove-permission',
-            'assign-permission-to-role',
-            'assign-permission-to-user',
+            ['name' => 'view-permission', 'display_name' => 'مشاهده مجوز'],
+            ['name' => 'create-permission', 'display_name' => 'ایجاد مجوز'],
+            ['name' => 'edit-permission', 'display_name' => 'ویرایش مجوز'],
+            ['name' => 'remove-permission', 'display_name' => 'حذف مجوز'],
+            ['name' => 'assign-permission-to-role', 'display_name' => 'اختصاص مجوز به نقش'],
+            ['name' => 'assign-permission-to-user', 'display_name' => 'اختصاص مجوز به کاربر'],
 
             // Election permissions
-            'view-election',
-            'create-election',
-            'edit-election',
-            'delete-election',
-            'remove-election',
+            ['name' => 'view-election', 'display_name' => 'مشاهده انتخابات'],
+            ['name' => 'create-election', 'display_name' => 'ایجاد انتخابات'],
+            ['name' => 'edit-election', 'display_name' => 'ویرایش انتخابات'],
+            ['name' => 'delete-election', 'display_name' => 'حذف انتخابات'],
+            ['name' => 'remove-election', 'display_name' => 'برداشتن انتخابات'],
 
             // User permissions
-            'view-admin',
-            'edit-admin',
-            'remove-admin',
-            'view-user',
-            'create-user',
-            'edit-user',
-            'remove-user',
+            ['name' => 'view-admin', 'display_name' => 'مشاهده ادمین'],
+            ['name' => 'edit-admin', 'display_name' => 'ویرایش ادمین'],
+            ['name' => 'remove-admin', 'display_name' => 'حذف ادمین'],
+            ['name' => 'view-user', 'display_name' => 'مشاهده کاربر'],
+            ['name' => 'create-user', 'display_name' => 'ایجاد کاربر'],
+            ['name' => 'edit-user', 'display_name' => 'ویرایش کاربر'],
+            ['name' => 'remove-user', 'display_name' => 'حذف کاربر'],
 
             // SubFeature permissions
-            'view-sub-feature',
-            'create-sub-feature',
-            'edit-sub-feature',
-            'remove-sub-feature',
-            'restore-sub-feature',
-            'force-delete-sub-feature',
+            ['name' => 'view-sub-feature', 'display_name' => 'مشاهده ویژگی فرعی'],
+            ['name' => 'create-sub-feature', 'display_name' => 'ایجاد ویژگی فرعی'],
+            ['name' => 'edit-sub-feature', 'display_name' => 'ویرایش ویژگی فرعی'],
+            ['name' => 'remove-sub-feature', 'display_name' => 'حذف ویژگی فرعی'],
+            ['name' => 'restore-sub-feature', 'display_name' => 'بازیابی ویژگی فرعی'],
+            ['name' => 'force-delete-sub-feature', 'display_name' => 'حذف کامل ویژگی فرعی'],
 
             // SubscriptionTier permissions
-            'view-subscription',
-            'create-subscription',
-            'edit-subscription',
-            'remove-subscription',
-            'restore-subscription',
-            'force-delete-subscription',
+            ['name' => 'view-subscription', 'display_name' => 'مشاهده اشتراک'],
+            ['name' => 'create-subscription', 'display_name' => 'ایجاد اشتراک'],
+            ['name' => 'edit-subscription', 'display_name' => 'ویرایش اشتراک'],
+            ['name' => 'remove-subscription', 'display_name' => 'حذف اشتراک'],
+            ['name' => 'restore-subscription', 'display_name' => 'بازیابی اشتراک'],
+            ['name' => 'force-delete-subscription', 'display_name' => 'حذف کامل اشتراک'],
 
             // SubscriptionUser permissions
-            'view-user-subscription',
-            'create-user-subscription',
-            'edit-user-subscription',
-            'remove-user-subscription',
-            'restore-user-subscription',
-            'force-delete-user-subscription',
+            ['name' => 'view-user-subscription', 'display_name' => 'مشاهده اشتراک کاربر'],
+            ['name' => 'create-user-subscription', 'display_name' => 'ایجاد اشتراک کاربر'],
+            ['name' => 'edit-user-subscription', 'display_name' => 'ویرایش اشتراک کاربر'],
+            ['name' => 'remove-user-subscription', 'display_name' => 'حذف اشتراک کاربر'],
+            ['name' => 'restore-user-subscription', 'display_name' => 'بازیابی اشتراک کاربر'],
+            ['name' => 'force-delete-user-subscription', 'display_name' => 'حذف کامل اشتراک کاربر'],
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
-                'name' => $permission
+                'name' => $permission['name']
+            ], [
+                'display_name' => $permission['display_name']
             ]);
         }
 
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $modRole = Role::firstOrCreate(['name' => 'Moderator']);
-        $userRole = Role::firstOrCreate(['name' => 'User']);
 
         // Admin role - gets all permissions
         $allPermissions = Permission::all();
