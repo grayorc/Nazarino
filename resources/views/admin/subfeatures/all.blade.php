@@ -38,6 +38,7 @@
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover" lang="en">
+                        @fragment('table-section')
                         <tbody id="table-section" style="font-family: 'Vazir', sans-serif !important;">
                         <tr>
                             <th>شناسه</th>
@@ -62,6 +63,7 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        @endfragment
                     </table>
                 </div>
                 <!-- /.card-body -->

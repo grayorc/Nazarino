@@ -93,6 +93,13 @@
                                                 <i class="ri-shield-user-line ri-1x"></i>
                                             </button>
                                         </a>
+                                        @can('create-user-subscription')
+                                        <a href="{{ route('admin.subscription-users.create', ['user_id' => $user->id]) }}">
+                                            <button class="btn btn-light btn-sm text-success" title="افزودن اشتراک">
+                                                <i class="ri-vip-crown-line ri-1x"></i>
+                                            </button>
+                                        </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

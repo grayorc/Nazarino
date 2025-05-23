@@ -28,11 +28,7 @@ class SubscriptionTierController extends Controller
 
         $subscriptionTiers = $query->paginate(10);
 
-        if (request()->hasHeader('HX-Request')) {
-            return view('admin.subscription-tiers.all', compact('subscriptionTiers'))->fragment('table-section');
-        }
-
-        return view('admin.subscription-tiers.all', compact('subscriptionTiers'));
+        return view('admin.subscription-tiers.all', compact('subscriptionTiers'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
     }
 
     /**

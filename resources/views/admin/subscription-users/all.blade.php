@@ -39,14 +39,12 @@
                                 <option value="cancelled">لغو شده</option>
                             </select>
                         </form>
-                        <div class="btn-group-sm mr-1">
-                            <a href="{{ route('admin.subscription-users.create') }}" class="btn btn-info">ایجاد اشتراک جدید</a>
-                        </div>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover" lang="en">
+                        @fragment('table-section')
                         <tbody id="table-section" style="font-family: 'Vazir', sans-serif !important;">
                         <tr>
                             <th>شناسه</th>
@@ -93,6 +91,7 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        @endfragment
                     </table>
                 </div>
                 <!-- /.card-body -->

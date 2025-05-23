@@ -28,11 +28,7 @@ class SubFeatureController extends Controller
 
         $subFeatures = $query->paginate(10);
 
-        if (request()->hasHeader('HX-Request')) {
-            return view('admin.subfeatures.all', compact('subFeatures'))->fragment('table-section');
-        }
-
-        return view('admin.subfeatures.all', compact('subFeatures'));
+        return view('admin.subfeatures.all', compact('subFeatures'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
     }
 
     /**

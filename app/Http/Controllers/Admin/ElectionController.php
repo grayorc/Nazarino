@@ -51,11 +51,7 @@ class ElectionController extends Controller
 
         $elections->appends($request->all());
 
-        if (request()->hasHeader('HX-Request')) {
-            return view('admin.elections.all', compact('elections'))->fragment('table-section');
-        }
-
-        return view('admin.elections.all', compact('elections'));
+        return view('admin.elections.all', compact('elections'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
     }
 
     // Create and store methods removed

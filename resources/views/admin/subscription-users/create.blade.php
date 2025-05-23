@@ -18,14 +18,24 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="user_id" class="col-sm-2 control-label">کاربر</label>
-                            <select name="user_id" class="form-control" id="user_id">
-                                <option value="">انتخاب کاربر</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name ?? $user->username }} ({{ $user->email }})
-                                    </option>
-                                @endforeach
-                            </select>
+                            @if(isset($selectedUserId))
+                                @php
+                                    $selectedUser = $users->where('id', $selectedUserId)->first();
+                                @endphp
+                                <input type="hidden" name="user_id" value="{{ $selectedUserId }}">
+                                <div class="form-control bg-light" readonly>
+                                    {{ $selectedUser->name ?? $selectedUser->username }} ({{ $selectedUser->email }})
+                                </div>
+                            @else
+                                <select name="user_id" class="form-control" id="user_id">
+                                    <option value="">انتخاب کاربر</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name ?? $user->username }} ({{ $user->email }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @endif
                             @error('user_id')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror

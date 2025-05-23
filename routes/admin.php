@@ -46,11 +46,11 @@ Route::prefix('users')->name('users.')->group(function () {
 
     Route::get('/{user}/roles', [UserRoleController::class, 'edit'])
         ->can('assign-role')
-        ->name('users.roles.edit');
+        ->name('roles.edit');
 
     Route::patch('/{user}/roles', [UserRoleController::class, 'update'])
         ->can('assign-role')
-        ->name('users.roles.update');
+        ->name('roles.update');
 });
 
 //elections

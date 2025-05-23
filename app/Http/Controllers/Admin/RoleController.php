@@ -29,11 +29,7 @@ class RoleController extends Controller
 
         $roles = $query->paginate(10);
 
-        if (request()->hasHeader('HX-Request')) {
-            return view('admin.roles.all', compact('roles'))->fragment('table-section');
-        }
-
-        return view('admin.roles.all', compact('roles'));
+        return view('admin.roles.all', compact('roles'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
     }
 
     /**

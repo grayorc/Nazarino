@@ -40,21 +40,19 @@ class SubscriptionUserController extends Controller
 
         $subscriptionUsers = $query->paginate(10);
 
-        if (request()->hasHeader('HX-Request')) {
-            return view('admin.subscription-users.all', compact('subscriptionUsers'))->fragment('table-section');
-        }
-
-        return view('admin.subscription-users.all', compact('subscriptionUsers'));
+        return view('admin.subscription-users.all', compact('subscriptionUsers'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $users = User::all();
         $subscriptionTiers = SubscriptionTier::all();
-        return view('admin.subscription-users.create', compact('users', 'subscriptionTiers'));
+        $selectedUserId = $request->input('user_id');
+
+        return view('admin.subscription-users.create', compact('users', 'subscriptionTiers', 'selectedUserId'));
     }
 
     /**
@@ -74,7 +72,6 @@ class SubscriptionUserController extends Controller
         $endsAt = null;
         // dd($data['duration'], $data['duration_unit']);
 
-        // Calculate end date based on duration and unit
         if ($data['duration_unit'] === 'days') {
             $endsAt = $startsAt->copy()->addDays(intval($data['duration']));
         } elseif ($data['duration_unit'] === 'months') {
