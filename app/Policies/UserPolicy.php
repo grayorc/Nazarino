@@ -33,8 +33,11 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function edit(User $user, User $model): bool
+    public function edit(User $user, User|string $model): bool
     {
+        if(is_numeric($model)){
+            $model = User::find($model);
+        }
         if($model->is_admin){
             return $user->hasPermission('edit-admin');
         }
@@ -44,7 +47,7 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, User|string $model): bool
     {
         return $user->hasPermission('remove-user') && !$model->is_admin || $model->is_admin && $user->hasPermission('remove-admin');
     }

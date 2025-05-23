@@ -18,7 +18,7 @@ class RolePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Role $role): bool
+    public function view(User $user, Role $role = null): bool
     {
         return $user->hasPermission('view-role');
     }
@@ -34,7 +34,7 @@ class RolePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Role $role): bool
+    public function update(User $user, Role $role = null): bool
     {
         return $user->hasPermission('edit-role');
     }
@@ -42,7 +42,7 @@ class RolePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Role $role): bool
+    public function delete(User $user, Role $role = null): bool
     {
         return $user->hasPermission('remove-role');
     }

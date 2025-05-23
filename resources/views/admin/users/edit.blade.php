@@ -15,7 +15,7 @@
                 <!-- form start -->
                 <form class="form-horizontal" action="{{ route('admin.users.update', $user->id) }}" method="POST">
                     @csrf
-                    @method('patch')
+                    @method('put')
 
                     <div class="card-body">
                         <div class="form-group">

@@ -20,6 +20,7 @@ class PermissionSeeder extends Seeder
             'assign-role',
             'create-role',
             'edit-role',
+            'delete-role',
             'remove-role',
             'view-role',
 
@@ -35,6 +36,7 @@ class PermissionSeeder extends Seeder
             'view-election',
             'create-election',
             'edit-election',
+            'delete-election',
             'remove-election',
 
             // User permissions
@@ -94,7 +96,7 @@ class PermissionSeeder extends Seeder
         $modPermissions = [
             'view-election',
             'create-election',
-            'edit-election',
+            'delete-election',
             'remove-election',
             'view-user',
             'view-role',
