@@ -20,7 +20,7 @@
     <style>
         body {
             text-align: center;
-            font-family: Tahoma;
+            font-family: Vazir;
             background-color: #f5f5f5;
             color: #333;
             margin: 0;

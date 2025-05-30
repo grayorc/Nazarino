@@ -37,6 +37,7 @@
         </style>
     </head>
     <body class="min-h-screen bg-primaryWhite">
+        <x-email-verification-banner />
         {{ $slot }}
         {!! ToastMagic::scripts() !!}
         <script>

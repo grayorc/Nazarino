@@ -7,12 +7,14 @@ use App\Models\Vote;
 use App\Models\User;
 use App\Models\Option;
 use App\Models\Election;
+use Devrabiul\ToastMagic\Facades\ToastMagic;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Number;
+
 
 class DashboardController extends Controller
 {
@@ -29,10 +31,12 @@ class DashboardController extends Controller
         $totalElections = $user->totalActiveElections();
         $totalComments = $user->getTotalComments();
 
+        if(\request()->has('verified')){
+            ToastMagic::success('اکانت شما با موفقیت تایید شد');
+        }
 
-        // Get most voted elections for current user
         $topElections = $user->elections()
-            ->select('elections.id', 'elections.title', DB::raw('COUNT(votes.id) as total_votes'))
+            ->select('elections.id', 'elections.title', 'elections.is_open', DB::raw('COUNT(votes.id) as total_votes'))
             ->join('options', 'elections.id', '=', 'options.election_id')
             ->join('votes', 'options.id', '=', 'votes.option_id')
             ->groupBy('elections.id', 'elections.title')
@@ -40,11 +44,9 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Prepare data for chart
         $electionTitles = $topElections->pluck('title')->toArray();
         $electionVotes = $topElections->pluck('total_votes')->toArray();
 
-        // Bar Chart for top elections
         $topElectionsChart = Chartjs::build()
             ->name('TopElectionsChart')
             ->type('bar')

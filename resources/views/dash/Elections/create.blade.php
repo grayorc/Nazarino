@@ -252,20 +252,20 @@
                                                 x-show="datePickerOpen && !isDisabled"
                                                 x-transition
                                                 @click.away="datePickerOpen = false"
-                                                class="absolute top-0 right-0 z-50 p-4 mt-12 antialiased bg-white border rounded-lg shadow w-full sm:w-64 md:w-72 border-neutral-200/70 dark:bg-gray-800 dark:border-gray-700">
+                                                class="absolute top-0 right-0 z-50 p-4 mt-12 antialiased bg-white border rounded-lg shadow w-full sm:w-64 md:w-72 border-neutral-200/70 dark:text-white dark:bg-gray-800 dark:border-gray-700">
                                                 <div class="flex items-center justify-between mb-2">
-                                                    <div>
-                                                        <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
-                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <span x-text="datePickerMonthNames[datePickerMonth]" class="text-lg font-bold text-gray-800"></span>
-                                                        <span x-text="datePickerYear" class="mr-1 text-lg font-normal text-gray-600"></span>
-                                                    </div>
                                                     <div>
                                                         <button @click="datePickerPreviousMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
                                                             <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <span x-text="datePickerMonthNames[datePickerMonth]" class="text-lg font-bold text-gray-800 dark:text-gray-300"></span>
+                                                        <span x-text="datePickerYear" class="mr-1 text-lg font-normal text-gray-600 dark:text-gray-100"></span>
+                                                    </div>
+                                                    <div>
+                                                        <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
+                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                                                         </button>
                                                     </div>
                                                 </div>

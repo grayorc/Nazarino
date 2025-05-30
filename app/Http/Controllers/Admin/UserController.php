@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UserExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -43,6 +45,38 @@ class UserController extends Controller
         }
 
         return view('admin.users.all', compact('users'));
+    }
+    
+    /**
+     * Export users to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = User::query()->with(['roles', 'subscriptions', 'elections']);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('id', $search);
+            });
+        }
+
+        if ($request->input('admin') == 'on') {
+            $query->where(function($q) {
+                $q->where('is_staff', 1)
+                    ->orWhere('is_superuser', 1);
+            });
+        }
+
+        $users = $query->get();
+        
+        return Excel::download(new UserExport($users), 'users-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     /**

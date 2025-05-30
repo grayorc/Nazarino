@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SubFeatureExport;
 use App\Http\Controllers\Controller;
 use App\Models\SubFeature;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubFeatureController extends Controller
 {
@@ -29,6 +31,29 @@ class SubFeatureController extends Controller
         $subFeatures = $query->paginate(10);
 
         return view('admin.subfeatures.all', compact('subFeatures'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
+    }
+    
+    /**
+     * Export sub features to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = SubFeature::query()->with('subscriptionTiers');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('key', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('id', $search);
+            });
+        }
+
+        $subFeatures = $query->get();
+        
+        return Excel::download(new SubFeatureExport($subFeatures), 'subfeatures-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     /**

@@ -19,35 +19,35 @@
                     closeImage() {
                         this.imageModalOpen = false;
                     }
-                }" 
+                }"
                 @keydown.window.escape="closeImage"
                 class="mb-3 rounded-xl overflow-hidden border border-gray-200/50 dark:border-gray-700/50 shadow-sm">
-                    <img 
-                        @click="openImage" 
-                        src="{{ asset('storage/' . $option->image->path) }}" 
-                        alt="{{ $option->title }}" 
+                    <img
+                        @click="openImage"
+                        src="{{ asset('storage/' . $option->image->path) }}"
+                        alt="{{ $option->title }}"
                         class="w-full h-auto object-cover cursor-zoom-in">
-                    
+
                     <!-- Image Modal -->
                     <template x-teleport="body">
-                        <div 
-                            x-show="imageModalOpen" 
-                            x-transition:enter="transition ease-in-out duration-300" 
-                            x-transition:enter-start="opacity-0" 
-                            x-transition:leave="transition ease-in-in duration-300" 
-                            x-transition:leave-end="opacity-0" 
-                            @click="closeImage" 
-                            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-80 select-none cursor-zoom-out" 
+                        <div
+                            x-show="imageModalOpen"
+                            x-transition:enter="transition ease-in-out duration-300"
+                            x-transition:enter-start="opacity-0"
+                            x-transition:leave="transition ease-in-in duration-300"
+                            x-transition:leave-end="opacity-0"
+                            @click="closeImage"
+                            class="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-80 select-none cursor-zoom-out"
                             x-cloak>
-                            <div class="relative flex items-center justify-center w-11/12 xl:w-4/5 h-11/12"> 
-                                <img 
-                                    x-show="imageModalOpen" 
-                                    x-transition:enter="transition ease-in-out duration-300" 
-                                    x-transition:enter-start="opacity-0 transform scale-50" 
-                                    x-transition:leave="transition ease-in-in duration-300" 
-                                    x-transition:leave-end="opacity-0 transform scale-50" 
-                                    class="object-contain object-center w-full h-full max-h-[90vh] select-none cursor-zoom-out" 
-                                    :src="imageUrl" 
+                            <div class="relative flex items-center justify-center w-11/12 xl:w-4/5 h-11/12">
+                                <img
+                                    x-show="imageModalOpen"
+                                    x-transition:enter="transition ease-in-out duration-300"
+                                    x-transition:enter-start="opacity-0 transform scale-50"
+                                    x-transition:leave="transition ease-in-in duration-300"
+                                    x-transition:leave-end="opacity-0 transform scale-50"
+                                    class="object-contain object-center w-full h-full max-h-[90vh] select-none cursor-zoom-out"
+                                    :src="imageUrl"
                                     :alt="imageAlt">
                                 <button @click="closeImage" class="absolute top-4 right-4 bg-white/10 text-white rounded-full p-2 hover:bg-white/20">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -140,7 +140,7 @@
 
             <div class="mt-6 md:mt-8 px-2 md:px-0">
                 @auth()
-                @if(auth()->user()->hasSubFeature('ai_analysis') && $election->comments)
+                @if(auth()->user()->can('ai-analysis') && $election->comments)
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-3">
                         <div class="font-bold text-lg md:text-xl">خلاصه هوش مصنوعی</div>

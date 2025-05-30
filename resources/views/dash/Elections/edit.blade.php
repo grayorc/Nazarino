@@ -91,7 +91,7 @@
                             <!-- Content -->
                             <div class="relative z-10 flex flex-col items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-500 dark:text-gray-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                                 </svg>
 
                                 <h2 class="mt-1 font-medium tracking-wide text-gray-700 dark:text-gray-200">تصویر نظرسنجی</h2>
@@ -324,27 +324,27 @@
                                                 x-show="datePickerOpen && !isDisabled"
                                                 x-transition
                                                 @click.away="datePickerOpen = false"
-                                                class="absolute top-0 right-0 z-50 p-4 mt-12 antialiased bg-white border rounded-lg shadow w-full sm:w-64 md:w-72 border-neutral-200/70 dark:bg-gray-800 dark:border-gray-700">
+                                                class="absolute top-0 right-0 z-50 p-4 mt-12 antialiased bg-white border rounded-lg shadow w-full sm:w-64 md:w-72 border-neutral-200/70 dark:text-white dark:bg-gray-800 dark:border-gray-700">
                                                 <div class="flex items-center justify-between mb-2">
-                                                    <div>
-                                                        <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
-                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <span x-text="datePickerMonthNames[datePickerMonth]" class="text-lg font-bold text-gray-800"></span>
-                                                        <span x-text="datePickerYear" class="mr-1 text-lg font-normal text-gray-600"></span>
-                                                    </div>
                                                     <div>
                                                         <button @click="datePickerPreviousMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
                                                             <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <span x-text="datePickerMonthNames[datePickerMonth]" class="text-lg font-bold text-gray-800 dark:text-gray-300"></span>
+                                                        <span x-text="datePickerYear" class="mr-1 text-lg font-normal text-gray-600 dark:text-gray-100"></span>
+                                                    </div>
+                                                    <div>
+                                                        <button @click="datePickerNextMonth()" type="button" class="inline-flex p-1 transition duration-100 ease-in-out rounded-full cursor-pointer focus:outline-none focus:shadow-outline hover:bg-gray-100">
+                                                            <svg class="inline-flex w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="grid grid-cols-7 mb-3">
                                                     <template x-for="(day, index) in datePickerDays" :key="index">
                                                         <div class="px-0.5">
-                                                            <div x-text="day" class="text-xs font-medium text-center text-gray-800"></div>
+                                                            <div x-text="day" class="text-xs font-medium text-center text-gray-800 dark:text-gray-300"></div>
                                                         </div>
                                                     </template>
                                                 </div>
@@ -358,10 +358,10 @@
                                                                 x-text="day"
                                                                 @click="datePickerDayClicked(day)"
                                                                 :class="{
-                                            'bg-neutral-200': datePickerIsToday(day) == true,
-                                            'text-gray-600 hover:bg-neutral-200': datePickerIsToday(day) == false && datePickerIsSelectedDate(day) == false,
-                                            'bg-neutral-800 text-white hover:bg-opacity-75': datePickerIsSelectedDate(day) == true
-                                        }"
+                                                    'bg-neutral-200': datePickerIsToday(day) == true,
+                                                    'text-gray-600 hover:bg-neutral-200 dark:text-gray-400 dark:hover:bg-gray-700': datePickerIsToday(day) == false && datePickerIsSelectedDate(day) == false,
+                                                    'bg-neutral-800 text-white hover:bg-opacity-75': datePickerIsSelectedDate(day) == true
+                                                }"
                                                                 class="flex items-center justify-center text-sm leading-none text-center rounded-full cursor-pointer h-7 w-7">
                                                             </div>
                                                         </div>
@@ -424,8 +424,35 @@
                                 عمومی
                             </label>
                         </div>
+                        <x-input-error :messages="$errors->get('public')" class="mt-2" />
                     </div>
-                    <x-input-error :messages="$errors->get('public')" class="mt-2" />
+
+                    <div class="mt-5">
+                        <div class="flex ml-auto">
+                            <div dir="ltr" x-data="{ switchOn: {{ $election->is_open ? 'true' : 'false' }} }" class="flex items-center justify-center space-x-2">
+                                <input id="comment" type="checkbox" name="open" class="hidden" :checked="switchOn">
+
+                                <button
+                                    x-ref="switchButton"
+                                    type="button"
+                                    @click="switchOn = ! switchOn"
+                                    :class="switchOn ? 'bg-primaryColor' : 'bg-neutral-200'"
+                                    class="relative inline-flex h-6 py-0.5 ml-4 focus:outline-none rounded-full w-10"
+                                    x-cloak>
+                                    <span :class="switchOn ? 'translate-x-[18px]' : 'translate-x-0.5'" class="w-5 h-5 duration-200 ease-in-out bg-white rounded-full shadow-md"></span>
+                                </button>
+
+                                <label @click="$refs.switchButton.click(); $refs.switchButton.focus()" :id="$id('switch')"
+                                       :class="{ 'text-blue-600': switchOn, 'text-gray-400': ! switchOn }"
+                                       class="select-none text-sm text-gray-500 dark:text-gray-300"
+                                       x-cloak>
+                                    باز
+                                </label>
+                            </div>
+                        </div>
+                        <x-input-error :messages="$errors->get('is_open')" class="mt-2" />
+                    </div>
+
                 </div>
                 <div class="mt-5">
                     <button type="submit" class="flex items-center justify-center w-full px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-SecondaryBlack dark:bg-PrimaryBlack hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">ویرایش نظرسنجی</button>

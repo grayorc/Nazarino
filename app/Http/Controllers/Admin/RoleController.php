@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RoleExport;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoleController extends Controller
 {
@@ -30,6 +32,29 @@ class RoleController extends Controller
         $roles = $query->paginate(10);
 
         return view('admin.roles.all', compact('roles'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
+    }
+    
+    /**
+     * Export roles to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = Role::query()->with(['permissions', 'users']);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('display_name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('id', $search);
+            });
+        }
+
+        $roles = $query->get();
+        
+        return Excel::download(new RoleExport($roles), 'roles-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     /**

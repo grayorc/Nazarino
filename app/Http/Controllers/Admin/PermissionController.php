@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PermissionExport;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PermissionController extends Controller
 {
@@ -33,6 +35,29 @@ class PermissionController extends Controller
         }
 
         return view('admin.permissions.all', compact('permissions'));
+    }
+    
+    /**
+     * Export permissions to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = Permission::query()->with('roles');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('display_name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('id', $search);
+            });
+        }
+
+        $permissions = $query->get();
+        
+        return Excel::download(new PermissionExport($permissions), 'permissions-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     /**

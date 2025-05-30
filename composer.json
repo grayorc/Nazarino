@@ -16,6 +16,7 @@
         "icehouse-ventures/laravel-chartjs": "^4.2",
         "laravel/framework": "^12.8",
         "laravel/tinker": "^2.10.1",
+        "maatwebsite/excel": "^3.1",
         "mckenziearts/laravel-notify": "^2.7"
     },
     "require-dev": {

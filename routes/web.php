@@ -38,25 +38,27 @@ Route::prefix('admin')->name('admin.')->middleware(['AdminMiddleware','auth'])->
 
 Route::get('elections', [\App\Http\Controllers\ElectionController::class, 'feed'])->name('elections.feed');
 
-Route::get('election/{election}', [\App\Http\Controllers\ElectionController::class, 'show'])
-    ->middleware('VerifyElectionStatus')
-    ->can('view-election', 'election')
-    ->name('election.show');
+Route::prefix('elections')->group(function () {
+    Route::get('{election}', [\App\Http\Controllers\ElectionController::class, 'show'])
+        ->middleware('VerifyElectionStatus')
+        ->can('view-election', 'election')
+        ->name('election.show');
 
-Route::get('election/{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])
-    ->middleware('VerifyElectionStatus')
-    ->can('view-election', 'election')
-    ->name('option.show');
+    Route::get('{election}/option/{option}', [\App\Http\Controllers\OptionController::class, 'show'])
+        ->middleware('VerifyElectionStatus')
+        ->can('view-election', 'election')
+        ->name('option.show');
+
+    Route::get('{election}/ai-analysis', [\App\Http\Controllers\ElectionController::class, 'getAiAnalysis'])
+        ->middleware('auth')
+        ->can('ai-analysis')
+        ->name('election.ai-analysis');
+});
 
 Route::get('options/{option}/ai-summary', [\App\Http\Controllers\OptionController::class, 'getAiSummary'])
     ->middleware('auth')
     ->can('ai-analysis')
     ->name('option.ai-summary');
-
-Route::get('elections/{election}/ai-analysis', [\App\Http\Controllers\ElectionController::class, 'getAiAnalysis'])
-    ->middleware('auth')
-    ->can('ai-analysis')
-    ->name('election.ai-analysis');
 
 Route::post('comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store');
 Route::delete('comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('comment.destroy')->middleware('auth');

@@ -116,7 +116,7 @@
                                                 <button
                                                     class="invite-button px-4 py-2 rounded-lg bg-primaryColor hover:bg-primaryColor/90 text-white transition-all duration-300 flex items-center gap-2 text-sm"
                                                     hx-vals='{"user_id": "{{ $follower->follower->id }}", "election_id": "{{ $election->id }}"}'
-                                                    hx-post="{{ route('election.send-invite') }}"
+                                                    hx-post="{{ route('election.send-invite', $election) }}"
                                                     hx-headers='{"x-csrf-token": "{{ csrf_token() }}"}'
                                                     hx-trigger="click"
                                                     hx-swap="none"

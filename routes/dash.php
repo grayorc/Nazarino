@@ -19,6 +19,14 @@ Route::prefix('elections')->group(function () {
     Route::get('/', [ElectionController::class, 'index'])
     ->name('elections.index');
 
+    Route::get('/export', [ElectionController::class, 'export'])
+    ->can('excel-export')
+    ->name('elections.export');
+    
+    Route::get('/export/{election}', [ElectionController::class, 'exportSingle'])
+    ->can('excel-export')
+    ->name('elections.export.single');
+
     Route::get('/create', [ElectionController::class, 'create'])
     ->can('unlimited-access')
     ->name('elections.create');

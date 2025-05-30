@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">جدول ریسپانسیو</h3>
+                    <h3 class="card-title">لیست کاربران</h3>
 
                     <div class="card-tools d-flex">
                         <form
@@ -41,6 +41,11 @@
 
                         </form>
                         <div class="btn-group-sm mr-1">
+                            @can('view-user')
+                                <a href="{{ route('admin.users.export', request()->query()) }}" class="btn btn-success btn-sm">
+                                    <i class="ri-file-excel-2-line"></i> خروجی اکسل
+                                </a>
+                            @endcan
                         </div>
                     </div>
                 </div>

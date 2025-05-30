@@ -39,6 +39,13 @@
                                 <option value="cancelled">لغو شده</option>
                             </select>
                         </form>
+                        <div class="btn-group-sm mr-1">
+                            @can('view-user-subscription')
+                                <a href="{{ route('admin.subscription-users.export', request()->query()) }}" class="btn btn-success">
+                                    <i class="ri-file-excel-2-line"></i> خروجی اکسل
+                                </a>
+                            @endcan
+                        </div>
                     </div>
                 </div>
                 <!-- /.card-header -->

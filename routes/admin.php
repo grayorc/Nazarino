@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ElectionController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
@@ -10,15 +11,17 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('admin.index');
-});
+Route::get('/', [AdminController::class, 'index']);
 
 //users
 Route::prefix('users')->name('users.')->group(function () {
     Route::get('/', [UserController::class, 'index'])
         ->can('view-user')
         ->name('index');
+
+    Route::get('/export', [UserController::class, 'export'])
+        ->can('view-user')
+        ->name('export');
 
     Route::get('/create', [UserController::class, 'create'])
         ->can('create-user')
@@ -59,6 +62,10 @@ Route::prefix('elections')->name('elections.')->group(function () {
         ->can('view-election')
         ->name('index');
 
+    Route::get('/export', [ElectionController::class, 'export'])
+        ->can('view-election')
+        ->name('export');
+
     Route::get('/{election}', [ElectionController::class, 'show'])
         ->can('view-election')
         ->name('show');
@@ -80,6 +87,10 @@ Route::prefix('roles')->name('roles.')->group(function () {
     Route::get('/', [RoleController::class, 'index'])
         ->can('view-role')
         ->name('index');
+
+    Route::get('/export', [RoleController::class, 'export'])
+        ->can('view-role')
+        ->name('export');
 
     Route::get('/create', [RoleController::class, 'create'])
         ->can('create-role')
@@ -108,6 +119,10 @@ Route::prefix('permissions')->name('permissions.')->group(function () {
         ->can('view-permission')
         ->name('index');
 
+    Route::get('/export', [PermissionController::class, 'export'])
+        ->can('view-permission')
+        ->name('export');
+
     Route::get('/{permission}/edit', [PermissionController::class, 'edit'])
         ->can('edit-permission')
         ->name('edit');
@@ -122,6 +137,10 @@ Route::prefix('subfeatures')->name('subfeatures.')->group(function () {
     Route::get('/', [SubFeatureController::class, 'index'])
         ->can('view-sub-feature')
         ->name('index');
+
+    Route::get('/export', [SubFeatureController::class, 'export'])
+        ->can('view-sub-feature')
+        ->name('export');
     Route::get('/{subfeature}/edit', [SubFeatureController::class, 'edit'])
         ->can('edit-sub-feature')
         ->name('edit');
@@ -135,6 +154,10 @@ Route::prefix('subscription-tiers')->name('subscription-tiers.')->group(function
     Route::get('/', [SubscriptionTierController::class, 'index'])
         ->can('view-subscription')
         ->name('index');
+
+    Route::get('/export', [SubscriptionTierController::class, 'export'])
+        ->can('view-subscription')
+        ->name('export');
 
     Route::get('/create', [SubscriptionTierController::class, 'create'])
         ->can('create-subscription')
@@ -162,6 +185,10 @@ Route::prefix('subscription-users')->name('subscription-users.')->group(function
     Route::get('/', [SubscriptionUserController::class, 'index'])
         ->can('view-user-subscription')
         ->name('index');
+
+    Route::get('/export', [SubscriptionUserController::class, 'export'])
+        ->can('view-user-subscription')
+        ->name('export');
 
     Route::get('/create', [SubscriptionUserController::class, 'create'])
         ->can('create-user-subscription')

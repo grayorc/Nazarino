@@ -32,7 +32,13 @@
                                 </div>
                             </div>
                         </form>
-
+                        <div class="btn-group-sm mr-1">
+                            @can('view-permission')
+                                <a href="{{ route('admin.permissions.export', request()->query()) }}" class="btn btn-success">
+                                    <i class="ri-file-excel-2-line"></i> خروجی اکسل
+                                </a>
+                            @endcan
+                        </div>
                     </div>
                 </div>
                 <!-- /.card-header -->

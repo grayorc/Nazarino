@@ -19,3 +19,11 @@ Schedule::call(function () {
         ->update(['status' => 'expired']);
     Log::info("Updated $affectedRows subscription(s) to expired status.");
 })->everyMinute();
+
+Schedule::call(function () {
+    $affectedRows = DB::table('elections')
+        ->where('end_date', '<=', now())
+        ->where('is_open', 1)
+        ->update(['is_open' => 0]);
+    Log::info("Closed $affectedRows election(s) that have reached their end date.");
+})->everyMinute();

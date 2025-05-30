@@ -19,6 +19,9 @@ use App\Facades\AI;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ElectionsExport;
+use App\Exports\OptionStatsExport;
 
 class ElectionController extends Controller
 {
@@ -241,6 +244,10 @@ class ElectionController extends Controller
     public function sendElectionToAI(Election $election)
     {
         try {
+            if($election->aiAnalysis()->createdAt() < now()->yesterday()){
+                return null;
+            }
+
             if ($election->options->count() < 3) {
                 return null;
             }
@@ -431,6 +438,7 @@ class ElectionController extends Controller
             'description' => ['required', 'string'],
             'public' => ['nullable', 'string'],
             'comment' => ['nullable', 'string'],
+            'open' => ['nullable', 'string'],
             'has_end_date' => ['nullable', 'string'],
             'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5120'],
         ]);
@@ -446,19 +454,17 @@ class ElectionController extends Controller
             $endDate = null;
         }
 
-        // Prepare data for update
         $data = [
             'title' => $validatedData['title'],
             'description' => $validatedData['description'],
             'end_date' => $endDate,
             'has_comment' => $request->has('comment'),
             'is_public' => $request->has('public'),
+            'is_open' => $request->has('open'),
         ];
 
-        // Update the election record
         $election->update($data);
 
-        // Handle image upload if present
         if ($request->hasFile('image')) {
             try {
                 if (!$request->file('image')->isValid()) {
@@ -469,17 +475,13 @@ class ElectionController extends Controller
 
                 // Delete old image if exists
                 if ($election->image) {
-                    // Delete file from storage
                     Storage::disk('public')->delete($election->image->path);
 
-                    // Delete image record
                     $election->image->delete();
                 }
 
-                // Store new image
                 $imagePath = $request->file('image')->store('elections', 'public');
 
-                // Create new image record
                 Image::create([
                     'path' => $imagePath,
                     'imageable_id' => $election->id,
@@ -501,5 +503,80 @@ class ElectionController extends Controller
         $election->delete();
         return redirect()->route('elections.index')
             ->with('success', 'نظرسنجی با موفقیت حذف شد.');
+    }
+
+    /**
+     * Export elections to Excel
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function export(Request $request)
+    {
+        // Check if user has permission to export
+        if (!Auth::user()->can('excel-export')) {
+            return redirect()->route('elections.index')
+                ->with('error', 'شما دسترسی لازم برای خروجی اکسل را ندارید.');
+        }
+
+        $query = Auth::user()->elections();
+
+        // Apply the same filters as the index method
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->has('filter')) {
+            switch ($request->input('filter')) {
+                case 'visible':
+                    $query->where('is_public', true);
+                    break;
+                case 'hidden':
+                    $query->where('is_public', false);
+                    break;
+                case 'all':
+                    break;
+            }
+        }
+
+        if ($request->has('status')) {
+            switch ($request->input('status')) {
+                case 'open':
+                    $query->where('is_open', true);
+                    break;
+                case 'closed':
+                    $query->where('is_open', false);
+                    break;
+            }
+        }
+
+        $elections = $query->with(['user', 'options'])->get();
+
+        return Excel::download(new ElectionsExport($elections), 'نظرسنجی-ها-' . verta()->format('Y-m-d') . '.xlsx');
+    }
+
+    /**
+     * Export a single election to Excel
+     *
+     * @param Election $election
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportSingle(Election $election)
+    {
+        // TODO: remove when policy is ok
+        if (!Auth::user()->can('excel-export')) {
+            return redirect()->route('elections.index')
+                ->with('error', 'شما دسترسی لازم برای خروجی اکسل را ندارید.');
+        }
+
+        // Generate a filename with the election title
+        $filename = 'آمار-گزینه-های-' . Str::slug($election->title) . '-' . verta()->format('Y-m-d') . '.xlsx';
+
+        // Use the OptionStatsExport class which focuses specifically on option statistics
+        return Excel::download(new OptionStatsExport($election), $filename);
     }
 }

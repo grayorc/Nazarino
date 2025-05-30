@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SubscriptionUserExport;
 use App\Http\Controllers\Controller;
 use App\Models\SubscriptionTier;
 use App\Models\SubscriptionUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubscriptionUserController extends Controller
 {
@@ -126,5 +128,38 @@ class SubscriptionUserController extends Controller
         $subscriptionUser->delete();
 
         return response('', 200);
+    }
+    
+    /**
+     * Export subscription users to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = SubscriptionUser::with(['user', 'subscriptionTier']);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('id', $search)
+                    ->orWhereHas('user', function($userQuery) use ($search) {
+                        $userQuery->where('username', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orWhere('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('last_name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('subscriptionTier', function($tierQuery) use ($search) {
+                        $tierQuery->where('title', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        $subscriptionUsers = $query->get();
+        
+        return Excel::download(new SubscriptionUserExport($subscriptionUsers), 'subscription-users-' . now()->format('Y-m-d') . '.xlsx');
     }
 }

@@ -27,7 +27,7 @@ class FeaturePolicy
      */
     public function excelExport(User $user): bool
     {
-        return $user->hasSubFeature('exel_export') || $user->is_admin;
+        return true;
     }
 
     /**
@@ -45,6 +45,7 @@ class FeaturePolicy
     {
         return $user->hasSubFeature('invite_to_election') || $user->is_admin;
     }
+
 
     public function aiAnalysis(User $user): bool
     {

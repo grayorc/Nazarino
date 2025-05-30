@@ -34,6 +34,11 @@
                         </form>
                         <div class="btn-group-sm mr-1">
                             <a href="{{ route('admin.subscription-tiers.create') }}" class="btn btn-info">ایجاد سطح اشتراک جدید</a>
+                            @can('view-subscription')
+                                <a href="{{ route('admin.subscription-tiers.export', request()->query()) }}" class="btn btn-success mr-1">
+                                    <i class="ri-file-excel-2-line"></i> خروجی اکسل
+                                </a>
+                            @endcan
                         </div>
                     </div>
                 </div>

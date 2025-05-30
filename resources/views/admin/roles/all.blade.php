@@ -34,6 +34,11 @@
                         </form>
                         <div class="btn-group-sm mr-1">
                             <a href="{{ route('admin.roles.create') }}" class="btn btn-info">ایجاد نقش جدید</a>
+                            @can('view-role')
+                                <a href="{{ route('admin.roles.export', request()->query()) }}" class="btn btn-success mr-1">
+                                    <i class="ri-file-excel-2-line"></i> خروجی اکسل
+                                </a>
+                            @endcan
                         </div>
                     </div>
                 </div>

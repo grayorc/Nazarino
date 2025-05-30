@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SubscriptionTierExport;
 use App\Http\Controllers\Controller;
 use App\Models\SubFeature;
 use App\Models\SubscriptionTier;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubscriptionTierController extends Controller
 {
@@ -29,6 +31,28 @@ class SubscriptionTierController extends Controller
         $subscriptionTiers = $query->paginate(10);
 
         return view('admin.subscription-tiers.all', compact('subscriptionTiers'))->fragment(request()->hasHeader('HX-Request') ? 'table-section' : '');
+    }
+    
+    /**
+     * Export subscription tiers to Excel
+     */
+    public function export(Request $request)
+    {
+        // Build the same query as index to maintain filter consistency
+        $query = SubscriptionTier::query()->with(['subFeatures', 'subscriptionUsers']);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('price', 'like', '%' . $search . '%')
+                    ->orWhere('id', $search);
+            });
+        }
+
+        $subscriptionTiers = $query->get();
+        
+        return Excel::download(new SubscriptionTierExport($subscriptionTiers), 'subscription-tiers-' . now()->format('Y-m-d') . '.xlsx');
     }
 
     /**
