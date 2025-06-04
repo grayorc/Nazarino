@@ -14,8 +14,9 @@
                         <form
                             hx-get="{{ route('elections.feed') }}"
                             hx-target="#elections-grid"
-                            hx-swap="outerHTML"
+                            hx-swap="innerHTML"
                             hx-trigger="change, keyup[target.value.length > 2] delay:500ms from:input"
+                            hx-push-url="true"
                             class="w-full"
                         >
                             <input
@@ -31,7 +32,10 @@
 
                     <select
                         name="status"
-                        onchange="window.location = '{{ route('elections.feed') }}?status=' + this.value"
+                        hx-get="{{ route('elections.feed') }}"
+                        hx-target="#elections-grid"
+                        hx-swap="innerHTML"
+                        hx-push-url="true"
                         class="px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-lg dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none"
                     >
                         <option value="" {{ request('status') == '' ? 'selected' : '' }}>همه وضعیت‌ها</option>
@@ -41,7 +45,9 @@
                 </div>
             </div>
 
-            <div id="elections-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="elections-grid">
+                @fragment('elections-grid')
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($elections as $election)
                     <div class="flex flex-col p-4 bg-gradient-to-br from-white to-primaryWhite/90 dark:from-Sidebar_background dark:to-Chart_background shadow-md hover:shadow-lg transition-all duration-300 rounded-2xl border border-gray-200/50 dark:border-Sidebar_background_hover/30">
                         <a href="{{ route('election.show', $election->id) }}" class="flex flex-col h-full">
@@ -119,7 +125,7 @@
                         </a>
                     </div>
                 @empty
-                    <div class="col-span-full flex flex-col items-center justify-center p-8 bg-white/50 dark:bg-zinc-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
+                    <div class="col-span-3 flex flex-col items-center justify-center p-8 bg-white/50 dark:bg-zinc-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
                         <i class="ri-inbox-line text-5xl text-gray-400 dark:text-gray-500 mb-4"></i>
                         <h3 class="text-xl font-medium text-PrimaryBlack dark:text-primaryWhite">هیچ انتخاباتی یافت نشد</h3>
                         <p class="mt-2 text-SecondaryBlack/90 dark:text-SecondaryWhite/90 text-center">
@@ -127,6 +133,8 @@
                         </p>
                     </div>
                 @endforelse
+                </div>
+                @endfragment
             </div>
 
             <!-- Pagination -->
@@ -136,7 +144,12 @@
                 </div>
 
                 <div class="flex items-center gap-x-4">
-                    <a href="{{ $elections->previousPageUrl() }}" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-PrimaryBlack dark:text-gray-200 dark:border-gray-700 dark:hover:bg-SecondaryBlack {{ $elections->onFirstPage()?"pointer-events-none opacity-40":""}}">
+                    <a href="{{ $elections->previousPageUrl() }}" 
+                       hx-get="{{ $elections->previousPageUrl() }}" 
+                       hx-target="#elections-grid" 
+                       hx-swap="innerHTML" 
+                       hx-push-url="true"
+                       class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-PrimaryBlack dark:text-gray-200 dark:border-gray-700 dark:hover:bg-SecondaryBlack {{ $elections->onFirstPage()?"pointer-events-none opacity-40":""}}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
                         </svg>
@@ -146,7 +159,12 @@
                     </span>
                     </a>
 
-                    <a href="{{ $elections->nextPageUrl() }}" class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-PrimaryBlack dark:text-gray-200 dark:border-gray-700 dark:hover:bg-SecondaryBlack {{ $elections->onLastPage()?"pointer-events-none opacity-40":""}}">
+                    <a href="{{ $elections->nextPageUrl() }}" 
+                       hx-get="{{ $elections->nextPageUrl() }}" 
+                       hx-target="#elections-grid" 
+                       hx-swap="innerHTML" 
+                       hx-push-url="true"
+                       class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-PrimaryBlack dark:text-gray-200 dark:border-gray-700 dark:hover:bg-SecondaryBlack {{ $elections->onLastPage()?"pointer-events-none opacity-40":""}}">
                     <span>
                         صفحه بعد
                     </span>

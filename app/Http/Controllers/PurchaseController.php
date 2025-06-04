@@ -35,24 +35,18 @@ class PurchaseController extends Controller
 
     public function paymentProcess(Request $request)
     {
-        // Get configuration from config file
         $gatewayConfig = [
             'merchant_id' => config('larapay.gateways.test.merchant_id'),
         ];
-
-        // Generate a unique payment ID
         $paymentId = time() . rand(1000, 9999);
-
-        // Get subscription tier
         $subscriptionTier = SubscriptionTier::findOrFail($request->subscription_tier_id);
 
-        // Payment details
         $paymentData = [
             'amount' => $subscriptionTier->price,
             'id' => $paymentId,
             'callbackUrl' => route('purchase.verify'),
-            'nationalId' => '1234567890', // TODO: Get from user profile
-            'mobile' => '09131234567',    // TODO: Get from user profile
+            'nationalId' => '1234567890',
+            'mobile' => '09131234567',
         ];
 
         try {
@@ -83,12 +77,10 @@ class PurchaseController extends Controller
                 'paid_at' => null
             ]);
 
-            // Store minimal data in session for verification
             session([
                 'payment_id' => $paymentId
             ]);
 
-            // Redirect to payment page
             return $gateway->redirect(
                 id: $paymentData['id'],
                 token: "dasf",
@@ -108,25 +100,21 @@ class PurchaseController extends Controller
     public function verify(Request $request)
     {
         try {
-            // Get configuration from config file
             $gatewayConfig = [
                 'merchant_id' => config('larapay.gateways.test.merchant_id'),
             ];
 
-            // Get payment ID from session
             $id = session('payment_id');
 
             if (empty($id)) {
                 throw new LarapayException('Payment ID is required');
             }
 
-            // Find the receipt with waiting_to_pay status
             $receipt = Receipt::where('receipt_number', $id)
                 ->where('status', 'pending')
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
-
-            // Extract payment data from receipt
+                
             $amount = $receipt->amount;
             $metaData = $receipt->meta_data;
             $nationalId = $metaData['national_id'] ?? '';

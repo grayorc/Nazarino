@@ -37,7 +37,8 @@ class PermissionRoleSeeder extends Seeder
                 'create-election',
                 'edit-election',
                 'remove-election',
-                'view-user'
+                'view-user',
+                'view-receipt'
             ];
             
             foreach ($modPermissions as $permName) {

@@ -328,6 +328,10 @@ class ElectionController extends Controller
 
         $elections->appends($request->all());
 
+        if ($request->header('HX-Request')) {
+            return view('elections.feed', compact('elections'))->fragment('elections-grid');
+        }
+
         return view('elections.feed', compact('elections'));
     }
 
@@ -559,24 +563,10 @@ class ElectionController extends Controller
         return Excel::download(new ElectionsExport($elections), 'نظرسنجی-ها-' . verta()->format('Y-m-d') . '.xlsx');
     }
 
-    /**
-     * Export a single election to Excel
-     *
-     * @param Election $election
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
     public function exportSingle(Election $election)
     {
-        // TODO: remove when policy is ok
-        if (!Auth::user()->can('excel-export')) {
-            return redirect()->route('elections.index')
-                ->with('error', 'شما دسترسی لازم برای خروجی اکسل را ندارید.');
-        }
-
-        // Generate a filename with the election title
+        //make file name
         $filename = 'آمار-گزینه-های-' . Str::slug($election->title) . '-' . verta()->format('Y-m-d') . '.xlsx';
-
-        // Use the OptionStatsExport class which focuses specifically on option statistics
         return Excel::download(new OptionStatsExport($election), $filename);
     }
 }

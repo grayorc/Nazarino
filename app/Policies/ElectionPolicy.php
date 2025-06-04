@@ -57,13 +57,7 @@ class ElectionPolicy
      */
     public function delete(User $user, string|Election $election = null): bool
     {
-        if($election == null){
-            return $user->hasPermission('delete-election');
-        }
-        if(is_numeric($election)){
-            $election = Election::find($election);
-        }
-        return $election->user_id == $user->id;
+        return $user->hasPermission('delete-election');
     }
 
     /**

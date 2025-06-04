@@ -71,6 +71,10 @@ class PermissionSeeder extends Seeder
             ['name' => 'remove-user-subscription', 'display_name' => 'حذف اشتراک کاربر'],
             ['name' => 'restore-user-subscription', 'display_name' => 'بازیابی اشتراک کاربر'],
             ['name' => 'force-delete-user-subscription', 'display_name' => 'حذف کامل اشتراک کاربر'],
+
+            // Receipt (Transaction) permissions
+            ['name' => 'view-receipt', 'display_name' => 'مشاهده تراکنش'],
+            ['name' => 'remove-receipt', 'display_name' => 'حذف تراکنش'],
         ];
 
         foreach ($permissions as $permission) {

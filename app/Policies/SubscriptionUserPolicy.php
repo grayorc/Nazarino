@@ -35,7 +35,7 @@ class SubscriptionUserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, SubscriptionUser $subscriptionUser): bool
+    public function update(User $user, SubscriptionUser $subscriptionUser = null): bool
     {
         return $user->hasPermission('edit-user-subscription');
     }

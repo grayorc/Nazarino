@@ -1,7 +1,7 @@
 <x-min-layout>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
-        <section class="container px-2 md:px-4 mx-auto flex-grow-1 w-full">
+        <section class="container px-2 md:px-4 mx-auto flex-grow-1 w-full mt-16">
             <!-- Main Content Container -->
                 <!-- Dashboard Title -->
                 <div class="mb-6">
@@ -57,13 +57,13 @@
                                     {{ $totalElections }}
                                 </h4>
                             </div>
-
+<!--
                             <span class="flex items-center gap-1 rounded-full bg-green-100 py-0.5 px-2 text-sm font-medium text-green-600 dark:bg-green-900/30 dark:text-green-500">
                                 <svg class="h-3 w-3 mr-0.5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                                 12.5%
-                            </span>
+                            </span> -->
                         </div>
                     </div>
 
@@ -82,13 +82,6 @@
                                     {{ $totalVotes }}
                                 </h4>
                             </div>
-
-                            <span class="flex items-center gap-1 rounded-full bg-green-100 py-0.5 px-2 text-sm font-medium text-green-600 dark:bg-green-900/30 dark:text-green-500">
-                                <svg class="h-3 w-3 mr-0.5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                3.8%
-                            </span>
                         </div>
                     </div>
 
@@ -107,13 +100,6 @@
                                     {{ $totalComments }}
                                 </h4>
                             </div>
-
-                            <span class="flex items-center gap-1 rounded-full bg-red-100 py-0.5 px-2 text-sm font-medium text-red-600 dark:bg-red-900/30 dark:text-red-500">
-                                <svg class="h-3 w-3 mr-0.5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 5V19M5 12L12 19L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                2.5%
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -156,53 +142,36 @@
                         </div>
 
                         <div>
-                            <div class="flex items-center gap-5 py-3 border-b border-stroke dark:border-gray-700">
-                                <div class="relative h-10 w-10 rounded-full">
-                                    <img src="/dist/img/def-pfp.jpg" alt="User" class="h-full w-full rounded-full object-cover" />
+                            @forelse($followers as $follow)
+                                <a href="{{ route('users.profile', $follow->follower->username) }}">
+                                    <div class="flex items-center gap-5 py-3 border-b border-stroke dark:border-gray-700">
+                                        <div class="relative h-10 w-10 rounded-full">
+                                            <img src="{{ $follow->follower->image ? Storage::url($follow->follower->image->path) : asset('dist/img/def-pfp.jpg') }}"
+                                                 alt="{{ $follow->follower->name }}"
+                                                 class="h-full w-full rounded-full object-cover" />
+                                        </div>
+                                        <div>
+                                            <h6 class="text-sm font-medium text-gray-800 dark:text-white">
+                                                {{ $follow->follower->first_name ?? $follow->follower->username }} شما را دنبال می‌کند
+                                            </h6>
+                                            <p class="text-xs text-gray-500">
+                                                {{ $follow->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="py-4 text-center text-gray-500 dark:text-gray-400">
+                                    هنوز کسی شما را دنبال نمی‌کند
                                 </div>
-                                <div>
-                                    <h6 class="text-sm font-medium text-gray-800 dark:text-white">
-                                        علی احمدی نظرسنجی جدید ایجاد کرد
-                                    </h6>
-                                    <p class="text-xs text-gray-500">2 ساعت پیش</p>
+                            @endforelse
+                            @if($followers->count() > 0)
+                                <div class="mt-4 text-center">
+                                    <a href="{{ route('users.profile', auth()->user()->username) }}" class="text-sm text-primaryColor hover:underline">
+                                        مشاهده همه دنبال‌کنندگان
+                                    </a>
                                 </div>
-                            </div>
-
-                            <div class="flex items-center gap-5 py-3 border-b border-stroke dark:border-gray-700">
-                                <div class="relative h-10 w-10 rounded-full">
-                                    <img src="/dist/img/def-pfp.jpg" alt="User" class="h-full w-full rounded-full object-cover" />
-                                </div>
-                                <div>
-                                    <h6 class="text-sm font-medium text-gray-800 dark:text-white">
-                                        سارا محمدی در نظرسنجی شرکت کرد
-                                    </h6>
-                                    <p class="text-xs text-gray-500">3 ساعت پیش</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center gap-5 py-3 border-b border-stroke dark:border-gray-700">
-                                <div class="relative h-10 w-10 rounded-full">
-                                    <img src="/dist/img/def-pfp.jpg" alt="User" class="h-full w-full rounded-full object-cover" />
-                                </div>
-                                <div>
-                                    <h6 class="text-sm font-medium text-gray-800 dark:text-white">
-                                        رضا کریمی نظر جدید ارسال کرد
-                                    </h6>
-                                    <p class="text-xs text-gray-500">5 ساعت پیش</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center gap-5 py-3">
-                                <div class="relative h-10 w-10 rounded-full">
-                                    <img src="/dist/img/def-pfp.jpg" alt="User" class="h-full w-full rounded-full object-cover" />
-                                </div>
-                                <div>
-                                    <h6 class="text-sm font-medium text-gray-800 dark:text-white">
-                                        مریم حسینی نظرسنجی را به اشتراک گذاشت
-                                    </h6>
-                                    <p class="text-xs text-gray-500">7 ساعت پیش</p>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

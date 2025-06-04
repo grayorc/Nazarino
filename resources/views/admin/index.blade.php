@@ -65,6 +65,52 @@
                 </div>
                 <!-- ./col -->
             </div>
+            
+            <!-- Transaction Stats Row -->
+            <div class="row">
+                <div class="col-lg-4 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-purple">
+                        <div class="inner">
+                            <h3>{{ $stats['transactions_count'] }}</h3>
+                            <p>تراکنش‌ها</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ri-exchange-dollar-fill"></i>
+                        </div>
+                        <a href="{{ route('admin.receipts.index') }}" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-teal">
+                        <div class="inner">
+                            <h3>{{ $stats['successful_transactions_count'] }}</h3>
+                            <p>تراکنش‌های موفق</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ri-check-double-line"></i>
+                        </div>
+                        <a href="{{ route('admin.receipts.index') }}?status=paid" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4 col-12">
+                    <!-- small box -->
+                    <div class="small-box bg-indigo">
+                        <div class="inner">
+                            <h3>{{ number_format($stats['total_revenue']) }} <small>تومان</small></h3>
+                            <p>درآمد کل</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ri-money-dollar-circle-line"></i>
+                        </div>
+                        <a href="{{ route('admin.receipts.index') }}" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
             <!-- /.row -->
 
             <!-- Main row -->
@@ -216,6 +262,49 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Transactions card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ri-exchange-dollar-line mr-1"></i>
+                                تراکنش‌های اخیر
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>شماره رسید</th>
+                                    <th>کاربر</th>
+                                    <th>مبلغ (تومان)</th>
+                                    <th>وضعیت</th>
+                                    <th>تاریخ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($recentTransactions as $transaction)
+                                    <tr>
+                                        <td>{{ $transaction['receipt_number'] }}</td>
+                                        <td>{{ $transaction['user_name'] }}</td>
+                                        <td>{{ $transaction['amount'] }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $transaction['status'] }}">
+                                                {{ $transaction['status_text'] }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $transaction['date'] }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <div class="mt-3 text-center">
+                                <a href="{{ route('admin.receipts.index') }}" class="btn btn-sm btn-primary">
+                                    مشاهده همه تراکنش‌ها
+                                </a>
                             </div>
                         </div>
                     </div>

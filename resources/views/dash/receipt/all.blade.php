@@ -5,7 +5,7 @@
          class="relative">
         @include('dash.layouts.sidebar')
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
-        <section class="container px-2 md:px-4 mx-auto flex-grow-1 w-full">
+        <section class="container px-2 md:px-4 mx-auto flex-grow-1 w-full mt-16">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <div>
                     <div class="flex items-center gap-x-3">

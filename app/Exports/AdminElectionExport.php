@@ -82,7 +82,7 @@ class AdminElectionExport implements FromCollection, WithHeadings, WithMapping, 
             $election->getTotalComments(),
             $endDate,
             verta($election->created_at)->format('Y/m/d'),
-            $election->user->name
+            $election->user->name? $election->user->email : 'ناشناس'
         ];
     }
 

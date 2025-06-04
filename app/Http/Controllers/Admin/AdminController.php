@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Election;
+use App\Models\Receipt;
 use App\Models\SubscriptionTier;
 use App\Models\SubscriptionUser;
 use App\Models\User;
@@ -20,7 +21,10 @@ class AdminController extends Controller
             'elections_count' => Election::count(),
             'votes_count' => Vote::count(),
             'users_count' => User::count(),
-            'active_subscriptions_count' => SubscriptionUser::where('status', 'active')->count()
+            'active_subscriptions_count' => SubscriptionUser::where('status', 'active')->count(),
+            'transactions_count' => Receipt::count(),
+            'successful_transactions_count' => Receipt::where('status', 'paid')->count(),
+            'total_revenue' => Receipt::where('status', 'paid')->sum('amount')
         ];
 
         $latestElections = Election::latest()->take(7)->get();
@@ -81,13 +85,43 @@ class AdminController extends Controller
             ['label' => 'نظرسنجی خصوصی', 'count' => $privateElections]
         ];
 
+        // Recent transactions data
+        $recentTransactions = Receipt::with('user')
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($receipt) {
+                return [
+                    'id' => $receipt->id,
+                    'receipt_number' => $receipt->receipt_number,
+                    'user_name' => $receipt->user ? $receipt->user->username : 'کاربر حذف شده',
+                    'amount' => number_format($receipt->amount),
+                    'status' => $receipt->status === 'paid' ? 'success' : 'danger',
+                    'status_text' => $receipt->status === 'paid' ? 'پرداخت شده' : 'ناموفق',
+                    'date' => jdate($receipt->created_at)->format('Y/m/d')
+                ];
+            });
+
+        // Transaction data for the last 7 days
+        $transactionData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $count = Receipt::whereDate('created_at', $date->format('Y-m-d'))->count();
+            $transactionData[] = [
+                'date' => $date->format('Y-m-d'),
+                'count' => $count
+            ];
+        }
+
         return view('admin.index', compact(
             'stats',
             'elections',
             'recentUsers',
             'subscriptionTiers',
             'votesData',
-            'electionTypes'
+            'electionTypes',
+            'recentTransactions',
+            'transactionData'
         ));
     }
 }

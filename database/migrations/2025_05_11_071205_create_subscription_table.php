@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('price', 10 , 2)->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('sub_features', function (Blueprint $table) {
@@ -25,45 +24,34 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('key')->unique();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('subscription_tier_sub_features', function (Blueprint $table) {
-            $table->unsignedBigInteger('sub_feature_id');
-            $table->unsignedBigInteger('subscription_tier_id');
-
-            $table->foreign('sub_feature_id')
-                ->references('id')
-                ->on('sub_features')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->foreign('subscription_tier_id')
-                ->references('id')
-                ->on('subscription_tiers')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
+            $table->foreignId('sub_feature_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('subscription_tier_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->primary(['sub_feature_id', 'subscription_tier_id']);
             $table->timestamps();
         });
 
-
         Schema::create('subscription_users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-            ->constrained()
-                ->onDelete('cascade');
+                ->constrained()
+                ->cascadeOnDelete();
             $table->foreignId('subscription_tier_id')
-            ->constrained('subscription_tiers')
-                ->onDelete('cascade');
+                ->constrained()
+                ->cascadeOnDelete();
             $table->string('status')->default('active');
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
-
 
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
@@ -74,7 +62,7 @@ return new class extends Migration
                 ->nullOnDelete();
             $table->foreignId('subscription_user_id')
                 ->nullable()
-                ->constrained('subscription_users')
+                ->constrained()
                 ->nullOnDelete();
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('تومان');
@@ -83,15 +71,15 @@ return new class extends Migration
             $table->json('meta_data')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
-            $table->softDeletes();
             $table->index('user_id');
             $table->index('status');
             $table->index('paid_at');
         });
-
     }
 
-
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('receipts');

@@ -2,7 +2,7 @@
 <section>
     <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
-        <section class="container px-4 mx-auto flex-grow-1">
+        <section class="container px-4 mx-auto flex-grow-1 mt-16">
             <div class="flex justify-between items-center mt-6">
                 <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300">افزودن گزینه جدید به نظرسنجی "{{ $election->title }}"</h2>
                 <div class="flex space-x-2 rtl:space-x-reverse">

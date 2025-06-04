@@ -41,8 +41,13 @@ class OptionController extends Controller
             'description' => 'required',
             'image' => ['nullable','file','image','mimes:jpeg,png,jpg,gif,svg','max:5120'],
         ]);
+        if(Election::find($request->election) === null){
+            return redirect()->back()->with('error', 'نظرسنجی مورد نظر یافت نشد');
+        }
+        if (Election::find($request->election)->user_id !== auth()->user()->id) {
+            return redirect()->back()->with('error', 'شما اجازه ایجاد گزینه برای این نظرسنجی را ندارید');
+        }
         $data['election_id'] = $request->election;
-        // dd($data);
         $option = Option::Create($data);
         if($request->hasFile('image')){
             $image = $request->file('image')->store('options', 'public');

@@ -35,6 +35,12 @@ class DashboardController extends Controller
             ToastMagic::success('اکانت شما با موفقیت تایید شد');
         }
 
+        $followers = $user->followers()
+            ->with('follower')
+            ->latest()
+            ->take(4)
+            ->get();
+
         $topElections = $user->elections()
             ->select('elections.id', 'elections.title', 'elections.is_open', DB::raw('COUNT(votes.id) as total_votes'))
             ->join('options', 'elections.id', '=', 'options.election_id')
@@ -127,6 +133,14 @@ class DashboardController extends Controller
                 ],
             ]);
 
-        return view('dash.index', compact('topElectionsChart', 'remainingDays', 'topElections', 'totalVotes', 'totalElections', 'totalComments'));
+        return view('dash.index', compact(
+            'topElectionsChart',
+            'remainingDays',
+            'topElections',
+            'totalVotes',
+            'totalElections',
+            'totalComments',
+            'followers'
+        ));
     }
 }

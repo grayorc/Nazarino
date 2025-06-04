@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use App\Policies\ElectionPolicy;
+use App\Policies\TransactionPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -98,5 +99,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('update-election', [ElectionPolicy::class, 'update']);
         Gate::define('delete-election', [ElectionPolicy::class, 'delete']);
         Gate::define('excel-export', [FeaturePolicy::class, 'excelExport']);
+
+        //receipt gates
+        Gate::define('view-receipt',[TransactionPolicy::class,'view']);
+        Gate::define('remove-receipt',[TransactionPolicy::class,'delete']);
+
     }
 }

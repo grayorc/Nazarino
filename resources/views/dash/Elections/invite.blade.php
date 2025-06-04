@@ -1,7 +1,7 @@
 <x-min-layout>
-    <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack pt-16">
+    <div class="flex relative min-h-screen bg-gray-100 dark:bg-PrimaryBlack">
         @include('dash.layouts.sidebar')
-        <section class="container px-4 mx-auto flex-grow-1 pb-32 dark:bg-PrimaryBlack">
+        <section class="container px-4 mx-auto flex-grow-1 pb-32 dark:bg-PrimaryBlack mt-16">
             <!-- Header Section -->
             <div class="mb-8">
                 <div class="flex items-center justify-between">

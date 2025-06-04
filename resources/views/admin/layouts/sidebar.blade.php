@@ -15,7 +15,7 @@
             <img src="/dist/img/user8-128x128.jpg" class="img-circle elevation-2 img-fluid" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block"> علی</a>
+            <a href="#" class="d-block">{{ auth()->user()->first_name?? auth()->user()->email }}</a>
           </div>
         </div>
 
@@ -58,7 +58,7 @@
               </ul>
             </li>
             @endcan
-            
+
             <!-- نقش‌ها و دسترسی‌ها -->
             @if(auth()->user()->hasPermission('view-role') || auth()->user()->hasPermission('view-permission'))
             <li class="nav-item has-treeview">
@@ -98,7 +98,7 @@
               </ul>
             </li>
             @endif
-            
+
             <!-- اشتراک‌ها -->
             @if(auth()->user()->hasPermission('view-sub-feature') || auth()->user()->hasPermission('view-subscription') || auth()->user()->hasPermission('view-user-subscription'))
             <li class="nav-item has-treeview">
@@ -137,7 +137,7 @@
               </ul>
             </li>
             @endif
-            
+
             <!-- نظرسنجی‌ها -->
             @can('view-election')
             <li class="nav-item has-treeview">
@@ -153,6 +153,27 @@
                   <a href="{{ route('admin.elections.index') }}" class="nav-link">
                     <i class="ri-circle-line nav-icon"></i>
                     <p>لیست نظرسنجی‌ها</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endcan
+
+            <!-- تراکنش‌ها -->
+            @can('view-receipt')
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="ri-exchange-dollar-fill nav-icon"></i>
+                <p>
+                  تراکنش‌ها
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('admin.receipts.index') }}" class="nav-link">
+                    <i class="ri-circle-line nav-icon"></i>
+                    <p>لیست تراکنش‌ها</p>
                   </a>
                 </li>
               </ul>

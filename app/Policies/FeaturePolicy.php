@@ -27,7 +27,7 @@ class FeaturePolicy
      */
     public function excelExport(User $user): bool
     {
-        return true;
+        return $user->hasSubFeature('excel_export') || $user->is_admin;
     }
 
     /**

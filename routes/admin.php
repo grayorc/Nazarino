@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ElectionController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubFeatureController;
+use App\Http\Controllers\Admin\ReceiptController;
 use App\Http\Controllers\Admin\SubscriptionTierController;
 use App\Http\Controllers\Admin\SubscriptionUserController;
 use App\Http\Controllers\Admin\UserController;
@@ -208,5 +209,24 @@ Route::prefix('subscription-users')->name('subscription-users.')->group(function
 
     Route::delete('/{subscriptionUser}', [SubscriptionUserController::class, 'destroy'])
         ->can('remove-user-subscription')
+        ->name('destroy');
+});
+
+//receipts (transactions)
+Route::prefix('receipts')->name('receipts.')->group(function () {
+    Route::get('/', [ReceiptController::class, 'index'])
+        ->can('view-receipt')
+        ->name('index');
+
+    Route::get('/export', [ReceiptController::class, 'export'])
+        ->can('view-receipt')
+        ->name('export');
+
+    Route::get('/{receipt}', [ReceiptController::class, 'show'])
+        ->can('view-receipt')
+        ->name('show');
+
+    Route::delete('/{receipt}', [ReceiptController::class, 'destroy'])
+        ->can('remove-receipt')
         ->name('destroy');
 });

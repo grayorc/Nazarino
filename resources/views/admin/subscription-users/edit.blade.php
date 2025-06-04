@@ -17,7 +17,7 @@
                     @csrf
                     @method('PATCH')
                     <div class="card-body">
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="user_id" class="col-sm-2 control-label">کاربر</label>
                             <select name="user_id" class="form-control" id="user_id">
                                 <option value="">انتخاب کاربر</option>
@@ -31,8 +31,8 @@
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="form-group">
+
+                        <div class="form-group col-md-6">
                             <label for="subscription_tier_id" class="col-sm-2 control-label">سطح اشتراک</label>
                             <select name="subscription_tier_id" class="form-control" id="subscription_tier_id">
                                 <option value="">انتخاب سطح اشتراک</option>
@@ -46,8 +46,8 @@
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        
-                        <div class="form-group">
+
+                        <div class="form-group col-md-6">
                             <label for="status" class="col-sm-2 control-label">وضعیت</label>
                             <select name="status" class="form-control" id="status">
                                 <option value="active" {{ old('status', $subscriptionUser->status) == 'active' ? 'selected' : '' }}>فعال</option>
@@ -59,7 +59,7 @@
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="starts_at" class="col-sm-2 control-label">تاریخ شروع</label>
                             <input type="date" name="starts_at" class="form-control" id="starts_at" value="{{ old('starts_at', $subscriptionUser->starts_at->format('Y-m-d')) }}">
@@ -67,7 +67,7 @@
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="ends_at" class="col-sm-2 control-label">تاریخ پایان</label>
                             <input type="date" name="ends_at" class="form-control" id="ends_at" value="{{ old('ends_at', $subscriptionUser->ends_at->format('Y-m-d')) }}">
