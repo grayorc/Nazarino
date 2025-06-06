@@ -219,9 +219,11 @@ class ElectionController extends Controller
             return response('<div class="text-gray-300 text-center">تعداد نظرات برای تحلیل کافی نیست (حداقل ۳ نظر نیاز است).</div>');
         }
 
-        $analysis = $election->aiAnalysis;
 
-        if (!$analysis) {
+        $analysis = $election->aiAnalysis()->latest()->first();
+
+
+        if(!$analysis || $analysis->created_at < now()->subDays(1)){
             $content = $this->sendElectionToAI($election);
 
             if (!$content) {
@@ -244,9 +246,6 @@ class ElectionController extends Controller
     public function sendElectionToAI(Election $election)
     {
         try {
-            if($election->aiAnalysis()->createdAt() < now()->yesterday()){
-                return null;
-            }
 
             if ($election->options->count() < 3) {
                 return null;

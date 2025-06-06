@@ -37,12 +37,19 @@
                             <div class="mt-6">
                                 <div class="flex justify-between mb-2">
                                     <label for="password" class="text-sm text-gray-500 dark:text-gray-200">گذرواژه</label>
-                                    <a href="#" class="text-sm text-gray-400 focus:text-primaryColor hover:text-primaryColor hover:underline">گذرواژه را فراموش کرده اید؟</a>
+                                    <a href="{{ route('forgot-password') }}" class="text-sm text-gray-400 focus:text-primaryColor hover:text-primaryColor hover:underline">گذرواژه را فراموش کرده اید؟</a>
                                 </div>
 
                                 <input type="password" name="password" id="password" placeholder="گذرواژه خود را وارد کنید" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-primaryWhite border border-gray-200 rounded-lg dark:placeholder-gray-500 dark:bg-PrimaryBlack dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
+                            </div>
+
+                            <div class="mt-4">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="remember" class="w-4 h-4 text-primaryColor bg-primaryWhite border-gray-300 rounded focus:ring-primaryColor dark:focus:ring-primaryColor dark:ring-offset-gray-800 focus:ring-2 dark:bg-PrimaryBlack dark:border-gray-600">
+                                    <span class="mr-2 text-sm text-gray-500 dark:text-gray-300">مرا به خاطر بسپار</span>
+                                </label>
                             </div>
 
                             <div class="mt-6">

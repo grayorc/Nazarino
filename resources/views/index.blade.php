@@ -57,7 +57,7 @@
                     </dl>
                 </div>
                 </div>
-                <img src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png" alt="Product screenshot" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 dark:ring-gray-700/30 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442">
+                <img src="{{ asset('dist/img/Screenshot.png') }}" alt="Product screenshot" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 dark:ring-gray-700/30 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442">
             </div>
             </div>
         </div>

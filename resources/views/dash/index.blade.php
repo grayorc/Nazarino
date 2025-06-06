@@ -137,7 +137,7 @@
                     <div class="col-span-1 rounded-xl px-5 py-5 border border-gray-200 bg-white shadow-default dark:border-gray-700 dark:bg-PrimaryBlack shadow-md">
                         <div class="mb-3 flex items-center justify-between">
                             <h5 class="text-xl font-semibold text-gray-800 dark:text-white">
-                                فعالیت‌های اخیر
+                                دنبال‌کنندگان
                             </h5>
                         </div>
 

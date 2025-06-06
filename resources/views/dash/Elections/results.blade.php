@@ -154,7 +154,7 @@
                                         </template>
                                         @else
                                         <template x-if="!$store.aiAnalysis.loading && !$store.aiAnalysis.content">
-                                            <div class="text-gray-300 text-">{!! Str::markdown($election->aiAnalysis->content) !!}</div>
+                                            <div class="text-gray-300 text-">{!! Str::markdown($election->aiAnalysis()->latest()->first()->content) !!}</div>
                                         </template>
                                         @endif
                                     </div>
