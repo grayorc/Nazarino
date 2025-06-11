@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('price', 10 , 2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('sub_features', function (Blueprint $table) {
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('key')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('subscription_tier_sub_features', function (Blueprint $table) {
@@ -51,6 +53,7 @@ return new class extends Migration
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('receipts', function (Blueprint $table) {
@@ -71,6 +74,7 @@ return new class extends Migration
             $table->json('meta_data')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->index('user_id');
             $table->index('status');
             $table->index('paid_at');

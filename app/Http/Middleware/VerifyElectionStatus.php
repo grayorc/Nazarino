@@ -16,8 +16,8 @@ class VerifyElectionStatus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        abort_if(Auth::guest() && !$request->election->is_open , 403, 'وارد شوید');
-        abort_unless($request->election->is_public, 403, 'نظرسنجی عمومی نیست');
+        abort_if(Auth::guest() && (!$request->election->is_open || !$request->election->is_public), 403, 'وارد شوید');
+        abort_if(!$request->election->is_public && !Auth::user()->InviteCheck($request->election->id), 403, 'نظرسنجی عمومی نیست');
         abort_unless($request->election->is_open || $request->election->user_id == $request->user()->id, 403, 'نظرسنجی بسته شده است');
 
         return $next($request);

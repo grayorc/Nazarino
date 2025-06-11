@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             SubscriptionUserSeeder::class,
             ProgrammingLanguagesElectionSeeder::class,
             PopularElectionsSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

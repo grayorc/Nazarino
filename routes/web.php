@@ -14,10 +14,6 @@ Route::get('/', function () {
     return view('index', compact('subscriptionTiers'));
 })->name('index');
 
-//Route::get('/dashboard', function () {
-//    return view('dash.index');
-//})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::prefix('dashboard')->middleware(['auth'])->group( function () {
     require __DIR__.'/dash.php';
 });
